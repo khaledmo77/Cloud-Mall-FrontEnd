@@ -9,7 +9,7 @@ import { MatListModule } from '@angular/material/list';
 import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-navbar',
-  imports: [  RouterOutlet,
+  imports: [  
     RouterLinkActive,
     MatToolbarModule,
     RouterLink,

@@ -9,8 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-footer',
-  imports: [  RouterOutlet,
-    RouterLinkActive,
+  imports: [  
+
     MatToolbarModule,
     RouterLink,
     MatGridListModule,

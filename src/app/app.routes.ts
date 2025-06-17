@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ClientLayoutComponent } from './client/layout.component';
-import { ClientHomeComponent } from './client/home.component';
+import { ClientLayoutComponent } from './client/Layout/layout.component';
+import { ClientHomeComponent } from './client/Home/home.component';
 import { VendorLayoutComponent } from './vendor/layout.component';
 import { VendorHomeComponent } from './vendor/home.component';
 import { AdminLayoutComponent } from './admin/layout.component';
@@ -22,7 +22,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-      canActivate: [roleGuard(['Admin'])],
+    canActivate: [roleGuard(['Admin'])],
     component: AdminLayoutComponent,
     children: [{ path: '', component: AdminHomeComponent }],
   },
