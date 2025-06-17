@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { ClientLayoutComponent } from './client/Layout/layout.component';
 import { ClientHomeComponent } from './client/Home/home.component';
-import { VendorLayoutComponent } from './vendor/layout.component';
-import { VendorHomeComponent } from './vendor/home.component';
-import { AdminLayoutComponent } from './admin/layout.component';
-import { AdminHomeComponent } from './admin/home.component';
-import { DeliveryLayoutComponent } from './delivery/layout.component';
-import { DeliveryHomeComponent } from './delivery/home.component';
+import { VendorLayoutComponent } from './vendor/Layout/layout.component';
+import { VendorHomeComponent } from './vendor/Home/home.component';
+import { AdminLayoutComponent } from './admin/Layout/layout.component';
+import { AdminHomeComponent } from './admin/Home/home.component';
+import { DeliveryLayoutComponent } from './delivery/Layout/layout.component';
+import { DeliveryHomeComponent } from './delivery/Home/home.component';
 import { roleGuard } from './core/auth.guard';
 
 export const routes: Routes = [
