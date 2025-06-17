@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, NavbarComponent],
+  imports: [RouterOutlet, MatToolbarModule, MatButtonModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })

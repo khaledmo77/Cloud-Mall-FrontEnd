@@ -1,9 +1,15 @@
+<mat-toolbar color="primary" class="client-navbar">
+  <div class="navbar-left">
+    <img src="../assets/logo2.png" alt="CloudMall" class="logo" />
 
-<mat-toolbar color="primary">
-  <span style="flex: 1 1 auto;">CloudMall - Client</span>
-  <a mat-button routerLink="/client">Home</a>
-  <a mat-button routerLink="/client/contact">Contact</a>
 
+    <span class="brand">CloudMall</span>
+  </div>
+
+  <div class="navbar-right">
+    <a mat-button routerLink="/client" routerLinkActive="active-link">Home</a>
+    <a mat-button routerLink="/client/contact" routerLinkActive="active-link">Contact</a>
+  </div>
 </mat-toolbar>
 
-<router-outlet></router-outlet> 
+<router-outlet></router-outlet>
