@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { NgIf } from '@angular/common';
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-footer',
   imports: [  RouterOutlet,
     RouterLinkActive,
     MatToolbarModule,
@@ -16,9 +16,9 @@ import { NgIf } from '@angular/common';
     MatGridListModule,
     MatIconModule,
     MatListModule],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  templateUrl: './footer.component.html',
+  styleUrl: './footer.component.scss'
 })
-export class navbarComponent {
+export class footerComponent {
 
 }
