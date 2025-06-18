@@ -9,6 +9,11 @@ import { AdminHomeComponent } from './admin/Home/home.component';
 import { DeliveryLayoutComponent } from './delivery/Layout/layout.component';
 import { DeliveryHomeComponent } from './delivery/Home/home.component';
 import { roleGuard } from './core/auth.guard';
+import { CreateStoreComponent } from './vendor/Create-Store/CreateStore.Component';
+import { StoreSettingsComponent } from './vendor/Store-Settings/StoreSettings.component';
+import { StorePreviewComponent } from './vendor/Store-Preview/StorePreview.component';
+import { ManageProductsComponent } from './vendor/Manage-Products/ManageProducts.component';
+import { VendorOrdersComponent } from './vendor/Orders/VendorOrders.component';
 
 export const routes: Routes = [
   {path: 'login',component: LoginComponent},
@@ -18,12 +23,19 @@ export const routes: Routes = [
     children: [{ path: '', component: ClientHomeComponent },
      
     ],
-  },
-  {
-    path: 'vendor',
-    component: VendorLayoutComponent,
-    children: [{ path: '', component: VendorHomeComponent }],
-  },
+  },{
+  path: 'vendor',
+  component: VendorLayoutComponent,
+  // canActivate: [VendorGuard], // Optional: protects the whole layout
+  children: [
+    { path: '', component: VendorHomeComponent }, // /vendor
+    { path: 'create-store', component: CreateStoreComponent }, // /vendor/create-store
+    { path: 'store-settings', component: StoreSettingsComponent }, // /vendor/store-settings
+    { path: 'store-preview', component: StorePreviewComponent }, // /vendor/store-preview
+    { path: 'manage-products', component: ManageProductsComponent }, // /vendor/manage-products
+    { path: 'orders', component: VendorOrdersComponent }, // /vendor/orders
+  ]
+},
   {
     path: 'admin',
     canActivate: [roleGuard(['Admin'])],
