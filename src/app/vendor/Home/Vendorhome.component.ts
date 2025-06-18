@@ -1,10 +1,11 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-vendor-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule ],
   templateUrl: './Vendorhome.component.html',
   styleUrls: ['./Vendorhome.component.scss']
 })

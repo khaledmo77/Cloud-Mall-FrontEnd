@@ -10,19 +10,22 @@ import { MatListModule } from '@angular/material/list';
 import { NgIf } from '@angular/common';
 import { navbarComponent } from '../../shared/navbar/navbar.component';
 import { footerComponent } from '../../shared/footer/footer.component';
+import { preloaderComponent } from '../../shared/preloader/preloader.component';
+import { navigationComponent } from '../../shared/navigation/navigation.component';
 
 @Component({
   selector: 'app-layout',
   imports: [
     RouterOutlet,
-
+    preloaderComponent,
+    navigationComponent,
     MatToolbarModule,
     footerComponent,
-
+    footerComponent,
     MatGridListModule,
     MatIconModule,
     MatListModule,
-    navbarComponent,
+ 
   ],
   templateUrl: './vendorlayout.component.html',
   styleUrl: './vendorlayout.component.scss',

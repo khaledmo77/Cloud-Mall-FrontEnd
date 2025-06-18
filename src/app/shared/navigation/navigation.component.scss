@@ -1,0 +1,167 @@
+/* Custom styles for the landing page */
+
+/* Preloader styles */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-wrapper {
+  position: relative;
+}
+
+.spinner-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.circle-clipper {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.circle-clipper.left {
+  left: 0;
+}
+
+.circle-clipper.right {
+  right: 0;
+}
+
+.circle {
+  width: 200%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.gap-patch {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  width: 10%;
+  height: 100%;
+  overflow: hidden;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hero section styles */
+.showcase-banner {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.bg-holder.overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.bg-holder.overlay > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Wave styles */
+.wave {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+}
+
+.wave svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Navigation styles */
+.navbar-slick {
+  transition: all 0.3s ease;
+}
+
+.navbar-slick.scrolled {
+  background: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Card hover effects */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Icon styles */
+.icon-xxl {
+  width: 80px;
+  height: 80px;
+}
+
+/* Button styles */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Form styles */
+.form-control {
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .showcase-banner {
+    min-height: 60vh;
+  }
+  
+  .wave {
+    height: 80px;
+  }
+  
+  .icon-xxl {
+    width: 60px;
+    height: 60px;
+  }
+}

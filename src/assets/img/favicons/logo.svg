@@ -1,0 +1,22 @@
+<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Crow bird design -->
+  <g fill="#ffffff">
+    <!-- Crow body -->
+    <ellipse cx="25" cy="30" rx="12" ry="8"/>
+    
+    <!-- Crow head -->
+    <circle cx="25" cy="20" r="8"/>
+    
+    <!-- Crow beak -->
+    <polygon points="25,18 30,15 25,22"/>
+    
+    <!-- Crow wing -->
+    <path d="M15 25 Q20 20 25 25 Q30 20 35 25"/>
+    
+    <!-- Crow tail -->
+    <path d="M35 30 Q40 25 42 30 Q40 35 35 30"/>
+    
+    <!-- Crow eye -->
+    <circle cx="22" cy="18" r="1.5" fill="#000000"/>
+  </g>
+</svg>
