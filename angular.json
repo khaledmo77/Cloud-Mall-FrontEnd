@@ -7,7 +7,9 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss" ,
+          "prefix": "app",
+          "type": "component"
         }
       },
       "root": "",
@@ -22,6 +24,7 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
@@ -89,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "382abbc6-d998-4508-bc2c-dde0589d50cb"
   }
 }

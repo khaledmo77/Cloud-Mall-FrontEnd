@@ -1,0 +1,13 @@
+::placeholder {
+  color: rgb(146, 141, 141) !important;
+  opacity: 1; /* Ensures full opacity */
+}
+.mint-link {
+  color: #96ee96; /* Mint green */
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.mint-link:hover {
+  color: #98FF98; /* Keep mint green */
+  text-decoration: underline;
+}
