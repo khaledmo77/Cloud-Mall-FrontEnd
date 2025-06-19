@@ -29,7 +29,7 @@ export const routes: Routes = [
     // canActivate: [VendorGuard], // Optional: protects the whole layout
     children: [
       { path: '', component: VendorHomeComponent }, // /vendor
-      { path: 'dashboard', component: VendorDashboardComponent }, // /vendor
+      { path: 'dashboard', component: VendorDashboardComponent }, // /vendor/dashboard
       { path: 'create-store', component: CreateStoreComponent }, // /vendor/create-store
       { path: 'store-settings', component: StoreSettingsComponent }, // /vendor/store-settings
       { path: 'store-preview', component: StorePreviewComponent }, // /vendor/store-preview
