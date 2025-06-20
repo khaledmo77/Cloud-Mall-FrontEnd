@@ -1,32 +1,41 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { RouterOutlet} from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
-import { NgIf } from '@angular/common';
+
+
 import { footerComponent } from '../../shared/footer/footer.component';
-import { preloaderComponent } from '../../shared/preloader/preloader.component';
 import { navigationComponent } from '../../shared/navigation/navigation.component';
+
 
 @Component({
   selector: 'app-layout',
   imports: [
     RouterOutlet,
-    preloaderComponent,
     navigationComponent,
     MatToolbarModule,
-    footerComponent,
     footerComponent,
     MatGridListModule,
     MatIconModule,
     MatListModule,
- 
-  ],
-  templateUrl: './vendorlayout.component.html',
-  styleUrl: './vendorlayout.component.scss',
+    
+],
+  templateUrl: './Clientlayout.component.html',
+  styleUrl: './Clientlayout.component.scss',
 })
-export class VendorLayoutComponent {}
+export class ClientLayoutComponent {
+  //    leftLinks =[
+  //   { label: 'Home', path: '/client' },
+  //   { label: 'Stores', path: '/client/store-list' },
+  //   { label: 'Orders', path: '/client/orders' }
+  //    ];
+  // rightLinks = [
+  //     { label: 'Cart', path: '/client/cart' },
+  //   { label: 'Checkout', path: '/client/checkout' }
+  // ];
+}

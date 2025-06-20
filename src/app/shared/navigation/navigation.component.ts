@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,4 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class navigationComponent {}
+export class navigationComponent {
+  // @Input() leftLinks: { label: string; path: string }[] = [];
+  // @Input() rightLinks: { label: string; path: string }[] = [];
+}

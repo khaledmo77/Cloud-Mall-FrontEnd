@@ -2,20 +2,23 @@ import { Component } from '@angular/core';
 import { RouterOutlet,RouterLink, RouterLinkActive } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-footer',
   imports: [  
-
     MatToolbarModule,
-    RouterLink,
+    MatButtonModule,
     MatGridListModule,
     MatIconModule,
-    MatListModule],
+    MatListModule,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'
 })
