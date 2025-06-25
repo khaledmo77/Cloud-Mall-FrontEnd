@@ -11,4 +11,5 @@ import { CommonModule } from '@angular/common';
 export class navigationComponent {
   // @Input() leftLinks: { label: string; path: string }[] = [];
   // @Input() rightLinks: { label: string; path: string }[] = [];
+  @Input() mode: 'client' | 'vendor' = 'client'; 
 }

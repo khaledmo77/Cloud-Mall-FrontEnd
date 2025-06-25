@@ -31,7 +31,7 @@ export const routes: Routes = [
     component: ClientLayoutComponent,
     children: [{ path: '', component: ClientHomeComponent },
       {path: 'store-list',component:StoreListComponent}, // /client/store-list
-      {path: 'store-details',component:StoreDetailsComponent},
+      {path: 'store-details/:id',component:StoreDetailsComponent},
       {path: 'product-details',component:ProductDetailsComponent},
       {path: 'orders',component:OrdersComponent},
       {path: 'cart',component:CartComponent},

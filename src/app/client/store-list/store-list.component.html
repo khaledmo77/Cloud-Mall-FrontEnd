@@ -20,24 +20,32 @@
       <div class="col px-sm-4 mt-6 mb-5 pt-2">
         <ul class="nav font-sans-serif justify-content-center px-1 showcase-nav" data-filter-nav>
           <li class="nav-item mb-3">
-            <a class="isotope-nav text-uppercase" ></a>
+            <!-- <a class="isotope-nav text-uppercase" data-filter="*" href="#all-stores">All Stores</a> -->
+            <a class="isotope-nav text-uppercase" (click)="filterStores('all')">All Stores</a>
+
           </li>
+            <li class="nav-item mb-3">
+          <a class="isotope-nav text-uppercase" data-filter=".fashion" href="#">Fashion</a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="isotope-nav text-uppercase" data-filter=".electronics" href="#">Electronics</a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="isotope-nav text-uppercase" data-filter=".groceries" href="#">Groceries</a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="isotope-nav text-uppercase" data-filter=".books" href="#">Books</a>
+        </li>
         </ul>
       </div>
     </div>
   </div>
 <!--get stores-->
-   <div class="container position-relative p-0">
-      <!-- <div class="row flex-center">
-        <div class="col px-sm-4">
-          <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4">Choose Your <strong class="fw-bold">Store</strong></h1>
-          <p class="lead text-300 opacity-75"> One platform. Endless stores. Discover the power of intelligent shopping built just for you. </p>
-        </div>
-      </div> -->
+   <div class="container position-relative p-0"  id="all-stores" >
       <!--stores cards-->
       <div class="row g-4 justify-content-center mt-5">
       <div class="col-12 col-md-4 isotope-item"
-           *ngFor="let store of stores">
+           *ngFor="let store of filteredStores">
         <div class="card h-100 border-0 shadow-sm card-hover">
           <div class="card-body p-0">
             <div class="position-relative overflow-hidden">
