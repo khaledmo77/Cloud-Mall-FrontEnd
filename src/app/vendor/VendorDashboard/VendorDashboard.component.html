@@ -1,7 +1,13 @@
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
+<app-VendorRegister  *ngIf="showRegister" (close)="closeRegister()"></app-VendorRegister>
 <main class="main" id="top">
+<div [class.blur]="showRegister">
+  <!-- Dashboard content here -->
+  <h1>Dashboard</h1>
+  <button (click)="openRegister()">Register</button>
+</div>
   <!-- ============================================-->
   <!-- <section> begin ============================-->
   <section class="pt-7 pt-md-9 pb-0 text-center">
@@ -20,8 +26,9 @@
     </div><!-- end of .container-->
   </section><!-- <section> close ============================-->
   <!-- ============================================-->
-  
+
   <!-- Filter Navigation -->
+
   <div class="container container-wide-xl showcase-content">
     <div class="row justify-content-center align-items-center mx-auto mb-0" style="max-width: 52rem;">
       <div class="col px-sm-4 mt-6 mb-5 pt-2">

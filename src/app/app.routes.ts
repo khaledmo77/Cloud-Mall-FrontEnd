@@ -21,6 +21,8 @@ import { ProductDetailsComponent } from './client/product-details/product-detail
 import { OrdersComponent } from './client/orders/orders.component';
 import { CartComponent } from './client/cart/cart.component';
 import { CheckoutComponent } from './client/checkout/checkout.component';
+import { VendorRegisterComponent } from './vendor/VendorAuth/Register/VendorRegister.component';
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -43,6 +45,7 @@ export const routes: Routes = [
     // canActivate: [VendorGuard], // Optional: protects the whole layout
     children: [
       { path: '', component: VendorHomeComponent }, // /vendor
+      {path: 'register', component: VendorRegisterComponent}, // /vendor/register
       { path: 'dashboard', component: VendorDashboardComponent }, // /vendor/dashboard
       { path: 'create-store', component: CreateStoreComponent }, // /vendor/create-store
       { path: 'store-settings', component: StoreSettingsComponent }, // /vendor/store-settings
