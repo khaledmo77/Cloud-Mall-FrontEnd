@@ -22,6 +22,7 @@ import { OrdersComponent } from './client/orders/orders.component';
 import { CartComponent } from './client/cart/cart.component';
 import { CheckoutComponent } from './client/checkout/checkout.component';
 import { VendorRegisterComponent } from './vendor/VendorAuth/Register/VendorRegister.component';
+import { ClientRegisterComponent } from './client/ClientAuth/Register/ClientRegister.component';
 
 
 export const routes: Routes = [
@@ -30,6 +31,7 @@ export const routes: Routes = [
     path: 'client',
     component: ClientLayoutComponent,
     children: [{ path: '', component: ClientHomeComponent },
+      {path: 'register', component: ClientRegisterComponent }, // /client/register
       {path: 'store-list',component:StoreListComponent}, // /client/store-list
       {path: 'store-details/:id',component:StoreDetailsComponent},
       {path: 'product-details',component:ProductDetailsComponent},
