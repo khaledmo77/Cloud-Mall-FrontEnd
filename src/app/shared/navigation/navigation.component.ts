@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendorRegisterComponent } from '../../vendor/VendorAuth/Register/VendorRegister.component';
-import { ClientRegisterComponent } from "../../client/ClientAuth/Register/ClientRegister.component";
-// import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component'; // if you have it
+import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component'; // if you have it
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent], // Add ClientRegisterComponent if needed
+  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent ], // Add ClientRegisterComponent if needed
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })

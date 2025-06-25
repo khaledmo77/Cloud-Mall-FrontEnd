@@ -1,15 +1,69 @@
-import { Component } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import {  Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+ // adjust path
+import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.service';
+
 @Component({
   selector: 'app-ClientRegister',
-  imports: [    MatDialogModule],
+  standalone: true,
+    providers: [ClientAuthApiService] ,
+  imports: [
+    MatDialogModule,
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
   templateUrl: './ClientRegister.component.html',
   styleUrl: './ClientRegister.component.scss'
 })
 export class ClientRegisterComponent {
   @Output() close = new EventEmitter<void>();
-  
+  //step of dependency injection
+  fb = inject(FormBuilder);
+  authService = inject(ClientAuthApiService); //handle api calls for client registration
+
+  registerForm: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', Validators.required]
+  }, { validators: this.matchPasswords });
+
+  isSubmitting = false;
+  errorMessage: string | null = null;
+
+  matchPasswords(group: FormGroup) {
+    const pass = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return pass === confirm ? null : { notMatching: true };
+  }
+
+  submitForm() {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched(); //show all validation messages
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.errorMessage = null;
+
+    const payload = this.registerForm.value;
+
+    this.authService.register(payload).subscribe({ //
+      next: () => {
+        this.isSubmitting = false;
+        this.close.emit();
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.errorMessage = err?.error?.message || 'Registration failed.';
+      }
+    });
+  }
+
   closePopup() {
     this.close.emit();
   }
