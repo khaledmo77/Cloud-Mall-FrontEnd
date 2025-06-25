@@ -2,8 +2,12 @@
 
   <!-- Client Mode -->
   <ng-container  *ngIf="mode === 'client'">
-    <app-ClientRegister *ngIf="showClientRegister" (close)="closeClientRegister()"></app-ClientRegister>
-
+    <app-ClientLogin *ngIf="showClientLogin" (switchToRegister)="openClientRegister()"  (close)="closeClientLogin()"></app-ClientLogin>
+<app-ClientRegister 
+ *ngIf="showClientRegister"
+  (close)="closeClientRegister()" 
+  (switchToLogin)="openClientLogin()">
+></app-ClientRegister>
     <div [class.blur]="showClientRegister" class="container container-wide-xl">
       <!-- Branding and navigation content -->
       <a class="navbar-brand ls-2 p-0 me-4" href="#">
@@ -21,12 +25,17 @@
           <li class="nav-item"><a class="nav-link" href="#Home">Features</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
-       <ul class="navbar-nav ms-auto align-items-lg-center">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
           <li class="nav-item"><a class="btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2" href="#purchase">Get Started</a></li>
-          <li class="nav-item">
-            <button   type="button"   class="nav-link btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2"
-                    (click)="openClientRegister()">Sign in</button>
-          </li>
+                <li class="nav-item" *ngIf="!isLoggedIn">
+  <button type="button" class="nav-link btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2"
+          (click)="openClientLogin()">
+    Sign in
+  </button>
+</li>
+<li class="nav-item text-white" *ngIf="isLoggedIn">
+  <span class="nav-link">Welcome back, {{ name }}</span>
+</li>
         </ul>
       </div>
     </div>
@@ -34,9 +43,13 @@
 
   <!-- Vendor Mode -->
   <ng-container *ngIf="mode === 'vendor'">
-    <app-VendorRegister *ngIf="showVendorRegister" (close)="closeVendorRegister()"></app-VendorRegister>
-
-    <div [class.blur]="showVendorRegister" class="container container-wide-xl">
+    <app-VendorLogin *ngIf="showVendorLogin"   (switchToRegister)="openVendorRegister()" (close)="closeVendorLogin()"></app-VendorLogin>
+<app-VendorRegister 
+  *ngIf="showVendorRegister"
+  (close)="closeVendorRegister()" 
+  (switchToLogin)="openVendorLogin()">
+</app-VendorRegister>
+    <div [class.blur]="showVendorLogin" class="container container-wide-xl">
       <a class="navbar-brand ls-2 p-0 me-4" href="#">
         <img src="../../../assets/logo2.png" alt="SLiCK" width="50" />
       </a>
@@ -53,11 +66,20 @@
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
         <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2" href="#purchase">Get Started</a></li>
-          <li class="nav-item">
-            <button   type="button"   class="nav-link btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2"
-                    (click)="openVendorRegister()">Sign in</button>
-          </li>
+          <li class="nav-item"><a [routerLink]="['/vendor']"
+   [fragment]="'purchase'"
+   class="btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2">
+  Get Started
+</a></li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+  <button type="button" class="nav-link btn btn-outline-light rounded-pill btn-sm border-2 ms-lg-2"
+          (click)="openVendorLogin()">
+    Sign in
+  </button>
+</li>
+<li class="nav-item text-white" *ngIf="isLoggedIn">
+  <span class="nav-link">Welcome back, {{ name }}</span>
+</li>
         </ul>
       </div>
     </div>

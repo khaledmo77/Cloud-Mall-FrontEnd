@@ -22,7 +22,7 @@ import { Router } from '@angular/router'; // ✅ Import this
 })
 export class VendorRegisterComponent {
   @Output() close = new EventEmitter<void>();
-
+@Output() switchToLogin = new EventEmitter<void>();
   fb = inject(FormBuilder);
   authService = inject(VendorAuthApiService);
 router = inject(Router);
@@ -62,10 +62,11 @@ router = inject(Router);
     const token = response.data.token;
     const role = response.data.roles[0];
     const userId = response.data.userId;
-    localStorage.setItem('token', token);
-    localStorage.setItem('role', role);
-    localStorage.setItem('userId', userId);
-    
+localStorage.setItem('token', response.data.token);
+localStorage.setItem('role', response.data.roles[0]);
+localStorage.setItem('userId', response.data.userId);
+localStorage.setItem('name', response.data.name); 
+localStorage.setItem('email', response.data.email);
     console.log('Stored token:', token);
     console.log('Stored role:', role);
     console.log('Stored userId:', userId);

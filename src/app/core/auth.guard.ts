@@ -8,10 +8,14 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     const router = inject(Router);
     const role = auth.getUserRole();
 
-    if (!role || !allowedRoles.includes(role)) {
-      router.navigate(['/client']);
-      return false;
-    }
+  if (!role || !allowedRoles.includes(role)) {
+  if (role === 'Vendor') {
+    router.navigate(['/vendor/login']);
+  } else {
+    router.navigate(['/client/login']);
+  }
+  return false;
+}
 
     return true;
   };

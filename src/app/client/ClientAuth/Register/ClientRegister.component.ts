@@ -3,8 +3,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
- // adjust path
-import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.service';
+
+import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.service'; // adjust path
+import { Router } from '@angular/router'; // ✅ Import this
 
 @Component({
   selector: 'app-ClientRegister',
@@ -21,9 +22,10 @@ import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.s
 })
 export class ClientRegisterComponent {
   @Output() close = new EventEmitter<void>();
-  //step of dependency injection
+@Output() switchToLogin = new EventEmitter<void>();
   fb = inject(FormBuilder);
-  authService = inject(ClientAuthApiService); //handle api calls for client registration
+  authService = inject(ClientAuthApiService);
+router = inject(Router);
 
   registerForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -43,7 +45,7 @@ export class ClientRegisterComponent {
 
   submitForm() {
     if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched(); //show all validation messages
+      this.registerForm.markAllAsTouched();
       return;
     }
 
@@ -52,20 +54,30 @@ export class ClientRegisterComponent {
 
     const payload = this.registerForm.value;
 
-    this.authService.register(payload).subscribe({ //
+    this.authService.register(payload).subscribe({
       next: (response) => {
         this.isSubmitting = false;
         this.close.emit();
-         const token = response.data.token;
+        
+    const token = response.data.token;
     const role = response.data.roles[0];
     const userId = response.data.userId;
-    localStorage.setItem('token', token);
-    localStorage.setItem('role', role);
-    localStorage.setItem('userId', userId);
-      console.log('Stored token:', token);
+localStorage.setItem('token', response.data.token);
+localStorage.setItem('role', response.data.roles[0]);
+localStorage.setItem('userId', response.data.userId);
+localStorage.setItem('name', response.data.name); 
+localStorage.setItem('email', response.data.email);
+    console.log('Stored token:', token);
     console.log('Stored role:', role);
     console.log('Stored userId:', userId);
         console.log('Registration successful');
+             this.router.navigate(['client/dashboard']); // Navigate to client dashboard
+
+
+             console.log('Token stored:', response.token);
+ // Store user data
+          console.log('User data stored:', response.user);
+            //  localStorage.setItem('role', response.role);  
       },
       error: (err) => {
         this.isSubmitting = false;
