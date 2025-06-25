@@ -53,9 +53,19 @@ export class ClientRegisterComponent {
     const payload = this.registerForm.value;
 
     this.authService.register(payload).subscribe({ //
-      next: () => {
+      next: (response) => {
         this.isSubmitting = false;
         this.close.emit();
+         const token = response.data.token;
+    const role = response.data.roles[0];
+    const userId = response.data.userId;
+    localStorage.setItem('token', token);
+    localStorage.setItem('role', role);
+    localStorage.setItem('userId', userId);
+      console.log('Stored token:', token);
+    console.log('Stored role:', role);
+    console.log('Stored userId:', userId);
+        console.log('Registration successful');
       },
       error: (err) => {
         this.isSubmitting = false;
