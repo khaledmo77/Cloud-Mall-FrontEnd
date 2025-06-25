@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ClientAuthApiService {
-  private baseUrl = 'https://localhost:5001/api/Auth/client';
+  private baseUrl = 'http://cloudmall.runasp.net/api/Auth/client';
 
   constructor(private http: HttpClient) {}
 
