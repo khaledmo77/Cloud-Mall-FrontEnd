@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   providedIn: 'root' // ✅ Required for global DI
 })
 export class VendorAuthApiService {
-  private baseUrl = 'https://localhost:5001/api/Auth/vendor';
+  private baseUrl = 'http://cloudmall.runasp.net/api/Auth/vendor';
 
   constructor(private http: HttpClient) {}
 
