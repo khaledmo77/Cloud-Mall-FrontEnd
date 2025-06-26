@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ClientGetAllStoresApiService, Store } from '../../core/ClientCore/client-getallstores-api.service';
+
 
 @Component({
   selector: 'app-store-list',
@@ -7,100 +9,35 @@ import { Component } from '@angular/core';
   templateUrl: './store-list.component.html',
   styleUrl: './store-list.component.scss'
 })
-export class StoreListComponent {
-   stores: Store[] = [
-  {
-    id: 1,
-    name: 'store 1',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-   
-  },
-  {
-    id: 2,
-    name: 'store 2',
-    image: 'assets/img/gallery/11.jpg',
-    category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-     
-  },
-  {
-    id: 3,
-    name: 'store 3',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content.'
-  },
-  {
-    id: 4,
-    name: 'store 4',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content.'
-  },
-  {
-    id: 5,
-    name: 'store 5',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content.'
-  },
-  {
-    id: 6,
-    name: 'store 6',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content.'
-  },
-  {
-    id: 7,
-    name: 'store 7',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content.'
-  },
-    {
-    id: 8,
-    name: 'store 8',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.'
-  },
-    {
-    id: 9,
-    name: 'store 9',
-    image: 'assets/img/gallery/11.jpg',
-     category: 'fashion',
-    description: 'This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.'
-  },
+export class StoreListComponent implements OnInit {
+   stores: Store[] = [];
+   filteredStores: Store[] = [];
+    categories: string[] = [];
+   error = '';
 
-];//create array of stores
-    filteredStores :Store[]= [];
+   constructor(private storeService: ClientGetAllStoresApiService){}
 
-     ngOnInit() {
-    this.filteredStores = this.stores; // default is all
+    ngOnInit(): void {
+    this.storeService.getAllStores().subscribe({
+      next: (data) => {
+        this.stores = data;
+        this.filteredStores = data;
+
+        
+      },
+      error: (err) => {
+        this.error = 'Failed to load stores';
+        
+      }
+    });
   }
-
-  
-  filterStores(category: string) {
-    if (category === 'all') {
-      this.filteredStores = this.stores;
-    } else {
-      this.filteredStores = this.stores.filter(store =>
-        store.category === category
-      );
-    }
-      // Scroll to the list section
-    document.getElementById('all-stores')?.scrollIntoView({ behavior: 'smooth' });
-  
+  filterStores(categoryName: string): void {
+  if (categoryName === 'all') {
+    this.filteredStores = this.stores;
+  } else {
+    this.filteredStores = this.stores.filter(store =>
+      store.categoryName?.toLowerCase() === categoryName.toLowerCase()
+    );
   }
-  
 }
-interface Store{
-    id: number;
-    name: string;
-    image: string;
-    description: string;
-    category: string;
-}
+ }

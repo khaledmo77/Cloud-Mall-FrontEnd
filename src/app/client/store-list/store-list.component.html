@@ -1,150 +1,76 @@
 <main class="main" id="top">
+  <!-- Section Header -->
   <section class="pt-7 pt-md-9 pb-0 text-center">
     <div class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
-    <!--/.bg-holder-->
     <div class="container-fluid p-0">
       <div class="row flex-center mx-auto showcase-banner">
         <div class="col px-sm-4">
           <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4">Choose Your <strong class="fw-bold"> Store</strong></h1>
-          <p class="lead text-300 opacity-75"> One platform. Endless stores. Discover the power of intelligent shopping built just for you.  </p>
+          <p class="lead text-300 opacity-75">One platform. Endless stores. Discover the power of intelligent shopping built just for you.</p>
         </div>
       </div>
       <div class="wave"><svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">
-          <path d="M1440,21.2101911 L1440,120 L0,120 L0,21.2101911 C120,35.0700637 240,42 360,42 C480,42 600,35.0700637 720,21.2101911 C808.32779,12.416393 874.573633,6.87702029 918.737528,4.59207306 C972.491685,1.8109458 1026.24584,0.420382166 1080,0.420382166 C1200,0.420382166 1320,7.35031847 1440,21.2101911 Z"></path>
-        </svg></div>
-    </div><!-- end of .container-->
-  </section><!-- <section> close ============================-->
+        <path d="..."></path></svg>
+      </div>
+    </div>
+  </section>
 
-      <div class="container container-wide-xl showcase-content">
+  <!-- Filter Buttons -->
+  <div class="container container-wide-xl showcase-content">
     <div class="row justify-content-center align-items-center mx-auto mb-0" style="max-width: 52rem;">
       <div class="col px-sm-4 mt-6 mb-5 pt-2">
-        <ul class="nav font-sans-serif justify-content-center px-1 showcase-nav" data-filter-nav>
-          <li class="nav-item mb-3">
-            <!-- <a class="isotope-nav text-uppercase" data-filter="*" href="#all-stores">All Stores</a> -->
-            <a class="isotope-nav text-uppercase" (click)="filterStores('all')">All Stores</a>
-
-          </li>
-            <li class="nav-item mb-3">
-          <a class="isotope-nav text-uppercase" data-filter=".fashion" href="#">Fashion</a>
-        </li>
-        <li class="nav-item mb-3">
-          <a class="isotope-nav text-uppercase" data-filter=".electronics" href="#">Electronics</a>
-        </li>
-        <li class="nav-item mb-3">
-          <a class="isotope-nav text-uppercase" data-filter=".groceries" href="#">Groceries</a>
-        </li>
-        <li class="nav-item mb-3">
-          <a class="isotope-nav text-uppercase" data-filter=".books" href="#">Books</a>
-        </li>
+        <ul class="nav font-sans-serif justify-content-center px-1 showcase-nav">
+          <li class="nav-item mb-3"><a class="isotope-nav text-uppercase" (click)="filterStores('all')">All Stores</a></li>
+          <li class="nav-item mb-3" *ngFor="let category of categories">
+            <a class="isotope-nav text-uppercase" (click)="filterStores('categoryName')">{{category}}</a></li>
         </ul>
       </div>
     </div>
   </div>
-<!--get stores-->
-   <div class="container position-relative p-0"  id="all-stores" >
-      <!--stores cards-->
-      <div class="row g-4 justify-content-center mt-5">
-      <div class="col-12 col-md-4 isotope-item"
-           *ngFor="let store of filteredStores">
+
+  <!-- Store Cards -->
+  <div class="container position-relative p-0" id="all-stores">
+    <div class="row g-4 justify-content-center mt-5">
+      <div class="col-12 col-md-4" *ngFor="let store of filteredStores">
         <div class="card h-100 border-0 shadow-sm card-hover">
           <div class="card-body p-0">
             <div class="position-relative overflow-hidden">
               <img class="img-fluid w-100"
-                   [src]="store.image"
-                   [alt]="store.description + ' component'"
+                   [src]="'http://cloudmall.runasp.net' + store.logoURL"
+                   [alt]="store.name + ' logo'"
                    loading="lazy">
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <h6 class="text-white mb-2">{{ store.name | titlecase }} Component</h6>
+                  <h6 class="text-white mb-2">{{ store.name | titlecase }}</h6>
                 </div>
               </div>
             </div>
             <div class="card-footer bg-transparent border-0 p-3">
               <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-primary rounded-pill">{{ store.name | titlecase }}</span>
-                <!-- <small class="text-muted">{{ store.link.split('/').pop() | titlecase }}</small> -->
+                <span class="badge bg-primary rounded-pill">{{ store.categoryName }}</span>
               </div>
+              <p class="mt-2 text-muted small">{{ store.description }}</p>
             </div>
           </div>
         </div>
       </div>
-      </div>
-      <div class="wave"><svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">
-          <path d="M1440,21.2101911 L1440,120 L0,120 L0,21.2101911 C120,35.0700637 240,42 360,42 C480,42 600,35.0700637 720,21.2101911 C808.32779,12.416393 874.573633,6.87702029 918.737528,4.59207306 C972.491685,1.8109458 1026.24584,0.420382166 1080,0.420382166 C1200,0.420382166 1320,7.35031847 1440,21.2101911 Z"></path>
-        </svg></div>
-    </div><!-- end of .container-->
 
- <!-- <div class="row row-cols-1 row-cols-md-3 g-3">
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/11.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 1</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <!-- No Stores Found -->
+      <div *ngIf="!filteredStores.length && !error" class="text-center text-muted mt-4">
+        No stores found in this category.
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="text-center text-danger mt-4">
+        {{ error }}
       </div>
     </div>
-  </div>
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/12.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 2</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      </div>
+
+    <!-- Bottom Wave -->
+    <div class="wave">
+      <svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">
+        <path d="..."></path>
+      </svg>
     </div>
   </div>
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/13-f.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 3</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-   <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/13-f.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 3</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/13-f.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 3</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/13-f.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 3</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card"><img class="img-fluid" src="../assets/img/gallery/13-f.jpg" alt="..." />
-      <div class="card-body">
-        <h5 class="card-title">store 3</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-      </div>
-    </div>
-  </div>
-</div> -->
 </main>
-
-
-   
-    <!-- <div class="row row-cols-1 row-cols-md-3 g-3">
-  <div class="col" *ngFor="let Store of stores">
-    <div class="card h-100 d-flex flex-column p-2"style="max-height: 300px">
-      <img [src]="Store.image" class="img-fluid card-img-top" alt="Store Image" />
-      <div class="card-body">
-        <h5 class="card-title">{{ Store.name }}</h5>
-        <p class="card-text">{{ Store.description }}</p>
-      </div>
-    </div>
-  </div>
-</div> -->
-  
