@@ -5,13 +5,15 @@ import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { clientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
 import { ClientRegisterComponent } from "../../client/ClientAuth/Register/ClientRegister.component";
+import { VendorLoginComponent } from "../../vendor/VendorAuth/Login/VendorLogin.component";
+import { VendorRegisterComponent } from "../../vendor/VendorAuth/Register/VendorRegister.component";
 
 
 
 @Component({
   selector: 'app-LandingPage',
   standalone: true,
-  imports: [CommonModule, RouterLink, clientLoginComponent, ClientRegisterComponent],
+  imports: [CommonModule, RouterLink, clientLoginComponent, ClientRegisterComponent, VendorLoginComponent, VendorRegisterComponent],
   templateUrl: './LandingPage.component.html',
   styleUrls: ['./LandingPage.component.scss']
 })
@@ -41,7 +43,7 @@ showVendorRegister = false;
     }
   }
 
-  // Method to handle navigation with authentication check
+  // Method to handle navigation with authentication check for clients
   navigateWithAuth(route: string) {
     if (this.isLoggedIn) {
       this.router.navigate([route]);
@@ -50,33 +52,50 @@ showVendorRegister = false;
     }
   }
 
+  // Method to handle navigation with authentication check for vendors
+  navigateVendorWithAuth(route: string) {
+    if (this.isLoggedIn) {
+      this.router.navigate([route]);
+    } else {
+      this.openVendorLogin();
+    }
+  }
+
   openVendorLogin() {
     console.log("Opening Vendor Login");
-      this.showVendorRegister = false; 
+    this.showVendorRegister = false; 
     this.showVendorLogin = true;
+    this.showClientLogin = false;
+    this.showClientRegister = false;
   }
+
   openClientLogin(){
-  console.log("Opening Client Login");
+    console.log("Opening Client Login");
     this.showClientLogin = true; // hide vendor login
     this.showClientRegister = false; // hide client register
-      this.showVendorLogin = false;
-  this.showVendorRegister = false;
+    this.showVendorLogin = false;
+    this.showVendorRegister = false;
   }
+
   closeClientLogin() {
     console.log("Closing Client Login");
     this.showClientLogin = false;
     this.refreshAuth(); // Refresh auth state after closing
   }
-openVendorRegister() {
-  console.log("Opening Vendor Register");
-  this.showVendorLogin = false; // hide login
-  this.showVendorRegister = true;
-}
-closeVendorRegister() {
-  console.log("Closing Vendor Register");
-  this.showVendorRegister = false;
-  this.refreshAuth(); // Refresh auth state after closing
-}
+
+  openVendorRegister() {
+    console.log("Opening Vendor Register");
+    this.showVendorLogin = false; // hide login
+    this.showVendorRegister = true;
+    this.showClientLogin = false;
+    this.showClientRegister = false;
+  }
+
+  closeVendorRegister() {
+    console.log("Closing Vendor Register");
+    this.showVendorRegister = false;
+    this.refreshAuth(); // Refresh auth state after closing
+  }
 
   closeVendorLogin() {
     console.log("Closing Vendor Login");
@@ -87,9 +106,9 @@ closeVendorRegister() {
   openClientRegister() {
     console.log("Opening Client Register");
     this.showClientRegister = true;
-      this.showClientLogin = false;
-     this.showVendorLogin = false;
-  this.showVendorRegister = false;
+    this.showClientLogin = false;
+    this.showVendorLogin = false;
+    this.showVendorRegister = false;
   }
 
   closeClientRegister() {

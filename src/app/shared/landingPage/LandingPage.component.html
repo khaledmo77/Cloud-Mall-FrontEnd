@@ -14,6 +14,20 @@
       (close)="closeClientRegister()" 
       (switchToLogin)="openClientLogin()">
     </app-ClientRegister>
+
+    <!-- Vendor Login Popup -->
+    <app-VendorLogin 
+      *ngIf="showVendorLogin" 
+      (switchToRegister)="openVendorRegister()"  
+      (close)="closeVendorLogin()">
+    </app-VendorLogin>
+    
+    <!-- Vendor Register Popup -->
+    <app-VendorRegister 
+      *ngIf="showVendorRegister"
+      (close)="closeVendorRegister()" 
+      (switchToLogin)="openVendorLogin()">
+    </app-VendorRegister>
     
     <div class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
     <div class="container-fluid p-0">
@@ -22,7 +36,7 @@
           <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4">Start Selling with <strong class="fw-bold">Confidence</strong></h1>
           <p class="lead text-300 opacity-75">Discover amazing stores curated just for you. Whether you're shopping for fashion, tech, or daily essentials — we've got it all. Find your favorite store and start ordering today!</p>
           <div class="mt-5">
-            <button class="btn btn-primary btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateWithAuth('/client/store-list')">Get Your Store</button>
+            <button class="btn btn-primary btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateVendorWithAuth('/vendor')">Get Your Store</button>
             <button class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateWithAuth('/client')">Browse Stores</button>
             <a class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7" href="#about">Learn More</a>
           </div>
