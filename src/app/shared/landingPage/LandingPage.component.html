@@ -37,7 +37,7 @@
           <p class="lead text-300 opacity-75">Discover amazing stores curated just for you. Whether you're shopping for fashion, tech, or daily essentials — we've got it all. Find your favorite store and start ordering today!</p>
           <div class="mt-5">
             <button class="btn btn-primary btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateVendorWithAuth('/vendor')">Get Your Store</button>
-            <button class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateWithAuth('/client')">Browse Stores</button>
+            <a class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7 me-3" [routerLink]="['/client/store-list']">Browse Stores</a>
             <a class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7" href="#about">Learn More</a>
           </div>
         </div>
@@ -57,7 +57,7 @@
         <div class="col-md-6">
           <h2>About Our Platform</h2>
           <p>Discover amazing stores and products from trusted vendors.</p>
-          <button class="btn btn-primary" (click)="navigateWithAuth('/client/store-list')">Explore Stores</button>
+          <a class="btn btn-primary" [routerLink]="['/client/store-list']">Explore Stores</a>
         </div>
         <div class="col-md-6">
           <h2>Start Shopping</h2>
