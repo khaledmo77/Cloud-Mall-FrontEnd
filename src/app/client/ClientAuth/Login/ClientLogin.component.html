@@ -7,11 +7,11 @@
         <div class="col-lg-6 mb-5 mb-lg-0">
           <h1 class="my-5 display-3 fw-bold ls-tight">
             Welcome back <br />
-            <span class="text-primary">to your dashboard</span>
+            <span class="text-primary">to your account</span>
           </h1>
           <p style="color: hsl(217, 10%, 50.8%)">
-            Login to manage your services and explore new business tools. 
-            We’re glad to have you again!
+            Login to access your favorite stores and manage your orders. 
+            We're glad to have you again!
           </p>
         </div>
 
@@ -36,12 +36,12 @@
                   {{ isLoggingIn ? 'Logging in...' : 'Log In' }}
                 </button>
                 <!-- Sign Up Link -->
-<div class="text-center">
-  <p class="mt-3 mb-0">
-    Don’t have an account?
-    <a (click)="switchToRegister.emit()" class="text-primary fw-bold">Sign up here</a>
-  </p>
-</div>
+                <div class="text-center">
+                  <p class="mt-3 mb-0">
+                    Don't have an account?
+                    <a (click)="navigateToRegister()" class="text-primary fw-bold" style="cursor: pointer;">Sign up here</a>
+                  </p>
+                </div>
               </form>
             </div>
           </div>

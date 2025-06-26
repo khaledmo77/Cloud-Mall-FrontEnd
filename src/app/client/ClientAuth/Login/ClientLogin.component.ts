@@ -23,7 +23,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class clientLoginComponent {
   @Output() close = new EventEmitter<void>();
-@Output() switchToRegister = new EventEmitter<void>();
+  @Output() switchToRegister = new EventEmitter<void>();
 
   fb = inject(FormBuilder);
   authService = inject(ClientAuthApiService);
@@ -51,29 +51,36 @@ export class clientLoginComponent {
     this.authService.login(payload).subscribe({
       next: (response) => {
         this.isLoggingIn = false;
-        this.close.emit();
-
+        
         const token = response.data.token;
         const role = response.data.roles[0];
         const userId = response.data.userId;
-   localStorage.setItem('token', response.data.token);
-localStorage.setItem('role', response.data.roles[0]);
-localStorage.setItem('userId', response.data.userId);
-localStorage.setItem('name', response.data.name); 
-localStorage.setItem('email', response.data.email);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.roles[0]);
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('name', response.data.name); 
+        localStorage.setItem('email', response.data.email);
 
         console.log('Login successful');
         console.log('Stored token:', token);
         console.log('Stored role:', role);
         console.log('Stored userId:', userId);
 
-        this.router.navigate(['client/dashboard']); // Navigate to client dashboard
+        // Close the popup first
+        this.close.emit();
+        
+        // Navigate to client dashboard
+        this.router.navigate(['/client']);
       },
       error: (err) => {
         this.isLoggingIn = false;
         this.loginErrorMessage = err?.error?.message || 'Login failed.';
       }
     });
+  }
+
+  navigateToRegister() {
+    this.switchToRegister.emit();
   }
 
   closePopup() {
