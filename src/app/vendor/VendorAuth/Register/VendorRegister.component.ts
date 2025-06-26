@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import { VendorAuthApiService } from '../../../core/VendorCore/vendor-auth-api.service'; // adjust path
+import { Router } from '@angular/router'; // ✅ Import this
 
 @Component({
   selector: 'app-VendorRegister',
@@ -21,9 +22,10 @@ import { VendorAuthApiService } from '../../../core/VendorCore/vendor-auth-api.s
 })
 export class VendorRegisterComponent {
   @Output() close = new EventEmitter<void>();
-
+@Output() switchToLogin = new EventEmitter<void>();
   fb = inject(FormBuilder);
   authService = inject(VendorAuthApiService);
+router = inject(Router);
 
   registerForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -53,10 +55,29 @@ export class VendorRegisterComponent {
     const payload = this.registerForm.value;
 
     this.authService.register(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.isSubmitting = false;
         this.close.emit();
+        
+    const token = response.data.token;
+    const role = response.data.roles[0];
+    const userId = response.data.userId;
+localStorage.setItem('token', response.data.token);
+localStorage.setItem('role', response.data.roles[0]);
+localStorage.setItem('userId', response.data.userId);
+localStorage.setItem('name', response.data.name); 
+localStorage.setItem('email', response.data.email);
+    console.log('Stored token:', token);
+    console.log('Stored role:', role);
+    console.log('Stored userId:', userId);
         console.log('Registration successful');
+             this.router.navigate(['vendor/dashboard']); // Navigate to vendor dashboard
+
+
+             console.log('Token stored:', response.token);
+ // Store user data
+          console.log('User data stored:', response.user);
+            //  localStorage.setItem('role', response.role);  
       },
       error: (err) => {
         this.isSubmitting = false;

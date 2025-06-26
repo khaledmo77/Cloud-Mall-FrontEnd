@@ -4,9 +4,12 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ClientAuthApiService {
-  private baseUrl = 'http://cloudmall.runasp.net/api/Auth/client';
+  private baseUrl = 'http://cloudmall.runasp.net/api/Auth';
 
   constructor(private http: HttpClient) {}
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login`, credentials);
+  }
 
   register(data: {
     name: string;
@@ -14,6 +17,6 @@ export class ClientAuthApiService {
     password: string;
     confirmPassword: string;
   }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, data);
+    return this.http.post(`${this.baseUrl}/client/register`, data);
   }
 }

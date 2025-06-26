@@ -1,28 +1,22 @@
-import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { VendorRegisterComponent } from '../../vendor/VendorAuth/Register/VendorRegister.component';
-<<<<<<< HEAD
-import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component'; // if you have it
-=======
-import { VendorLoginComponent } from '../../vendor/VendorAuth/Login/VendorLogin.component';
-import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component';
+
+import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
+
+import { RouterLink, Router } from '@angular/router';
 import { clientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
->>>>>>> d43e2716c5f033e56c519d0c09b395528b7c97bc
-import { RouterLink } from '@angular/router';
+import { ClientRegisterComponent } from "../../client/ClientAuth/Register/ClientRegister.component";
+
+
 
 @Component({
-  selector: 'app-navigation',
+  selector: 'app-LandingPage',
   standalone: true,
-<<<<<<< HEAD
-  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent ,RouterLink], // Add ClientRegisterComponent if needed
-=======
-  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent, VendorLoginComponent, clientLoginComponent,RouterLink],
->>>>>>> d43e2716c5f033e56c519d0c09b395528b7c97bc
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  imports: [CommonModule, RouterLink, clientLoginComponent, ClientRegisterComponent],
+  templateUrl: './LandingPage.component.html',
+  styleUrls: ['./LandingPage.component.scss']
 })
-export class navigationComponent implements OnInit {
-  @Input() mode: 'client' | 'vendor' = 'client';
+
+export class LandingPageComponent {
 
 showVendorRegister = false;
   showClientRegister = false;
@@ -32,7 +26,7 @@ showVendorRegister = false;
   name: string | null = null;
   isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -44,6 +38,15 @@ showVendorRegister = false;
       this.isLoggedIn = !!token;
       this.name = name;
       console.log(this.isLoggedIn, this.name);
+    }
+  }
+
+  // Method to handle navigation with authentication check
+  navigateWithAuth(route: string) {
+    if (this.isLoggedIn) {
+      this.router.navigate([route]);
+    } else {
+      this.openClientLogin();
     }
   }
 
@@ -92,12 +95,14 @@ closeVendorRegister() {
   closeClientRegister() {
     console.log("Closing Client Register");
     this.showClientRegister = false;
+    this.refreshAuth(); // Refresh auth state after closing
   }
 
   refreshAuth() {
     if (this.isBrowser) {
       this.isLoggedIn = !!localStorage.getItem('token');
-      this.name = localStorage.getItem('userName'); // Again: 'userName', not 'name'
+      this.name = localStorage.getItem('name');
     }
   }
 }
+
