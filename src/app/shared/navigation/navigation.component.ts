@@ -1,23 +1,19 @@
 import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { VendorRegisterComponent } from '../../vendor/VendorAuth/Register/VendorRegister.component';
-<<<<<<< HEAD
-import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component'; // if you have it
-=======
+
 import { VendorLoginComponent } from '../../vendor/VendorAuth/Login/VendorLogin.component';
 import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component';
 import { clientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
->>>>>>> d43e2716c5f033e56c519d0c09b395528b7c97bc
+
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-<<<<<<< HEAD
-  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent ,RouterLink], // Add ClientRegisterComponent if needed
-=======
+
   imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent, VendorLoginComponent, clientLoginComponent,RouterLink],
->>>>>>> d43e2716c5f033e56c519d0c09b395528b7c97bc
+
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
