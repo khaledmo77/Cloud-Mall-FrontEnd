@@ -3,7 +3,7 @@ import { provideRouter, withPreloading } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { authInterceptor } from './core/auth-interceptor';
 import { CustomPreloadingStrategy } from './core/preloading-strategy';
 
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withPreloading(CustomPreloadingStrategy)),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     CustomPreloadingStrategy
   ]
 };

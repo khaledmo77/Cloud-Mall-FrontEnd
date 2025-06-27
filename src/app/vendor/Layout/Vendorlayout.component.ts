@@ -26,7 +26,7 @@ import { navigationComponent } from '../../shared/navigation/navigation.componen
     MatListModule,
  
   ],
-  templateUrl: './vendorlayout.component.html',
-  styleUrl: './vendorlayout.component.scss',
+  templateUrl: './Vendorlayout.component.html',
+  styleUrl: './Vendorlayout.component.scss',
 })
 export class VendorLayoutComponent {}

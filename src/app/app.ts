@@ -3,10 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,    ReactiveFormsModule],
+  imports: [RouterOutlet, ReactiveFormsModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
-  template: `<router-outlet></router-outlet>`
+  styleUrl: './app.scss'
 })
 export class App {
   protected title = 'cloudmall-frontend';

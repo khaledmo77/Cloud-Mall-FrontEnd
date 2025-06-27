@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { VendorRegisterComponent } from "../VendorAuth/Register/VendorRegister.component";
 
 interface FilterCategory {
   filter: string;
@@ -17,20 +16,11 @@ interface DashboardItem {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, VendorRegisterComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './VendorDashboard.component.html',
   styleUrl: './VendorDashboard.component.scss'
 })
 export class VendorDashboardComponent implements OnInit, AfterViewInit {
-   showRegister = false;
-
-  openRegister() {
-    this.showRegister = true;
-  }
-
-  closeRegister() {
-    this.showRegister = false;
-  }
   selectedFilter: string = '.header';
   filteredItems: DashboardItem[] = [];
   
