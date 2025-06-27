@@ -1,8 +1,7 @@
-import { Component, inject, Output, EventEmitter } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { Component, inject, Output, EventEmitter, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { VendorAuthApiService } from '../../../core/VendorCore/vendor-auth-api.service'; // adjust path
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +11,6 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   providers: [VendorAuthApiService],
   imports: [
-    MatDialogModule,
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -28,6 +26,7 @@ export class VendorLoginComponent {
   fb = inject(FormBuilder);
   authService = inject(VendorAuthApiService);
   router = inject(Router);
+  platformId = inject(PLATFORM_ID);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -55,11 +54,15 @@ export class VendorLoginComponent {
         const token = response.data.token;
         const role = response.data.roles[0];
         const userId = response.data.userId;
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', response.data.roles[0]);
-        localStorage.setItem('userId', response.data.userId);
-        localStorage.setItem('name', response.data.name); 
-        localStorage.setItem('email', response.data.email);
+        
+        // Only set localStorage if we're in a browser environment
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('role', response.data.roles[0]);
+          localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('name', response.data.name); 
+          localStorage.setItem('email', response.data.email);
+        }
 
         console.log('Login successful');
         console.log('Stored token:', token);

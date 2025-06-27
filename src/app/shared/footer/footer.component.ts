@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet,RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -16,8 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
     MatGridListModule,
     MatIconModule,
     MatListModule,
-    RouterLink,
-    RouterLinkActive,
   ],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'

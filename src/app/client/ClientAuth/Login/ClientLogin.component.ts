@@ -1,8 +1,7 @@
-import { Component, inject, Output, EventEmitter } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { Component, inject, Output, EventEmitter, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.service'; // adjust path
 import { Router, RouterModule } from '@angular/router';
@@ -12,22 +11,22 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   providers: [ClientAuthApiService],
   imports: [
-    MatDialogModule,
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule
   ],
-  templateUrl: './clientLogin.component.html',
-  styleUrl: './clientLogin.component.scss'
+  templateUrl: './ClientLogin.component.html',
+  styleUrl: './ClientLogin.component.scss'
 })
-export class clientLoginComponent {
+export class ClientLoginComponent {
   @Output() close = new EventEmitter<void>();
   @Output() switchToRegister = new EventEmitter<void>();
 
   fb = inject(FormBuilder);
   authService = inject(ClientAuthApiService);
   router = inject(Router);
+  platformId = inject(PLATFORM_ID);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -55,11 +54,15 @@ export class clientLoginComponent {
         const token = response.data.token;
         const role = response.data.roles[0];
         const userId = response.data.userId;
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', response.data.roles[0]);
-        localStorage.setItem('userId', response.data.userId);
-        localStorage.setItem('name', response.data.name); 
-        localStorage.setItem('email', response.data.email);
+        
+        // Only set localStorage if we're in a browser environment
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('role', response.data.roles[0]);
+          localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('name', response.data.name); 
+          localStorage.setItem('email', response.data.email);
+        }
 
         console.log('Login successful');
         console.log('Stored token:', token);

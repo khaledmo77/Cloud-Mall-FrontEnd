@@ -3,93 +3,39 @@ import { Routes } from '@angular/router';
 // Shared Components
 import { LandingPageComponent } from './shared/landingPage/LandingPage.component';
 
-// Client
-import { clientLoginComponent } from './client/ClientAuth/Login/ClientLogin.component';
-import { ClientRegisterComponent } from './client/ClientAuth/Register/ClientRegister.component';
-import { ClientLayoutComponent } from './client/Layout/Clientlayout.component';
-import { ClientHomeComponent } from './client/Home/home.component';
-import { StoreListComponent } from './client/store-list/store-list.component';
-import { StoreDetailsComponent } from './client/store-details/store-details.component';
-import { ProductDetailsComponent } from './client/product-details/product-details.component';
-import { OrdersComponent } from './client/orders/orders.component';
-import { CartComponent } from './client/cart/cart.component';
-import { CheckoutComponent } from './client/checkout/checkout.component';
-
-// Vendor
-import { VendorLoginComponent } from './vendor/VendorAuth/Login/VendorLogin.component';
-import { VendorRegisterComponent } from './vendor/VendorAuth/Register/VendorRegister.component';
-import { VendorLayoutComponent } from './vendor/Layout/Vendorlayout.component';
-import { VendorHomeComponent } from './vendor/Home/Vendorhome.component';
-import { VendorDashboardComponent } from './vendor/VendorDashboard/VendorDashboard.component';
-import { CreateStoreComponent } from './vendor/Create-Store/CreateStore.Component';
-import { StoreSettingsComponent } from './vendor/Store-Settings/StoreSettings.component';
-import { StorePreviewComponent } from './vendor/Store-Preview/StorePreview.component';
-import { ManageProductsComponent } from './vendor/Manage-Products/ManageProducts.component';
-import { VendorOrdersComponent } from './vendor/Orders/VendorOrders.component';
-
-// Admin
-import { AdminLayoutComponent } from './admin/Layout/layout.component';
-import { AdminHomeComponent } from './admin/Home/home.component';
-
-// Delivery
-import { DeliveryLayoutComponent } from './delivery/Layout/layout.component';
-import { DeliveryHomeComponent } from './delivery/Home/home.component';
-
-// Auth Guard
-import { roleGuard } from './core/auth.guard';
-
 export const routes: Routes = [
-  // Shared Landing Page
+  // Shared Landing Page (eager loaded)
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
   { path: 'landing', component: LandingPageComponent },
 
+  // 🔹 Shared Authentication Routes (eager loaded)
+  {
+    path: '',
+    loadChildren: () => import('./shared/shared.routes').then(m => m.SHARED_ROUTES)
+  },
 
-  // 🔹 Client Protected Area
+  // 🔹 Client Protected Area (lazy loaded)
   {
     path: 'client',
-    canActivate: [roleGuard(['Client'])],
-    component: ClientLayoutComponent,
-    children: [
-      { path: '', component: ClientHomeComponent },
-      { path: 'store-list', component: StoreListComponent },
-      { path: 'store-details/:id', component: StoreDetailsComponent },
-      { path: 'product-details', component: ProductDetailsComponent },
-      { path: 'orders', component: OrdersComponent },
-      { path: 'cart', component: CartComponent },
-      { path: 'checkout', component: CheckoutComponent },
-    ],
+    loadChildren: () => import('./client/client.routes').then(m => m.CLIENT_ROUTES)
   },
 
-  // 🔹 Vendor Protected Area
+  // 🔹 Vendor Protected Area (lazy loaded)
   {
     path: 'vendor',
-    canActivate: [roleGuard(['Vendor'])],
-    component: VendorLayoutComponent,
-    children: [
-      { path: '', component: VendorHomeComponent },
-      { path: 'dashboard', component: VendorDashboardComponent },
-      { path: 'create-store', component: CreateStoreComponent },
-      { path: 'store-settings', component: StoreSettingsComponent },
-      { path: 'store-preview', component: StorePreviewComponent },
-      { path: 'manage-products', component: ManageProductsComponent },
-      { path: 'orders', component: VendorOrdersComponent },
-    ],
+    loadChildren: () => import('./vendor/vendor.routes').then(m => m.VENDOR_ROUTES)
   },
 
-  // 🔹 Admin Protected Area
+  // 🔹 Admin Protected Area (lazy loaded)
   {
     path: 'admin',
-    canActivate: [roleGuard(['Admin'])],
-    component: AdminLayoutComponent,
-    children: [{ path: '', component: AdminHomeComponent }],
+    loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
   },
 
-  // 🔹 Delivery Protected Area
+  // 🔹 Delivery Protected Area (lazy loaded)
   {
     path: 'delivery',
-    canActivate: [roleGuard(['Delivery'])],
-    component: DeliveryLayoutComponent,
-    children: [{ path: '', component: DeliveryHomeComponent }],
+    loadChildren: () => import('./delivery/delivery.routes').then(m => m.DELIVERY_ROUTES)
   },
 
   // Fallback

@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
-import { clientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
+import { ClientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
 import { ClientRegisterComponent } from "../../client/ClientAuth/Register/ClientRegister.component";
 import { VendorLoginComponent } from "../../vendor/VendorAuth/Login/VendorLogin.component";
 import { VendorRegisterComponent } from "../../vendor/VendorAuth/Register/VendorRegister.component";
@@ -13,7 +13,7 @@ import { VendorRegisterComponent } from "../../vendor/VendorAuth/Register/Vendor
 @Component({
   selector: 'app-LandingPage',
   standalone: true,
-  imports: [CommonModule, RouterLink, clientLoginComponent, ClientRegisterComponent, VendorLoginComponent, VendorRegisterComponent],
+  imports: [CommonModule, RouterLink, ClientLoginComponent, ClientRegisterComponent, VendorLoginComponent, VendorRegisterComponent],
   templateUrl: './LandingPage.component.html',
   styleUrls: ['./LandingPage.component.scss']
 })
@@ -45,9 +45,13 @@ showVendorRegister = false;
 
   // Method to handle navigation with authentication check for clients
   navigateWithAuth(route: string) {
+    console.log("navigateWithAuth called with route:", route);
+    console.log("Current isLoggedIn state:", this.isLoggedIn);
     if (this.isLoggedIn) {
+      console.log("User is logged in, navigating to:", route);
       this.router.navigate([route]);
     } else {
+      console.log("User is not logged in, opening client login");
       this.openClientLogin();
     }
   }
@@ -70,11 +74,19 @@ showVendorRegister = false;
   }
 
   openClientLogin(){
-    console.log("Opening Client Login");
+    console.log("Opening Client Login - Method called");
+    console.log("Previous state - showClientLogin:", this.showClientLogin);
     this.showClientLogin = true; // hide vendor login
     this.showClientRegister = false; // hide client register
     this.showVendorLogin = false;
     this.showVendorRegister = false;
+    console.log("New state - showClientLogin:", this.showClientLogin);
+    console.log("All popup states:", {
+      showClientLogin: this.showClientLogin,
+      showClientRegister: this.showClientRegister,
+      showVendorLogin: this.showVendorLogin,
+      showVendorRegister: this.showVendorRegister
+    });
   }
 
   closeClientLogin() {

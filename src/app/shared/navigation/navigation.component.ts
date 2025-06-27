@@ -4,7 +4,7 @@ import { VendorRegisterComponent } from '../../vendor/VendorAuth/Register/Vendor
 
 import { VendorLoginComponent } from '../../vendor/VendorAuth/Login/VendorLogin.component';
 import { ClientRegisterComponent } from '../../client/ClientAuth/Register/ClientRegister.component';
-import { clientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
+import { ClientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
 
 import { RouterLink } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-navigation',
   standalone: true,
 
-  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent, VendorLoginComponent, clientLoginComponent,RouterLink],
+  imports: [CommonModule, VendorRegisterComponent, ClientRegisterComponent, VendorLoginComponent, ClientLoginComponent,RouterLink],
 
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
