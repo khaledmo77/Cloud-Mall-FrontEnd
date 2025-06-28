@@ -1,0 +1,94 @@
+/* Loader Component Styles */
+:host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    color: #0f0;
+    font-family: 'Source Code Pro', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Container for all loader elements */
+.loader-container {
+    text-align: center; /* Center align sub-text and progress bar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* The element where the text will be typed */
+#loader-text {
+    font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
+    font-weight: bold;
+    border-right: 0.15em solid #0f0; /* The blinking cursor */
+    white-space: nowrap; 
+    overflow: hidden;
+    display: inline-block;
+    letter-spacing: .15em;
+    animation: 
+        typing 2s steps(9, end), /* 9 steps for "QuickCrow" */
+        blink-caret .75s step-end infinite;
+}
+
+/* Sub-text styles */
+#sub-text {
+    margin-top: 1.5rem;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: #0c0; /* Slightly darker green */
+    opacity: 0; /* Initially hidden */
+    animation: fadeIn 1s ease-in 2s forwards; /* Fade in after typing animation */
+}
+
+/* Progress bar container */
+.progress-bar-container {
+    width: 80%;
+    max-width: 400px;
+    height: 10px;
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    overflow: hidden; /* Ensures the inner bar stays within the container's rounded corners */
+    opacity: 0;
+    animation: fadeIn 1s ease-in 0.5s forwards; /* Fade in before typing finishes */
+}
+
+/* The actual progress bar that fills */
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #0f0;
+    border-radius: 5px;
+    animation: fill-progress 3s ease-in-out 1s forwards; /* Start filling after a delay */
+}
+
+/* Typing effect animation */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #0f0; }
+}
+
+/* Fade in animation for sub-text and progress bar */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Progress bar filling animation */
+@keyframes fill-progress {
+    from { width: 0%; }
+    to { width: 100%; }
+} 

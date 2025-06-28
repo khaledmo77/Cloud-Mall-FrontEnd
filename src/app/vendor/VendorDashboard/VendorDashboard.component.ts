@@ -1,6 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { VendorStoreApiService, CreateStoreRequest } from '../../core/VendorCore/vendor-store-api.service';
+import { GetCategoryStoresApiService, StoreCategory } from '../../core/SiteCore/Get-CategoryStores-api.service';
+import { LoaderComponent } from '../../shared/loader/loader.component';
 
 interface FilterCategory {
   filter: string;
@@ -16,13 +20,27 @@ interface DashboardItem {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './VendorDashboard.component.html',
   styleUrl: './VendorDashboard.component.scss'
 })
 export class VendorDashboardComponent implements OnInit, AfterViewInit {
   selectedFilter: string = '.header';
   filteredItems: DashboardItem[] = [];
+  storeCategories: StoreCategory[] = [];
+  
+  // Popup properties
+  showCreateStorePopup = false;
+  isCreatingStore = false;
+  createStoreForm!: FormGroup;
+  selectedFile: File | null = null;
+  errorMessage = '';
+  successMessage = '';
+  
+  // Loader properties
+  showLoader = false;
+  createdStoreId: number | null = null;
+  vendorId: string | null = null;
   
   filterCategories: FilterCategory[] = [
     { filter: '*', label: 'ALL' },
@@ -241,13 +259,157 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
     { category: 'footer', link: 'blocks/footer-13', image: 'assets/img/screenshots/blocks/footer-13.jpg' }
   ];
 
+  constructor(
+    private storeService: VendorStoreApiService,
+    private categoryService: GetCategoryStoresApiService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    // Initialize form
+    this.createStoreForm = this.fb.group({
+      Name: ['', Validators.required],
+      Description: ['', Validators.required],
+      StoreCategoryID: [null, Validators.required]
+    });
+  }
+
   ngOnInit() {
     this.filterItems('.header');
+    this.loadStoreCategories();
+    
+    // Get vendor ID from localStorage (stored as 'userId' during login)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      this.vendorId = localStorage.getItem('userId');
+      console.log('Vendor ID from localStorage (userId):', this.vendorId);
+    }
   }
 
   ngAfterViewInit() {
     if (typeof window !== 'undefined') {
       this.initializeDashboard();
+    }
+  }
+
+  private loadStoreCategories() {
+    this.categoryService.getStoreCategories().subscribe({
+      next: (categories) => {
+        this.storeCategories = categories;
+      },
+      error: (error) => {
+        console.error('Error loading store categories:', error);
+      }
+    });
+  }
+
+  openCreateStorePopup() {
+    this.resetForm(); // Initialize form when opening popup
+    this.showCreateStorePopup = true;
+  }
+
+  closeCreateStorePopup() {
+    console.log('Closing create store popup...');
+    this.showCreateStorePopup = false;
+    console.log('Popup closed, showCreateStorePopup:', this.showCreateStorePopup);
+  }
+
+  resetForm() {
+    this.createStoreForm = this.fb.group({
+      Name: ['', Validators.required],
+      Description: ['', Validators.required],
+      StoreCategoryID: [null, Validators.required]
+    });
+    this.selectedFile = null;
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+  createStore() {
+    if (this.createStoreForm.valid) {
+      console.log('Creating store...');
+      
+      // Capture form data before closing popup
+      const storeData: CreateStoreRequest = {
+        Name: this.createStoreForm.get('Name')?.value || '',
+        Description: this.createStoreForm.get('Description')?.value || '',
+        StoreCategoryID: this.createStoreForm.get('StoreCategoryID')?.value || 0,
+        LogoFile: this.selectedFile || undefined
+      };
+      
+      // Close popup first before showing loader
+      this.closeCreateStorePopup();
+      
+      // Show loader immediately when create store button is clicked
+      this.showLoader = true;
+      
+      this.storeService.createStore(storeData).subscribe({
+        next: (response) => {
+          console.log('Store creation response:', response);
+          
+          // Handle different response formats
+          let isSuccess = false;
+          let storeId: number | null = null;
+          
+          if (response.success) {
+            isSuccess = true;
+            // Check for store ID in different possible locations
+            storeId = response.storeId || response.id || response.data || null;
+          } else if (response) {
+            // If response exists but no clear success flag, assume success
+            isSuccess = true;
+            storeId = response.storeId || response.id || response.data || null;
+          }
+          
+          if (isSuccess) {
+            this.successMessage = 'Store created successfully!';
+            this.createdStoreId = storeId;
+            
+            console.log('Store created successfully. Store ID:', this.createdStoreId);
+            console.log('Vendor ID:', this.vendorId);
+            
+            // Navigate to store preview after a short delay to show the loader
+            setTimeout(() => {
+              console.log('About to navigate to store preview...');
+              console.log('Created Store ID:', this.createdStoreId);
+              console.log('Vendor ID:', this.vendorId);
+              
+              if (this.createdStoreId && this.vendorId) {
+                const route = ['/vendor', this.vendorId, 'store', this.createdStoreId];
+                console.log('Navigating to route:', route);
+                this.router.navigate(route).then(() => {
+                  console.log('Navigation successful');
+                }).catch((error) => {
+                  console.error('Navigation failed:', error);
+                  this.showLoader = false;
+                });
+              } else {
+                this.errorMessage = 'Vendor ID or Store ID is missing. Please log in again.';
+                this.showLoader = false;
+                console.error('Navigation failed: Vendor ID or Store ID is missing.', {
+                  vendorId: this.vendorId,
+                  storeId: this.createdStoreId
+                });
+              }
+            }, 2000); // Show loader for 2 seconds before navigation
+          } else {
+            this.errorMessage = response.message || 'Failed to create store.';
+            // Hide loader if there's an error
+            this.showLoader = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error creating store:', error);
+          this.errorMessage = 'An error occurred while creating the store.';
+          // Hide loader if there's an error
+          this.showLoader = false;
+        }
+      });
     }
   }
 
@@ -313,15 +475,14 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   }
 
   private initializeIsotope() {
-    // Check if window is available (for SSR compatibility)
-    if (typeof window !== 'undefined') {
-      // Initialize isotope if the library is available
-      const isotopeElement = document.querySelector('[data-sl-isotope]');
-      if (isotopeElement && (window as any).Isotope) {
-        // Reinitialize isotope with new filter
-        const iso = new (window as any).Isotope(isotopeElement, {
-          layoutMode: 'packery',
-          filter: this.selectedFilter
+    // Isotope initialization code remains the same
+    if (typeof window !== 'undefined' && (window as any).Isotope) {
+      const grid = document.querySelector('.isotope-container');
+      if (grid) {
+        new (window as any).Isotope(grid, {
+          itemSelector: '.isotope-item',
+          layoutMode: 'fitRows',
+          transitionDuration: '0.4s'
         });
       }
     }

@@ -1,0 +1,146 @@
+.store-preview-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem 0;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+}
+
+.store-info {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.store-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.store-title {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.store-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.store-logo {
+  text-align: center;
+  padding: 1rem;
+}
+
+.store-logo img {
+  max-width: 200px;
+  height: auto;
+  border: 3px solid #e9ecef;
+  padding: 1rem;
+  background: #f8f9fa;
+}
+
+.store-details {
+  padding: 1rem;
+}
+
+.store-details h3 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.detail-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f8f9fa;
+  display: flex;
+  align-items: center;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item strong {
+  min-width: 120px;
+  color: #495057;
+  font-weight: 600;
+}
+
+.store-actions {
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 2px solid #e9ecef;
+  margin-top: 2rem;
+}
+
+.store-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.store-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.error-container .alert {
+  max-width: 500px;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .store-preview-container {
+    padding: 1rem 0;
+  }
+  
+  .store-info {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .store-title {
+    font-size: 1.5rem;
+  }
+  
+  .store-actions .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .detail-item strong {
+    min-width: auto;
+    margin-bottom: 0.25rem;
+  }
+}

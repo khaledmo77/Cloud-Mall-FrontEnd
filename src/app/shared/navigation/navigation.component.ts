@@ -1,5 +1,6 @@
 import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { VendorRegisterComponent } from '../../vendor/VendorAuth/Register/VendorRegister.component';
 
 import { VendorLoginComponent } from '../../vendor/VendorAuth/Login/VendorLogin.component';
@@ -28,7 +29,7 @@ showVendorRegister = false;
   name: string | null = null;
   isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -40,6 +41,26 @@ showVendorRegister = false;
       this.isLoggedIn = !!token;
       this.name = name;
       console.log(this.isLoggedIn, this.name);
+    }
+  }
+
+  logout() {
+    if (this.isBrowser) {
+      // Clear all session data
+      localStorage.removeItem('token');
+      localStorage.removeItem('name');
+      localStorage.removeItem('role');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('vendorId');
+      
+      // Update component state
+      this.isLoggedIn = false;
+      this.name = null;
+      
+      console.log('Logged out successfully');
+      
+      // Navigate to landing page
+      this.router.navigate(['/landing']);
     }
   }
 

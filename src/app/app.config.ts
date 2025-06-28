@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withPreloading } from '@angular/router';
+import { provideRouter, withPreloading, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -11,7 +11,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withPreloading(CustomPreloadingStrategy)),
+    provideRouter(
+      routes, 
+      withPreloading(CustomPreloadingStrategy),
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
+    ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     CustomPreloadingStrategy

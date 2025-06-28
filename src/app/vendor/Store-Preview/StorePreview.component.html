@@ -1,0 +1,82 @@
+<div class="store-preview-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading store information...</p>
+  </div>
+
+  <!-- Store Information -->
+  <div *ngIf="!isLoading && storeData" class="store-info">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="store-header">
+            <h1 class="store-title">{{ storeData.name }}</h1>
+            <p class="store-subtitle">Store ID: {{ storeData.id }} | Vendor ID: {{ storeData.vendorId }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <div class="store-logo">
+            <img [src]="storeData.logoUrl" [alt]="storeData.name + ' logo'" class="img-fluid rounded">
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="store-details">
+            <h3>Store Details</h3>
+            <div class="detail-item">
+              <strong>Name:</strong> {{ storeData.name }}
+            </div>
+            <div class="detail-item">
+              <strong>Category:</strong> {{ storeData.category }}
+            </div>
+            <div class="detail-item">
+              <strong>Description:</strong> {{ storeData.description }}
+            </div>
+            <div class="detail-item">
+              <strong>Store ID:</strong> {{ storeData.id }}
+            </div>
+            <div class="detail-item">
+              <strong>Vendor ID:</strong> {{ storeData.vendorId }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="store-actions">
+            <button class="btn btn-primary me-2">
+              <i class="fas fa-edit me-2"></i>
+              Edit Store
+            </button>
+            <button class="btn btn-success me-2">
+              <i class="fas fa-plus me-2"></i>
+              Add Products
+            </button>
+            <button class="btn btn-info">
+              <i class="fas fa-eye me-2"></i>
+              View Store
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !storeData" class="error-container">
+    <div class="alert alert-warning" role="alert">
+      <h4 class="alert-heading">Store Not Found</h4>
+      <p>The requested store could not be found or loaded.</p>
+      <hr>
+      <p class="mb-0">
+        <a href="/vendor/dashboard" class="btn btn-primary">Back to Dashboard</a>
+      </p>
+    </div>
+  </div>
+</div>
