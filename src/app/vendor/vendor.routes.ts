@@ -25,8 +25,8 @@ export const VENDOR_ROUTES: Routes = [
       { path: 'manage-products', component: ManageProductsComponent },
       { path: 'orders', component: VendorOrdersComponent },
       { 
-        path: ':vendorId/store/:storeId', 
-        component: StorePreviewComponent
+        path: ':vendorId/store/:storeId',
+        loadChildren: () => import('../shared/storePages/store.routes')
       },
     ],
   },
