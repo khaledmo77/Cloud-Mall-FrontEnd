@@ -8,7 +8,7 @@ export interface Store {
   logoURL: string;
   description : string;
   categoryName: string;
-  
+  vendorId: string;
   // add any other fields returned by your API
 }
 

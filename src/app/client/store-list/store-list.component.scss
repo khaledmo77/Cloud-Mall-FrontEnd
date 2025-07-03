@@ -38,6 +38,8 @@
   transition: all 0.3s ease-in-out;
   border-radius: 0.75rem;
   overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .card-hover:hover {

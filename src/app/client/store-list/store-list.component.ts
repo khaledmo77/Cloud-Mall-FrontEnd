@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ClientGetAllStoresApiService, Store } from '../../core/ClientCore/client-getallstores-api.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,10 @@ export class StoreListComponent implements OnInit {
     categories: string[] = [];
    error = '';
 
-   constructor(private storeService: ClientGetAllStoresApiService){}
+   constructor(
+     private storeService: ClientGetAllStoresApiService,
+     private router: Router
+   ){}
 
     ngOnInit(): void {
     this.storeService.getAllStores().subscribe({
@@ -38,6 +42,15 @@ export class StoreListComponent implements OnInit {
     this.filteredStores = this.stores.filter(store =>
       store.categoryName?.toLowerCase() === categoryName.toLowerCase()
     );
+  }
+}
+
+openVendorStore(store: Store) {
+  console.log('Clicked store:', store);
+  if (store.vendorId && store.id) {
+    this.router.navigate([`/vendor/${store.vendorId}/store/${store.id}`]);
+  } else {
+    alert('vendorId or store id missing! Store object: ' + JSON.stringify(store));
   }
 }
  }

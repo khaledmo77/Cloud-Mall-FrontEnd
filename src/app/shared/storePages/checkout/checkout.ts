@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-checkout',
+  selector: 'app-store-checkout',
   standalone: true,
   imports: [],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.scss']
 })
-export class Checkout {}
+export class StoreCheckoutComponent {}
