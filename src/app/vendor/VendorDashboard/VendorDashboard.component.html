@@ -1,12 +1,13 @@
+<app-loader *ngIf="showLoader"></app-loader>
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
 
 <!-- Loader Component -->
-<app-loader *ngIf="showLoader" 
+<!-- <app-loader *ngIf="showLoader" 
             [storeId]="createdStoreId" 
             [vendorId]="vendorId">
-</app-loader>
+</app-loader> -->
 
 <main class="main" id="top" *ngIf="!showLoader">
   <!-- ============================================-->

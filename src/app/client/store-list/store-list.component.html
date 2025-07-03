@@ -66,6 +66,21 @@
       </div>
     </div>
 
+    <!-- Pagination Controls -->
+    <nav *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+      <ul class="pagination pagination-lg">
+        <li class="page-item" [class.disabled]="pageNumber === 1">
+          <a class="page-link" (click)="prevPage()">‹</a>
+        </li>
+        <li class="page-item" [class.disabled]="pageNumber === totalPages">
+          <a class="page-link" (click)="nextPage()">›</a>
+        </li>
+      </ul>
+    </nav>
+    <div *ngIf="totalPages > 1" class="text-center text-muted mb-4">
+      Page {{ pageNumber }} of {{ totalPages }} | Showing {{ filteredStores.length }} of {{ totalItems }} stores
+    </div>
+
     <!-- Bottom Wave -->
     <div class="wave">
       <svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">

@@ -23,4 +23,12 @@ export class ClientGetAllStoresApiService {
   getAllStores(): Observable<Store[]> {
     return this.http.get<Store[]>(this.apiUrl);
   }
+
+  getStoresPaginated(options?: { categoryName?: string; pageNumber?: number; pageSize?: number }): Observable<any> {
+    let params: any = {};
+    if (options?.categoryName) params.categoryName = options.categoryName;
+    if (options?.pageNumber) params.pageNumber = options.pageNumber;
+    if (options?.pageSize) params.pageSize = options.pageSize;
+    return this.http.get<Store[]>(this.apiUrl, { params });
+  }
 }

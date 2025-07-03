@@ -24,10 +24,10 @@ export const VENDOR_ROUTES: Routes = [
       { path: 'store-preview', component: StorePreviewComponent },
       { path: 'manage-products', component: ManageProductsComponent },
       { path: 'orders', component: VendorOrdersComponent },
-      { 
-        path: ':vendorId/store/:storeId',
-        loadChildren: () => import('../shared/storePages/store.routes')
-      },
     ],
+  },
+  { 
+    path: ':vendorId/store/:storeId',
+    loadChildren: () => import('../shared/storePages/store.routes')
   },
 ]; 

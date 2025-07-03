@@ -333,7 +333,6 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   createStore() {
     if (this.createStoreForm.valid) {
       console.log('Creating store...');
-      
       // Capture form data before closing popup
       const storeData: CreateStoreRequest = {
         Name: this.createStoreForm.get('Name')?.value || '',
@@ -341,21 +340,15 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
         StoreCategoryID: this.createStoreForm.get('StoreCategoryID')?.value || 0,
         LogoFile: this.selectedFile || undefined
       };
-      
       // Close popup first before showing loader
       this.closeCreateStorePopup();
-      
-      // Show loader immediately when create store button is clicked
       this.showLoader = true;
-      
       this.storeService.createStore(storeData).subscribe({
         next: (response) => {
           console.log('Store creation response:', response);
-          
           // Handle different response formats
           let isSuccess = false;
           let storeId: number | null = null;
-          
           if (response.success) {
             isSuccess = true;
             // Check for store ID in different possible locations
@@ -365,48 +358,27 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
             isSuccess = true;
             storeId = response.storeId || response.id || response.data || null;
           }
-          
           if (isSuccess) {
             this.successMessage = 'Store created successfully!';
             this.createdStoreId = storeId;
-            
             console.log('Store created successfully. Store ID:', this.createdStoreId);
             console.log('Vendor ID:', this.vendorId);
-            
             // Navigate to store preview after a short delay to show the loader
             setTimeout(() => {
-              console.log('About to navigate to store preview...');
-              console.log('Created Store ID:', this.createdStoreId);
-              console.log('Vendor ID:', this.vendorId);
-              
               if (this.createdStoreId && this.vendorId) {
                 const route = ['/vendor', this.vendorId, 'store', this.createdStoreId];
-                console.log('Navigating to route:', route);
-                this.router.navigate(route).then(() => {
-                  console.log('Navigation successful');
-                }).catch((error) => {
-                  console.error('Navigation failed:', error);
-                  this.showLoader = false;
-                });
-              } else {
-                this.errorMessage = 'Vendor ID or Store ID is missing. Please log in again.';
-                this.showLoader = false;
-                console.error('Navigation failed: Vendor ID or Store ID is missing.', {
-                  vendorId: this.vendorId,
-                  storeId: this.createdStoreId
-                });
+                this.router.navigate(route);
               }
-            }, 2000); // Show loader for 2 seconds before navigation
+              this.showLoader = false;
+            }, 2000);
           } else {
             this.errorMessage = response.message || 'Failed to create store.';
-            // Hide loader if there's an error
             this.showLoader = false;
           }
         },
         error: (error) => {
           console.error('Error creating store:', error);
           this.errorMessage = 'An error occurred while creating the store.';
-          // Hide loader if there's an error
           this.showLoader = false;
         }
       });

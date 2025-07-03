@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ export class LoaderComponent implements OnInit {
   @Input() storeId: number | null = null;
   @Input() vendorId: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     console.log('Loader component initialized');
@@ -28,10 +28,12 @@ export class LoaderComponent implements OnInit {
   }
 
   private startTypingEffect() {
-    const textToType = "QuickCrow";
-    const targetElement = document.getElementById('loader-text');
-    if (targetElement) {
-      targetElement.textContent = textToType;
+    if (isPlatformBrowser(this.platformId)) {
+      const textToType = "QuickCrow";
+      const targetElement = document.getElementById('loader-text');
+      if (targetElement) {
+        targetElement.textContent = textToType;
+      }
     }
   }
 } 
