@@ -35,4 +35,3 @@ const routes: Routes = [
 ];
 
 export const STORE_ROUTES = routes;
-export default routes; 

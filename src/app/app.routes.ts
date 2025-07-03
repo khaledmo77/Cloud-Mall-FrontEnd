@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 // Shared Components
 import { LandingPageComponent } from './shared/landingPage/LandingPage.component';
+import { landingRedirectGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   // Shared Landing Page (eager loaded)

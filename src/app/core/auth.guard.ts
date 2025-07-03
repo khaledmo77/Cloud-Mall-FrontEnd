@@ -29,3 +29,28 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     return true;
   };
 };
+
+export const landingRedirectGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
+
+  if (!isPlatformBrowser(platformId)) {
+    return true;
+  }
+
+  if (auth.isLoggedIn()) {
+    const role = auth.getUserRole();
+    if (role === 'Vendor') {
+      router.navigate(['/vendor/dashboard']);
+      return false;
+    } else if (role === 'Client') {
+      router.navigate(['/client/home']);
+      return false;
+    } else {
+      router.navigate(['/']); // fallback
+      return false;
+    }
+  }
+  return true; // allow access to landing if not logged in
+};

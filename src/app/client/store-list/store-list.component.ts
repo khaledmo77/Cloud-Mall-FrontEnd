@@ -39,21 +39,29 @@ export class StoreListComponent implements OnInit {
       pageSize: this.pageSize
     }).subscribe({
       next: (response) => {
-        // If backend returns { items, totalPages, totalItems }, use that. Otherwise, fallback.
-        if (response.items && response.totalPages) {
-          this.stores = response.items;
-          this.filteredStores = response.items;
-          this.totalPages = response.totalPages;
-          this.totalItems = response.totalItems;
-        } else {
-          this.stores = response;
-          this.filteredStores = response;
+        let items: Store[] = [];
+        if (response && Array.isArray(response.allStores)) {
+          items = response.allStores;
+          this.totalPages = response.totalNumberOfPages || 1;
+          this.totalItems = response.totalCount || items.length;
+        } else if (Array.isArray(response)) {
+          items = response;
           this.totalPages = 1;
           this.totalItems = response.length;
+        } else {
+          items = [];
+          this.totalPages = 1;
+          this.totalItems = 0;
         }
+        this.stores = items;
+        this.filteredStores = items;
       },
       error: (err) => {
         this.error = 'Failed to load stores';
+        this.stores = [];
+        this.filteredStores = [];
+        this.totalPages = 1;
+        this.totalItems = 0;
       }
     });
   }

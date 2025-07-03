@@ -18,7 +18,7 @@ import { VendorRegisterComponent } from "../../vendor/VendorAuth/Register/Vendor
   styleUrls: ['./LandingPage.component.scss']
 })
 
-export class LandingPageComponent {
+export class LandingPageComponent implements OnInit {
 
 showVendorRegister = false;
   showClientRegister = false;

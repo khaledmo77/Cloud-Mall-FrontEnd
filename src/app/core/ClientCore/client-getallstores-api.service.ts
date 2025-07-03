@@ -6,10 +6,18 @@ export interface Store {
   id: number;
   name: string;
   logoURL: string;
-  description : string;
+  description: string;
   categoryName: string;
-  vendorId: string;
+  vendorID: string;
   // add any other fields returned by your API
+}
+
+export interface GetAllStoresResponse {
+  pageSize: number;
+  totalCount: number;
+  currentPage: number;
+  totalNumberOfPages: number;
+  allStores: Store[];
 }
 
 @Injectable({
@@ -20,15 +28,15 @@ export class ClientGetAllStoresApiService {
 
   constructor(private http: HttpClient) {}
 
-  getAllStores(): Observable<Store[]> {
-    return this.http.get<Store[]>(this.apiUrl);
+  getAllStores(): Observable<GetAllStoresResponse> {
+    return this.http.get<GetAllStoresResponse>(this.apiUrl);
   }
 
-  getStoresPaginated(options?: { categoryName?: string; pageNumber?: number; pageSize?: number }): Observable<any> {
+  getStoresPaginated(options?: { categoryName?: string; pageNumber?: number; pageSize?: number }): Observable<GetAllStoresResponse> {
     let params: any = {};
     if (options?.categoryName) params.categoryName = options.categoryName;
     if (options?.pageNumber) params.pageNumber = options.pageNumber;
     if (options?.pageSize) params.pageSize = options.pageSize;
-    return this.http.get<Store[]>(this.apiUrl, { params });
+    return this.http.get<GetAllStoresResponse>(this.apiUrl, { params });
   }
 }

@@ -28,6 +28,6 @@ export const VENDOR_ROUTES: Routes = [
   },
   { 
     path: ':vendorId/store/:storeId',
-    loadChildren: () => import('../shared/storePages/store.routes')
+    loadChildren: () => import('../shared/storePages/store.routes').then(m => m.STORE_ROUTES)
   },
 ]; 
