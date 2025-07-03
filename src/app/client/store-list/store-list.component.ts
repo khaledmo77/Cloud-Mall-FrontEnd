@@ -65,9 +65,11 @@ export class StoreListComponent implements OnInit {
   }
 
   openVendorStore(store: Store) {
-    console.log('Clicked store:', store);
-    if (store.vendorId && store.id) {
-      this.router.navigate([`/vendor/${store.vendorId}/store/${store.id}`]);
+    // Support both vendorId and vendorID from backend
+    const vendorId = (store as any).vendorId || (store as any).vendorID;
+    const storeId = store.id;
+    if (vendorId && storeId) {
+      this.router.navigate([`/vendor/${vendorId}/store/${storeId}`]);
     } else {
       alert('vendorId or store id missing! Store object: ' + JSON.stringify(store));
     }
