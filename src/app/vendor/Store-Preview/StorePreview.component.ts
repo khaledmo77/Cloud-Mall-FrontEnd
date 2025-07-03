@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-StorePreview',
@@ -15,13 +16,16 @@ export class StorePreviewComponent implements OnInit, OnDestroy {
   storeData: any = null;
   isLoading = true;
   private isDestroyed = false;
+  isVendor = false;
 
   constructor(
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
+    this.isVendor = this.auth.getUserRole() === 'Vendor';
     // Get route parameters using paramMap for better handling
     this.route.paramMap.subscribe(params => {
       this.vendorId = params.get('vendorId');

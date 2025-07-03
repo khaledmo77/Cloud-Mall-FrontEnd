@@ -1,3 +1,9 @@
+<!-- Success Alert -->
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 2000; min-width: 300px; max-width: 90vw;">
+  {{ successMessage }}
+  <button type="button" class="btn-close" aria-label="Close" (click)="successMessage = null"></button>
+</div>
+
 <!-- Start Hero Area -->
 <section class="hero-area">
     <div class="container">
@@ -42,6 +48,96 @@
     </div>
 </section>
 <!-- End Hero Area -->
+
+<!-- Vendor-only action buttons -->
+<div *ngIf="isVendor" class="mb-4 d-flex gap-2">
+  <button class="btn btn-success" (click)="showAddProductModal = true">Add Product</button>
+  <button class="btn btn-primary" (click)="showAddCategoryModal = true">Add Product Category</button>
+</div>
+
+<!-- Add Product Modal -->
+<div *ngIf="showAddProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
+  <div class="modal-dialog" style="z-index: 1060;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Product</h5>
+        <button type="button" class="btn-close" (click)="showAddProductModal = false"></button>
+      </div>
+      <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label>Name</label>
+            <input type="text" class="form-control" [(ngModel)]="addProductData.name" name="name" required />
+          </div>
+          <div class="mb-3">
+            <label>Description</label>
+            <input type="text" class="form-control" [(ngModel)]="addProductData.description" name="description" required />
+          </div>
+          <div class="mb-3">
+            <label>Brand</label>
+            <input type="text" class="form-control" [(ngModel)]="addProductData.brand" name="brand" />
+          </div>
+          <div class="mb-3">
+            <label>SKU</label>
+            <input type="text" class="form-control" [(ngModel)]="addProductData.sku" name="sku" />
+          </div>
+          <div class="mb-3">
+            <label>Price</label>
+            <input type="number" class="form-control" [(ngModel)]="addProductData.price" name="price" required />
+          </div>
+          <div class="mb-3">
+            <label>Discount</label>
+            <input type="number" class="form-control" [(ngModel)]="addProductData.discount" name="discount" />
+          </div>
+          <div class="mb-3">
+            <label>Stock</label>
+            <input type="number" class="form-control" [(ngModel)]="addProductData.stock" name="stock" />
+          </div>
+          <div class="mb-3">
+            <label>Image</label>
+            <input type="file" class="form-control" (change)="onProductImageChange($event)" />
+          </div>
+          <div class="mb-3">
+            <label>Product Category ID</label>
+            <input type="number" class="form-control" [(ngModel)]="addProductData.productCategoryId" name="productCategoryId" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="showAddProductModal = false">Cancel</button>
+          <button type="submit" class="btn btn-success">Add Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Product Category Modal -->
+<div *ngIf="showAddCategoryModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
+  <div class="modal-dialog" style="z-index: 1060;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Product Category</h5>
+        <button type="button" class="btn-close" (click)="showAddCategoryModal = false"></button>
+      </div>
+      <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label>Name</label>
+            <input type="text" class="form-control" [(ngModel)]="addCategoryData.name" name="categoryName" required />
+          </div>
+          <div class="mb-3">
+            <label>Description</label>
+            <input type="text" class="form-control" [(ngModel)]="addCategoryData.description" name="categoryDescription" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="showAddCategoryModal = false">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- Start Trending Product Area -->
 <section class="trending-product section" style="margin-top: 12px;">

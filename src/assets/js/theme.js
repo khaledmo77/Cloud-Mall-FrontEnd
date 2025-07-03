@@ -1900,11 +1900,15 @@ var isotopeInit = function isotopeInit() {
 
 var glightboxInit = function glightboxInit() {
   if (window.GLightbox) {
-    window.GLightbox({
-      selector: '[data-gallery]'
-    });
+    var elements = document.querySelectorAll('[data-gallery]');
+    if (elements && elements.length > 0) {
+      window.GLightbox({
+        selector: '[data-gallery]'
+      });
+    }
   }
-}; // import utils from "./utils";
+};
+// import utils from "./utils";
 
 /*-----------------------------------------------
 |   Top navigation opacity on scroll
