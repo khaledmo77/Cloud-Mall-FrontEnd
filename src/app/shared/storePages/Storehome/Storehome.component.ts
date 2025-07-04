@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HeroSlider } from '../../storeComponents/hero-slider/hero-slider';
 import { ProductApiService } from '../../../core/storeCore/product-api.service';
@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { GetProductsApiService } from '../../../core/storeCore/Get-Products-api.service';
 import { AuthService } from '../../../core/auth.service';
 import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
+import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { FormsModule } from '@angular/forms';
 
 
@@ -20,6 +21,8 @@ export class Storehome {
     storeId: number = 0;
     products: any[] = [];
     isVendor = false;
+    isLoading = false;
+    errorMessage: string | null = null;
     showAddProductModal = false;
     showAddCategoryModal = false;
     addProductData: any = {
@@ -39,16 +42,21 @@ export class Storehome {
     };
     successMessage: string | null = null;
 
-     constructor( private route: ActivatedRoute, 
+     constructor( 
+     private route: ActivatedRoute, 
      private productService: ProductApiService,
+     private clientProductService: ClientProductApiService,
      private auth: AuthService,
-     private storeProductCategoryService: StoreProductCategoryApiService
+     private storeProductCategoryService: StoreProductCategoryApiService,
+     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    console.log('Storehome ngOnInit');
     this.isVendor = this.auth.getUserRole() === 'Vendor';
     this.route.paramMap.subscribe(params => {
       const id = params.get('storeId');
+      console.log('paramMap subscribe', { id });
       if (id) {
         this.storeId = +id;
         this.loadProducts();
@@ -56,19 +64,36 @@ export class Storehome {
     });
   }
    loadProducts(): void {
-    this.productService.getProductsByStore(this.storeId).subscribe({
+    this.isLoading = true;
+    this.errorMessage = null;
+    console.log('isLoading set to true');
+    // Use appropriate service based on user role
+    const service = this.isVendor ? this.productService : this.clientProductService;
+    console.log('Loading products for store:', this.storeId, 'User role:', this.auth.getUserRole(), 'Using service:', this.isVendor ? 'vendor' : 'client');
+    
+    service.getProductsByStore(this.storeId).subscribe({
       next: (data) => {
-        if (Array.isArray(data)) {
-          this.products = data;
-        } else if (data && Array.isArray(data.products)) {
-          this.products = data.products;
-        } else {
-          this.products = [];
-        }
+        this.isLoading = false;
+        console.log('isLoading set to false (next)');
+        this.products = Array.isArray(data) ? data : [];
+        console.log('Products loaded:', this.products);
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.isLoading = false;
+        console.log('isLoading set to false (error)');
         console.error('Error loading store products:', err);
         this.products = [];
+        if (err.status === 403) {
+          this.errorMessage = 'Access denied. You may not have permission to view these products.';
+        } else if (err.status === 404) {
+          this.errorMessage = 'Store or products not found.';
+        } else if (err.status === 0) {
+          this.errorMessage = 'Network error. Please check your connection and try again.';
+        } else {
+          this.errorMessage = `Failed to load products (${err.status}). Please try again later.`;
+        }
+        this.cdr.detectChanges();
       }
     });
   }
@@ -97,7 +122,14 @@ export class Storehome {
     if (this.addProductData.productCategoryId) {
       formData.append('ProductCategoryID', this.addProductData.productCategoryId);
     }
-    this.productService.addProduct(formData).subscribe({
+    
+    console.log('Adding product for store:', this.storeId);
+    console.log('FormData entries:');
+    for (let [key, value] of formData.entries()) {
+      console.log(key + ':', value);
+    }
+    
+    this.productService.addProduct(formData, this.storeId).subscribe({
       next: () => {
         this.successMessage = 'Product added successfully!';
         setTimeout(() => {
@@ -107,7 +139,22 @@ export class Storehome {
         this.loadProducts();
       },
       error: (err) => {
-        alert('Failed to add product: ' + err.message);
+        console.error('Error adding product:', err);
+        let errorMessage = 'Failed to add product';
+        
+        if (err.status === 400) {
+          errorMessage = 'Invalid product data. Please check all required fields.';
+        } else if (err.status === 401) {
+          errorMessage = 'Unauthorized. Please log in again.';
+        } else if (err.status === 403) {
+          errorMessage = 'Access denied. You may not have permission to add products to this store.';
+        } else if (err.status === 0) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        }
+        
+        alert(errorMessage);
       }
     });
   }
@@ -129,5 +176,11 @@ export class Storehome {
         alert('Failed to add category: ' + err.message);
       }
     });
+  }
+
+  getProductImageUrl(imagesURL: string): string {
+    if (!imagesURL) return 'assets/images/placeholder.png'; // fallback image
+    if (imagesURL.startsWith('http')) return imagesURL;
+    return 'http://cloudmall.runasp.net' + imagesURL;
   }
 }

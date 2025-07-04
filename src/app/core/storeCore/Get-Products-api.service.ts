@@ -15,4 +15,8 @@ export class GetProductsApiService{
 //     return this.http.get<Product[]>(this.baseUrl);
 //   }
 
+  getProductsByVendorStore(storeId: number): Observable<any[]> {
+    return this.http.get<any[]>(`http://cloudmall.runasp.net/api/Product/vendor/${storeId}`);
+  }
+
 }
