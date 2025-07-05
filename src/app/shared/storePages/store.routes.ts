@@ -12,6 +12,7 @@ import { StoreCheckoutComponent } from './checkout/checkout';
 import { Faq } from './faq/faq';
 import { MailSuccess } from './mail-success/mail-success';
 import { NotFound } from './not-found/not-found';
+import { StoreSettingsComponent } from '../../vendor/Store-Settings/StoreSettings.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
       { path: 'checkout', component: StoreCheckoutComponent },
       { path: 'faq', component: Faq },
       { path: 'mail-success', component: MailSuccess },
+      { path: 'storesettings', component: StoreSettingsComponent },
       { path: '**', component: NotFound }
     ]
   }

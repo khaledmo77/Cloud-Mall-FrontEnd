@@ -1,0 +1,335 @@
+<div class="store-settings-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon>store</mat-icon>
+        Store Settings & Dashboard
+      </h1>
+      <p class="page-subtitle">Manage your store, products, and orders from one central location</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>inventory</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ storeStats.totalProducts }}</h3>
+            <p>Total Products</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>shopping_cart</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ storeStats.totalOrders }}</h3>
+            <p>Total Orders</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>${{ storeStats.totalRevenue.toLocaleString() }}</h3>
+            <p>Total Revenue</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>pending</mat-icon>
+          </div>
+          <div class="stat-details">
+            <h3>{{ storeStats.pendingOrders }}</h3>
+            <p>Pending Orders</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Tabs -->
+  <mat-card class="main-content-card">
+    <mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="300ms">
+      
+      <!-- Dashboard Tab -->
+      <mat-tab label="Dashboard">
+        <div class="tab-content">
+          <div class="dashboard-grid">
+            
+            <!-- Recent Orders -->
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>receipt</mat-icon>
+                  Recent Orders
+                </mat-card-title>
+                <mat-card-subtitle>Latest customer orders</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item *ngFor="let order of recentOrders" class="order-item">
+                    <div class="order-info">
+                      <div class="order-header">
+                        <span class="order-id">{{ order.id }}</span>
+                        <mat-chip [color]="getStatusColor(order.status)" selected>
+                          {{ order.status }}
+                        </mat-chip>
+                      </div>
+                      <div class="order-details">
+                        <span class="customer-name">{{ order.customer }}</span>
+                        <span class="order-amount">${{ order.amount }}</span>
+                      </div>
+                      <div class="order-date">{{ order.date }}</div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+                <div class="view-all">
+                  <button mat-button color="primary">
+                    View All Orders
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Low Stock Alert -->
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>warning</mat-icon>
+                  Low Stock Alert
+                </mat-card-title>
+                <mat-card-subtitle>Products running low on inventory</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item *ngFor="let product of lowStockProducts" class="stock-item">
+                    <div class="stock-info">
+                      <div class="product-name">{{ product.name }}</div>
+                      <div class="stock-details">
+                        <span class="stock-count">Stock: {{ product.stock }}</span>
+                        <mat-chip [color]="getStockColor(product.stock, product.threshold)" selected>
+                          {{ getStockStatus(product.stock, product.threshold) }}
+                        </mat-chip>
+                      </div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+                <div class="view-all">
+                  <button mat-button color="primary">
+                    Manage Inventory
+                    <mat-icon>arrow_forward</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Quick Actions -->
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>flash_on</mat-icon>
+                  Quick Actions
+                </mat-card-title>
+                <mat-card-subtitle>Common tasks and shortcuts</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="quick-actions">
+                  <button mat-raised-button color="primary" class="action-btn">
+                    <mat-icon>add</mat-icon>
+                    Add Product
+                  </button>
+                  <button mat-raised-button color="accent" class="action-btn">
+                    <mat-icon>category</mat-icon>
+                    Add Category
+                  </button>
+                  <button mat-raised-button color="warn" class="action-btn">
+                    <mat-icon>inventory</mat-icon>
+                    Manage Stock
+                  </button>
+                  <button mat-raised-button class="action-btn">
+                    <mat-icon>analytics</mat-icon>
+                    View Reports
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Store Settings Tab -->
+      <mat-tab label="Store Settings">
+        <div class="tab-content">
+          <div class="settings-grid">
+            
+            <!-- Basic Information -->
+            <mat-card class="settings-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>store</mat-icon>
+                  Basic Information
+                </mat-card-title>
+                <mat-card-subtitle>Store details and contact information</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <form class="settings-form">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Store Name</mat-label>
+                    <input matInput [(ngModel)]="storeSettings.storeName" name="storeName">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput [(ngModel)]="storeSettings.description" name="description" rows="3"></textarea>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" [(ngModel)]="storeSettings.email" name="email">
+                    <mat-icon matSuffix>email</mat-icon>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Phone</mat-label>
+                    <input matInput [(ngModel)]="storeSettings.phone" name="phone">
+                    <mat-icon matSuffix>phone</mat-icon>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput [(ngModel)]="storeSettings.address" name="address" rows="2"></textarea>
+                    <mat-icon matSuffix>location_on</mat-icon>
+                  </mat-form-field>
+
+                  <div class="form-row">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Currency</mat-label>
+                      <mat-select [(ngModel)]="storeSettings.currency" name="currency">
+                        <mat-option value="USD">USD ($)</mat-option>
+                        <mat-option value="EUR">EUR (€)</mat-option>
+                        <mat-option value="GBP">GBP (£)</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>Timezone</mat-label>
+                      <mat-select [(ngModel)]="storeSettings.timezone" name="timezone">
+                        <mat-option value="EST">Eastern Time (EST)</mat-option>
+                        <mat-option value="PST">Pacific Time (PST)</mat-option>
+                        <mat-option value="CST">Central Time (CST)</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </form>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Notifications -->
+            <mat-card class="settings-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>notifications</mat-icon>
+                  Notifications
+                </mat-card-title>
+                <mat-card-subtitle>Configure notification preferences</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="notification-settings">
+                  <div class="setting-item">
+                    <div class="setting-info">
+                      <h4>Auto Accept Orders</h4>
+                      <p>Automatically accept new orders without manual approval</p>
+                    </div>
+                    <mat-slide-toggle [(ngModel)]="storeSettings.autoAcceptOrders"></mat-slide-toggle>
+                  </div>
+
+                  <mat-divider></mat-divider>
+
+                  <div class="setting-item">
+                    <div class="setting-info">
+                      <h4>Email Notifications</h4>
+                      <p>Receive order notifications via email</p>
+                    </div>
+                    <mat-slide-toggle [(ngModel)]="storeSettings.emailNotifications"></mat-slide-toggle>
+                  </div>
+
+                  <mat-divider></mat-divider>
+
+                  <div class="setting-item">
+                    <div class="setting-info">
+                      <h4>SMS Notifications</h4>
+                      <p>Receive order notifications via SMS</p>
+                    </div>
+                    <mat-slide-toggle [(ngModel)]="storeSettings.smsNotifications"></mat-slide-toggle>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+
+          <!-- Save Button -->
+          <div class="save-section">
+            <button mat-raised-button color="primary" class="save-btn">
+              <mat-icon>save</mat-icon>
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Products Tab -->
+      <mat-tab label="Products">
+        <div class="tab-content">
+          <div class="products-header">
+            <h2>Product Management</h2>
+            <button mat-raised-button color="primary">
+              <mat-icon>add</mat-icon>
+              Add New Product
+            </button>
+          </div>
+          <p>Product management interface will be implemented here.</p>
+        </div>
+      </mat-tab>
+
+      <!-- Orders Tab -->
+      <mat-tab label="Orders">
+        <div class="tab-content">
+          <div class="orders-header">
+            <h2>Order Management</h2>
+            <button mat-raised-button color="accent">
+              <mat-icon>refresh</mat-icon>
+              Refresh Orders
+            </button>
+          </div>
+          <p>Order management interface will be implemented here.</p>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card>
+</div>

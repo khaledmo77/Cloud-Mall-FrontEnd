@@ -267,6 +267,9 @@
                                 <li class="nav-item">
                                     <a routerLink="/contact" routerLinkActive="active">Contact Us</a>
                                 </li>
+                                <li class="nav-item" *ngIf="isVendor">
+                                    <a routerLink="./storesettings" routerLinkActive="active">Store Settings</a>
+                                </li>
                             </ul>
                         </div> <!-- navbar collapse -->
                     </nav>

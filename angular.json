@@ -33,7 +33,10 @@
               "src/assets/css/tiny-slider.css",
               "src/assets/css/glightbox.min.css",
               "src/styles.scss"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            }
           },
           "configurations": {
             "production": {

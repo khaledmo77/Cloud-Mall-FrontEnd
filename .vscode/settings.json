@@ -1,0 +1,17 @@
+{
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "files.exclude": {
+    "**/dist": true,
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/dist": true,
+    "**/node_modules": true
+  },
+  "css.lint.unknownVendorSpecificProperties": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+  "scss.lint.unknownVendorSpecificProperties": "ignore",
+  "scss.lint.vendorPrefix": "ignore"
+} 
