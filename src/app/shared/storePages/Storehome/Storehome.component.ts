@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/auth.service';
 import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { FormsModule } from '@angular/forms';
+import { CartService } from '../../../core/ClientCore/client-cart-api.service';
 
 
 @Component({
@@ -48,7 +49,8 @@ export class Storehome {
      private clientProductService: ClientProductApiService,
      private auth: AuthService,
      private storeProductCategoryService: StoreProductCategoryApiService,
-     private cdr: ChangeDetectorRef
+     private cdr: ChangeDetectorRef,
+     private cartService : CartService
   ) {}
 
   ngOnInit(): void {
@@ -224,4 +226,20 @@ export class Storehome {
   onImageError(imageUrl: string): void {
     console.log('Image failed to load:', imageUrl);
   }
+
+
+  addToCart(product: any) {
+  if (this.isVendor) return; // check
+
+  this.cartService.addToCart({
+    productId: product.id,
+    productName: product.name,
+    price: product.price,
+    quantity: 1,
+    imageUrl: product.imagesURL
+  });
+
+  alert(`${product.name} added to cart!`);
+}
+
 }

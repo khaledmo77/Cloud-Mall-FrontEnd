@@ -179,10 +179,13 @@
                             <img [src]="getProductImageUrl(product.imagesURL)" alt="Product image" 
                                  (load)="onImageLoad(product.imagesURL)" 
                                  (error)="onImageError(product.imagesURL)" />
-                            <div class="button">
-                                <a [routerLink]="['/product-details', product.id]" class="btn">
+                            <div class="button" *ngIf="!isVendor">
+                                <!-- <a [routerLink]="['/product-details', product.id]" class="btn">
                                     <i class="lni lni-cart"></i> Add to Cart
-                                </a>
+                                </a> -->
+                                <button (click)="addToCart(product)" class="btn">
+                                    <i class="lni lni-cart"></i> Add to Cart
+                                </button>
                             </div>
                         </div>
                         <div class="product-info">
