@@ -179,8 +179,29 @@ export class Storehome {
   }
 
   getProductImageUrl(imagesURL: string): string {
-    if (!imagesURL) return 'assets/images/placeholder.png'; // fallback image
-    if (imagesURL.startsWith('http')) return imagesURL;
-    return 'http://cloudmall.runasp.net' + imagesURL;
+    console.log('getProductImageUrl - input:', imagesURL);
+    console.log('getProductImageUrl - type:', typeof imagesURL);
+    
+    if (!imagesURL) {
+      console.log('getProductImageUrl - no URL, using placeholder');
+      return 'assets/images/placeholder.png'; // fallback image
+    }
+    
+    if (imagesURL.startsWith('http')) {
+      console.log('getProductImageUrl - absolute URL:', imagesURL);
+      return imagesURL;
+    }
+    
+    const fullUrl = 'http://cloudmall.runasp.net/' + imagesURL.replace(/^\//, '');
+    console.log('getProductImageUrl - constructed URL:', fullUrl);
+    return fullUrl;
+  }
+
+  onImageLoad(imageUrl: string): void {
+    console.log('Image loaded successfully:', imageUrl);
+  }
+
+  onImageError(imageUrl: string): void {
+    console.log('Image failed to load:', imageUrl);
   }
 }

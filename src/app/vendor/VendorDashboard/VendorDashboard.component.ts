@@ -6,6 +6,7 @@ import { VendorStoreApiService, CreateStoreRequest } from '../../core/VendorCore
 import { VendorStoresApiService, VendorStore } from '../../core/VendorCore/vendor-stores-api.service';
 import { GetCategoryStoresApiService, StoreCategory } from '../../core/SiteCore/Get-CategoryStores-api.service';
 import { LoaderComponent } from '../../shared/loader/loader.component';
+import { environment } from '../../../environments/environment';
 
 interface FilterCategory {
   filter: string;
@@ -514,7 +515,7 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
       if (logoURL.startsWith('http')) {
         return logoURL;
       } else {
-        return `http://cloudmall.runasp.net${logoURL}`;
+        return `${environment.imageBaseUrl}/${logoURL.replace(/^\//, '')}`;
       }
     }
     return 'assets/images/products/product-1.jpg'; // Default store image

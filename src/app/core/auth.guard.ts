@@ -16,8 +16,10 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     }
 
     const role = auth.getUserRole();
+    console.log('roleGuard - checking role:', role, 'against allowed roles:', allowedRoles);
 
     if (!role || !allowedRoles.includes(role)) {
+      console.log('roleGuard - Access denied for role:', role);
       if (role === 'Vendor') {
         router.navigate(['/vendor/login']);
       } else {
@@ -26,6 +28,7 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
       return false;
     }
 
+    console.log('roleGuard - Access granted for role:', role);
     return true;
   };
 };
@@ -39,18 +42,28 @@ export const landingRedirectGuard: CanActivateFn = () => {
     return true;
   }
 
+  // Debug logging
+  console.log('landingRedirectGuard - isLoggedIn:', auth.isLoggedIn());
+  console.log('landingRedirectGuard - role:', auth.getUserRole());
+  console.log('landingRedirectGuard - token:', auth.getToken());
+
+  // Check if user is logged in
   if (auth.isLoggedIn()) {
     const role = auth.getUserRole();
+    console.log('landingRedirectGuard - User logged in with role:', role);
+    
     if (role === 'Vendor') {
+      console.log('landingRedirectGuard - Redirecting to vendor dashboard');
       router.navigate(['/vendor/dashboard']);
       return false;
     } else if (role === 'Client') {
-      router.navigate(['/client/home']);
-      return false;
-    } else {
-      router.navigate(['/']); // fallback
+      console.log('landingRedirectGuard - Redirecting to client home');
+      router.navigate(['/client']);
       return false;
     }
   }
-  return true; // allow access to landing if not logged in
+  
+  console.log('landingRedirectGuard - Allowing access to landing page');
+  // If not logged in or no valid role, allow access to landing page
+  return true;
 };

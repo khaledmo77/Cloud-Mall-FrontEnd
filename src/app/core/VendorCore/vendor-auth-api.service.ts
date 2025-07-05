@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root' // ✅ Required for global DI
 })
 export class VendorAuthApiService {
-  private baseUrl = 'http://cloudmall.runasp.net/api/Auth';
+  private baseUrl = `${environment.apiBaseUrl}/Auth`;
 
   constructor(private http: HttpClient) {}
 
