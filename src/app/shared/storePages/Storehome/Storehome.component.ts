@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HeroSlider } from '../../storeComponents/hero-slider/hero-slider';
 import { ProductApiService } from '../../../core/storeCore/product-api.service';
 import { CommonModule } from '@angular/common';
+import { GetProductsApiService } from '../../../core/storeCore/Get-Products-api.service';
 import { AuthService } from '../../../core/auth.service';
 import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
