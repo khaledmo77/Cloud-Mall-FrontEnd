@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartService } from '../../../core/ClientCore/client-cart-api.service';
 import { CartItem } from '../../../core/ClientCore/client-cart-api.service'; // update the path as needed
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-StoreHeader',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive , CommonModule],
   templateUrl: './StoreHeader.component.html',
   styleUrl: './StoreHeader.component.scss'
 })
@@ -14,6 +16,8 @@ export class StoreHeader implements OnInit {
   cartItems: CartItem[] = [];
   totalCount = 0;
   totalAmount =0;
+  total$!: Observable<number>; // Declare total$ as a class property
+
 
    constructor(private cartService: CartService,) {}
 
@@ -22,6 +26,7 @@ export class StoreHeader implements OnInit {
       this.cartItems = items;
       this.totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
       this.totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      this.total$ = this.cartService.total$;
     });
    }
 
