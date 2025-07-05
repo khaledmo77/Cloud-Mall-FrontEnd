@@ -12,7 +12,7 @@ export interface StoreCategory {
   providedIn: 'root'
 })
 export class GetCategoryStoresApiService {
-  private apiUrl = 'http://cloudmall.runasp.net/api/StoreCategory';
+  private apiUrl = 'https://cloudmall.runasp.net/api/StoreCategory';
 
   constructor(private http: HttpClient) {}
 

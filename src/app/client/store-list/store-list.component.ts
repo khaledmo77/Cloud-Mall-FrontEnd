@@ -73,7 +73,7 @@ export class StoreListComponent implements OnInit {
   }
 
   openVendorStore(store: Store) {
-    // Navigate to vendor store route (this will use the Storehome component)
+    // Navigate to vendor store route (same as vendor, but will use different API based on user role)
     const vendorId = (store as any).vendorId || (store as any).vendorID;
     const storeId = store.id;
     if (vendorId && storeId) {

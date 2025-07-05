@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductApiService {
-  private baseUrl = 'http://cloudmall.runasp.net/api/Product/vendor';
+  private baseUrl = 'https://cloudmall.runasp.net/api/Product/vendor';
 
   constructor(private http: HttpClient) {}
 

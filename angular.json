@@ -27,6 +27,11 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/assets/css/theme.min.css",
+              "src/assets/css/user.min.css",
+              "src/assets/css/LineIcons.3.0.css",
+              "src/assets/css/tiny-slider.css",
+              "src/assets/css/glightbox.min.css",
               "src/styles.scss"
             ]
           },
@@ -35,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "700kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.5MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "10kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"

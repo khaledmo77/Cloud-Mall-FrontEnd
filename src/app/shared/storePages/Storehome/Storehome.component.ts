@@ -59,8 +59,10 @@ export class Storehome {
     console.log('Current URL:', currentUrl);
     
     // Determine if this is a vendor route (contains /vendor/) or client route
-    this.isVendor = currentUrl.includes('/vendor/') || this.auth.getUserRole() === 'Vendor';
+    // For API calls, we use vendor service only if user role is Vendor, regardless of route path
+    this.isVendor = this.auth.getUserRole() === 'Vendor';
     console.log('Is vendor route:', this.isVendor);
+    console.log('User role:', this.auth.getUserRole());
     
     this.route.paramMap.subscribe(params => {
       const id = params.get('storeId');
@@ -86,17 +88,29 @@ export class Storehome {
         this.isLoading = false;
         console.log('isLoading set to false (next)');
         console.log('Raw API response:', data);
+        console.log('Response type:', typeof data);
+        console.log('Is array:', Array.isArray(data));
+        console.log('Response keys:', data && typeof data === 'object' ? Object.keys(data) : 'N/A');
         
         // Handle different response formats
         if (Array.isArray(data)) {
           this.products = data;
+          console.log('Using data as array, length:', data.length);
         } else if (data && typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
           this.products = (data as any).data;
+          console.log('Using data.data as array, length:', (data as any).data.length);
+        } else if (data && typeof data === 'object' && 'products' in data && Array.isArray((data as any).products)) {
+          this.products = (data as any).products;
+          console.log('Using data.products as array, length:', (data as any).products.length);
+        } else if (data && typeof data === 'object' && 'allProducts' in data && Array.isArray((data as any).allProducts)) {
+          this.products = (data as any).allProducts;
+          console.log('Using data.allProducts as array, length:', (data as any).allProducts.length);
         } else {
           this.products = [];
+          console.log('No valid array found in response, setting products to empty array');
         }
         
-        console.log('Processed products:', this.products);
+        console.log('Final processed products:', this.products);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -212,7 +226,7 @@ export class Storehome {
       return imagesURL;
     }
     
-    const fullUrl = 'http://cloudmall.runasp.net/' + imagesURL.replace(/^\//, '');
+    const fullUrl = 'https://cloudmall.runasp.net/' + imagesURL.replace(/^\//, '');
     console.log('getProductImageUrl - constructed URL:', fullUrl);
     return fullUrl;
   }

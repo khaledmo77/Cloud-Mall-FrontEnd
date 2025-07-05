@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StoreProductCategoryApiService {
-  private baseUrl = 'http://cloudmall.runasp.net/api/Store/vendor/productcategory';
+  private baseUrl = 'https://cloudmall.runasp.net/api/Store/vendor/productcategory';
 
   constructor(private http: HttpClient) {}
 

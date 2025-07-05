@@ -24,13 +24,16 @@ export interface Product {
 export class ClientProductApiService {
   private baseUrl = `${environment.apiBaseUrl}/Product`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private https: HttpClient) {}
 
   getProductsByStore(storeId: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`${environment.apiBaseUrl}/Product/${storeId}`);
+    const url = `${environment.apiBaseUrl}/Product/${storeId}`;
+    console.log('Client API - Calling URL:', url);
+    console.log('Client API - Store ID:', storeId);
+    return this.https.get<Product[]>(url);
   }
 
   getProductById(productId: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/${productId}`);
+    return this.https.get<Product>(`${this.baseUrl}/${productId}`);
   }
 } 
