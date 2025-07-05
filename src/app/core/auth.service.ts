@@ -16,11 +16,16 @@ export class AuthService {
 
   getUserRole(): string | null {
     const storage = this.getStorage();
-    return storage ? storage.getItem('role') : null;
+    const role = storage ? storage.getItem('role') : null;
+    console.log('AuthService.getUserRole() - storage:', storage, 'role:', role);
+    return role;
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    const isLoggedIn = !!token;
+    console.log('AuthService.isLoggedIn() - token:', token, 'isLoggedIn:', isLoggedIn);
+    return isLoggedIn;
   }
 
   logout(): void {
@@ -31,6 +36,22 @@ export class AuthService {
       storage.removeItem('userId');
       storage.removeItem('name');
       storage.removeItem('email');
+    }
+  }
+
+  getDefaultRoute(): string {
+    if (!this.isLoggedIn()) {
+      return '/landing';
+    }
+    
+    const role = this.getUserRole();
+    switch (role) {
+      case 'Vendor':
+        return '/vendor/dashboard';
+      case 'Client':
+        return '/client';
+      default:
+        return '/landing';
     }
   }
 }

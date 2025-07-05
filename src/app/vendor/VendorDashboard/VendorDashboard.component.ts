@@ -1,10 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VendorStoreApiService, CreateStoreRequest } from '../../core/VendorCore/vendor-store-api.service';
+import { VendorStoresApiService, VendorStore } from '../../core/VendorCore/vendor-stores-api.service';
 import { GetCategoryStoresApiService, StoreCategory } from '../../core/SiteCore/Get-CategoryStores-api.service';
 import { LoaderComponent } from '../../shared/loader/loader.component';
+import { environment } from '../../../environments/environment';
 
 interface FilterCategory {
   filter: string;
@@ -42,8 +44,14 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   createdStoreId: number | null = null;
   vendorId: string | null = null;
   
+  // Vendor stores properties
+  vendorStores: VendorStore[] = [];
+  showVendorStores = false;
+  isLoadingStores = false;
+  
   filterCategories: FilterCategory[] = [
     { filter: '*', label: 'ALL' },
+    { filter: '.your-stores', label: 'Your Stores' },
     { filter: '.navigation', label: 'navigation' },
     { filter: '.header', label: 'header' },
     { filter: '.features', label: 'features' },
@@ -261,9 +269,11 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private storeService: VendorStoreApiService,
+    private vendorStoresService: VendorStoresApiService,
     private categoryService: GetCategoryStoresApiService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     // Initialize form
     this.createStoreForm = this.fb.group({
@@ -274,6 +284,9 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    // Ensure main loader is hidden on component initialization
+    this.forceHideLoader();
+    
     this.filterItems('.header');
     this.loadStoreCategories();
     
@@ -282,6 +295,11 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
       this.vendorId = localStorage.getItem('userId');
       console.log('Vendor ID from localStorage (userId):', this.vendorId);
     }
+    
+    // Safety timeout to hide loader if it gets stuck
+    setTimeout(() => {
+      this.forceHideLoader();
+    }, 5000);
   }
 
   ngAfterViewInit() {
@@ -409,12 +427,12 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // Smooth scrolling for anchor links
+    // Smooth scrolling for anchor links - Fix the querySelector error
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
         e.preventDefault();
         const href = anchor.getAttribute('href');
-        if (href) {
+        if (href && href !== '#') { // Only proceed if href is not just '#'
           const target = document.querySelector(href);
           if (target) {
             target.scrollIntoView({
@@ -435,15 +453,72 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
     
     if (filter === '*') {
       this.filteredItems = this.allItems;
+      this.showVendorStores = false;
+    } else if (filter === '.your-stores') {
+      // Force hide main loader when showing vendor stores
+      this.showLoader = false;
+      this.loadVendorStores();
+      this.showVendorStores = true;
     } else {
       const category = filter.replace('.', '');
       this.filteredItems = this.allItems.filter(item => item.category === category);
+      this.showVendorStores = false;
     }
     
     // Update isotope layout after filtering
     setTimeout(() => {
       this.initializeIsotope();
     }, 100);
+  }
+
+  loadVendorStores() {
+    console.log('Loading vendor stores...');
+    this.isLoadingStores = true;
+    this.forceHideLoader(); // Ensure main loader is hidden when starting to load stores
+    console.log('showLoader set to false, isLoadingStores set to true');
+    
+    this.vendorStoresService.getAllStores().subscribe({
+      next: (stores) => {
+        this.vendorStores = stores;
+        this.isLoadingStores = false;
+        this.forceHideLoader(); // Ensure main loader is hidden when stores are loaded
+        console.log('Vendor stores loaded:', stores);
+        console.log('showLoader:', this.showLoader, 'isLoadingStores:', this.isLoadingStores);
+        
+        // Force hide loader again after a short delay to ensure UI updates
+        setTimeout(() => {
+          this.forceHideLoader();
+        }, 100);
+      },
+      error: (error) => {
+        console.error('Error loading vendor stores:', error);
+        this.isLoadingStores = false;
+        this.forceHideLoader(); // Ensure main loader is hidden on error too
+        console.log('Error - showLoader:', this.showLoader, 'isLoadingStores:', this.isLoadingStores);
+        
+        // Force hide loader again after a short delay to ensure UI updates
+        setTimeout(() => {
+          this.forceHideLoader();
+        }, 100);
+      }
+    });
+  }
+
+  navigateToStore(storeId: number) {
+    if (this.vendorId) {
+      this.router.navigate(['/vendor', this.vendorId, 'store', storeId]);
+    }
+  }
+
+  getStoreImageUrl(logoURL?: string): string {
+    if (logoURL) {
+      if (logoURL.startsWith('http')) {
+        return logoURL;
+      } else {
+        return `${environment.imageBaseUrl}/${logoURL.replace(/^\//, '')}`;
+      }
+    }
+    return 'assets/images/products/product-1.jpg'; // Default store image
   }
 
   private initializeIsotope() {
@@ -458,5 +533,12 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
         });
       }
     }
+  }
+
+  // Helper method to force hide the main loader
+  private forceHideLoader() {
+    this.showLoader = false;
+    console.log('Force hide loader called - showLoader:', this.showLoader);
+    this.changeDetectorRef.detectChanges();
   }
 }

@@ -112,4 +112,10 @@ export class StoreListComponent implements OnInit {
     this.pageNumber = this.totalPages;
     this.fetchStores();
   }
+
+  getStoreImageUrl(logoURL?: string): string {
+    if (!logoURL) return 'assets/images/placeholder.png';
+    if (logoURL.startsWith('http')) return logoURL;
+    return 'http://cloudmall.runasp.net/' + logoURL.replace(/^\//, '');
+  }
 }
