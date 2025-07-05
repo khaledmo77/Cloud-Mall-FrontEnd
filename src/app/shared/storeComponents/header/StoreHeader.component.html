@@ -130,37 +130,26 @@
                                         <a routerLink="/cart">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove" title="Remove this item"><i
+                                        <li *ngFor="let item of cartItems">
+                                            <a href="javascript:void(0)" class="remove" title="Remove this item" (click)="removeItem(item.productId)"><i
                                                     class="lni lni-close"></i></a>
                                             <div class="cart-img-head">
-                                                <a class="cart-img" routerLink="/product-details"><img
-                                                        src="assets/images/header/cart-items/item1.jpg" alt="#"></a>
+                                                <a class="cart-img" [routerLink]="['/product-details', item.productId]">
+                                                    <img [src]="item.imageUrl || 'assets/images/default.jpg'" alt="{{ item.productName }}"></a>
                                             </div>
 
                                             <div class="content">
-                                                <h4><a routerLink="/product-details">
-                                                        Apple Watch Series 6</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove" title="Remove this item"><i
-                                                    class="lni lni-close"></i></a>
-                                            <div class="cart-img-head">
-                                                <a class="cart-img" routerLink="/product-details"><img
-                                                        src="assets/images/header/cart-items/item2.jpg" alt="#"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4><a routerLink="/product-details">Wi-Fi Smart Camera</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$35.00</span></p>
+                                                <h4><a [routerLink]="['/product-details', item.productId]">
+                                                        {{ item.productName }}</a></h4>
+                                                <p class="quantity">  {{ item.quantity }}x - 
+                                                    <span class="amount">${{ item.price.toFixed(2) }}</span></p>
                                             </div>
                                         </li>
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
                                             <span>Total</span>
-                                            <span class="total-amount">$134.00</span>
+                                            <span class="total-amount">${{ total$ | async | number: '1.2-2' }}</span>
                                         </div>
                                         <div class="button">
                                             <a routerLink="/checkout" class="btn animate">Checkout</a>

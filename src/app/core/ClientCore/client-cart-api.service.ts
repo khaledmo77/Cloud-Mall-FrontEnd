@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 export interface CartItem {
   productId: number;
@@ -20,6 +20,9 @@ export class CartService{
 
      cart$ = this.cartSubject.asObservable(); //"observable"to protect the cart state from being changed
      
+      total$ = this.cart$.pipe(  // to be updated automatically 
+    map(items => items.reduce((total, item) => total + item.price * item.quantity, 0))
+  );
       constructor() {
     // Load cart from localStorage if it exists
     const savedCart = localStorage.getItem('cart');
@@ -44,12 +47,13 @@ export class CartService{
 
      removeFromCart(productId: number){
         this.cart = this.cart.filter(p => p.productId !== productId);
-        this.cartSubject.next(this.cart);
+        this.updateCartState(); // to be updated and saved in storage 
      }
 
      cleanCart(){
         this.cart = [];
-        this.cartSubject.next(this.cart);
+        this.updateCartState(); 
+
      }
 
      
