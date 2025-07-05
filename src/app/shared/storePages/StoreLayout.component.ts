@@ -23,8 +23,10 @@ export class StoreLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // CSS files are now handled by Angular build process
-      // Only load scripts that are not already included in index.html
+      this.loadStyle(this.storeCssHref);
+      this.loadStyle('assets/css/LineIcons.3.0.css');
+      this.loadStyle('assets/css/tiny-slider.css');
+      this.loadStyle('assets/css/glightbox.min.css');
       this.loadScript('assets/js/tiny-slider.js');
       this.loadScript('assets/js/glightbox.min.js');
       this.loadScript('assets/js/main.js');
@@ -38,6 +40,17 @@ export class StoreLayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  loadStyle(href: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        document.head.appendChild(link);
+      }
+    }
+  }
 
   loadScript(src: string) {
     if (isPlatformBrowser(this.platformId)) {
