@@ -22,7 +22,7 @@ export interface CreateStoreResponse {
   providedIn: 'root'
 })
 export class VendorStoreApiService {
-  private baseUrl = 'http://cloudmall.runasp.net/api/Store';
+  private baseUrl = 'https://cloudmall.runasp.net/api/Store';
 
   constructor(private http: HttpClient) {}
 
