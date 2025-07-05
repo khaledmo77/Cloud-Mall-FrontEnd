@@ -53,7 +53,15 @@ export class Storehome {
 
   ngOnInit(): void {
     console.log('Storehome ngOnInit');
-    this.isVendor = this.auth.getUserRole() === 'Vendor';
+    
+    // Check if this is a vendor route or client route
+    const currentUrl = window.location.pathname;
+    console.log('Current URL:', currentUrl);
+    
+    // Determine if this is a vendor route (contains /vendor/) or client route
+    this.isVendor = currentUrl.includes('/vendor/') || this.auth.getUserRole() === 'Vendor';
+    console.log('Is vendor route:', this.isVendor);
+    
     this.route.paramMap.subscribe(params => {
       const id = params.get('storeId');
       console.log('paramMap subscribe', { id });
@@ -67,16 +75,28 @@ export class Storehome {
     this.isLoading = true;
     this.errorMessage = null;
     console.log('isLoading set to true');
-    // Use appropriate service based on user role
+    
+    // Use appropriate service based on route (vendor vs client)
     const service = this.isVendor ? this.productService : this.clientProductService;
-    console.log('Loading products for store:', this.storeId, 'User role:', this.auth.getUserRole(), 'Using service:', this.isVendor ? 'vendor' : 'client');
+    const apiType = this.isVendor ? 'vendor' : 'client';
+    console.log('Loading products for store:', this.storeId, 'Route type:', apiType, 'Using service:', this.isVendor ? 'vendor' : 'client');
     
     service.getProductsByStore(this.storeId).subscribe({
       next: (data) => {
         this.isLoading = false;
         console.log('isLoading set to false (next)');
-        this.products = Array.isArray(data) ? data : [];
-        console.log('Products loaded:', this.products);
+        console.log('Raw API response:', data);
+        
+        // Handle different response formats
+        if (Array.isArray(data)) {
+          this.products = data;
+        } else if (data && typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
+          this.products = (data as any).data;
+        } else {
+          this.products = [];
+        }
+        
+        console.log('Processed products:', this.products);
         this.cdr.detectChanges();
       },
       error: (err) => {
