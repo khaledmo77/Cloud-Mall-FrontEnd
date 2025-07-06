@@ -157,11 +157,11 @@
               </mat-card-header>
               <mat-card-content>
                 <div *ngIf="!showAddProductModal && !showAddCategoryModal" class="quick-actions">
-                  <button mat-raised-button color="primary" class="action-btn" (click)="showAddProductModal = true">
+                  <button mat-raised-button color="primary" class="action-btn" (click)="toggleAddProductModal()">
                     <mat-icon>add</mat-icon>
                     Add Product
                   </button>
-                  <button mat-raised-button color="accent" class="action-btn" (click)="showAddCategoryModal = true">
+                  <button mat-raised-button color="accent" class="action-btn" (click)="toggleAddCategoryModal()">
                     <mat-icon>category</mat-icon>
                     Add Category
                   </button>
@@ -191,7 +191,7 @@
                   </div>
                   <mat-form-field appearance="outline" class="full-width"><mat-label>Product Category ID</mat-label><input matInput type="number" [(ngModel)]="addProductData.productCategoryId" name="productCategoryId" /></mat-form-field>
                   <div class="form-actions">
-                    <button mat-button type="button" (click)="showAddProductModal = false">Cancel</button>
+                    <button mat-button type="button" (click)="closeAddProductModal()">Cancel</button>
                     <button mat-raised-button color="primary" type="submit">Add Product</button>
                   </div>
                 </form>
@@ -202,7 +202,7 @@
                   <mat-form-field appearance="outline" class="full-width"><mat-label>Name</mat-label><input matInput [(ngModel)]="addCategoryData.name" name="categoryName" required /></mat-form-field>
                   <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><input matInput [(ngModel)]="addCategoryData.description" name="categoryDescription" required /></mat-form-field>
                   <div class="form-actions">
-                    <button mat-button type="button" (click)="showAddCategoryModal = false">Cancel</button>
+                    <button mat-button type="button" (click)="closeAddCategoryModal()">Cancel</button>
                     <button mat-raised-button color="accent" type="submit">Add Category</button>
                   </div>
                 </form>
@@ -340,11 +340,11 @@
         <div class="tab-content">
           <div class="products-header">
             <h2>Product Management</h2>
-            <button mat-raised-button color="primary" (click)="showAddProductModal = true">
+            <button mat-raised-button color="primary" (click)="toggleAddProductModal()">
               <mat-icon>add</mat-icon>
               Add New Product
             </button>
-            <button mat-raised-button color="accent" (click)="showAddCategoryModal = true">
+            <button mat-raised-button color="accent" (click)="toggleAddCategoryModal()">
               <mat-icon>category</mat-icon>
               Add Product Category
             </button>

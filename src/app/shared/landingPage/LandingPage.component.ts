@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
-import { Component, Inject, PLATFORM_ID, OnInit, Input } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, Input, HostListener } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
 import { ClientLoginComponent } from "../../client/ClientAuth/Login/ClientLogin.component";
@@ -27,10 +27,13 @@ showVendorRegister = false;
   isLoggedIn = false;
   name: string | null = null;
   isBrowser: boolean;
+   isScrolled = false;
+    navOpen = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
+
 
   ngOnInit(): void {
     if (this.isBrowser) {
@@ -113,6 +116,15 @@ showVendorRegister = false;
       this.isLoggedIn = !!localStorage.getItem('token');
       this.name = localStorage.getItem('name');
     }
+  }
+
+    @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    this.isScrolled = scrollY > 50;
+  }
+    toggleNav() {
+    this.navOpen = !this.navOpen;
   }
 }
 
