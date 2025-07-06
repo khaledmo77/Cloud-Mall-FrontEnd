@@ -193,6 +193,30 @@ export class StoreSettingsComponent implements OnInit {
     });
   }
 
+  toggleAddProductModal() {
+    console.log('Toggle product modal clicked, current state:', this.showAddProductModal);
+    this.showAddProductModal = !this.showAddProductModal;
+    console.log('New state:', this.showAddProductModal);
+    this.cdr.detectChanges();
+  }
+
+  toggleAddCategoryModal() {
+    console.log('Toggle category modal clicked, current state:', this.showAddCategoryModal);
+    this.showAddCategoryModal = !this.showAddCategoryModal;
+    console.log('New state:', this.showAddCategoryModal);
+    this.cdr.detectChanges();
+  }
+
+  closeAddProductModal() {
+    this.showAddProductModal = false;
+    this.cdr.detectChanges();
+  }
+
+  closeAddCategoryModal() {
+    this.showAddCategoryModal = false;
+    this.cdr.detectChanges();
+  }
+
   submitAddProduct() {
     if (!this.storeId) {
       alert('Store ID not available. Please wait for store information to load.');
@@ -220,7 +244,7 @@ export class StoreSettingsComponent implements OnInit {
     this.productService.addProduct(formData, this.storeId).subscribe({
       next: () => {
         this.showSuccessToast('✅ Product added successfully!');
-        this.showAddProductModal = false;
+        this.closeAddProductModal();
         // Reset form
         this.addProductData = {
           name: '',
@@ -285,7 +309,7 @@ export class StoreSettingsComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.showSuccessToast('✅ Category added successfully!');
-        this.showAddCategoryModal = false;
+        this.closeAddCategoryModal();
         // Reset form
         this.addCategoryData = { name: '', description: '' };
         // Manually trigger change detection
