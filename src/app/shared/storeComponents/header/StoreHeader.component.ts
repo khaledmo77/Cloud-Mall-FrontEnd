@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router, ActivatedRoute } from '@angular/router';
 import { CartService, CartItem } from '../../../core/ClientCore/client-cart-api.service';
 import { AuthService } from '../../../core/auth.service';
 import { Observable, Subscription } from 'rxjs';
@@ -22,7 +22,9 @@ export class StoreHeader implements OnInit, OnDestroy {
 
   constructor(
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -51,5 +53,20 @@ export class StoreHeader implements OnInit, OnDestroy {
 
   clearCart() {
     this.cartService.cleanCart();
+  }
+
+  navigateToStoreHome() {
+    // Get the current route parameters to construct the storehome URL
+    this.route.params.subscribe(params => {
+      const vendorId = params['vendorId'];
+      const storeId = params['storeId'];
+      if (vendorId && storeId) {
+        // Navigate to the storehome route within the current store context
+        this.router.navigate([`/vendor/${vendorId}/store/${storeId}`]);
+      } else {
+        // Fallback to root if no store context
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

@@ -156,12 +156,12 @@
                 <mat-card-subtitle>Common tasks and shortcuts</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <div class="quick-actions">
-                  <button mat-raised-button color="primary" class="action-btn">
+                <div *ngIf="!showAddProductModal && !showAddCategoryModal" class="quick-actions">
+                  <button mat-raised-button color="primary" class="action-btn" (click)="showAddProductModal = true">
                     <mat-icon>add</mat-icon>
                     Add Product
                   </button>
-                  <button mat-raised-button color="accent" class="action-btn">
+                  <button mat-raised-button color="accent" class="action-btn" (click)="showAddCategoryModal = true">
                     <mat-icon>category</mat-icon>
                     Add Category
                   </button>
@@ -174,6 +174,39 @@
                     View Reports
                   </button>
                 </div>
+
+                <!-- Add Product Form (inline) -->
+                <form *ngIf="showAddProductModal" (ngSubmit)="submitAddProduct()" #addProductForm="ngForm" class="add-product-form">
+                  <h5>Add Product</h5>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Name</mat-label><input matInput [(ngModel)]="addProductData.name" name="name" required /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><input matInput [(ngModel)]="addProductData.description" name="description" required /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Brand</mat-label><input matInput [(ngModel)]="addProductData.brand" name="brand" /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>SKU</mat-label><input matInput [(ngModel)]="addProductData.sku" name="sku" /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Price</mat-label><input matInput type="number" [(ngModel)]="addProductData.price" name="price" required /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Discount</mat-label><input matInput type="number" [(ngModel)]="addProductData.discount" name="discount" /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Stock</mat-label><input matInput type="number" [(ngModel)]="addProductData.stock" name="stock" /></mat-form-field>
+                  <div class="full-width" style="margin-bottom: 20px;">
+                    <label style="display:block; color:#2c3e50; margin-bottom: 6px;">Image</label>
+                    <input type="file" (change)="onProductImageChange($event)" />
+                  </div>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Product Category ID</mat-label><input matInput type="number" [(ngModel)]="addProductData.productCategoryId" name="productCategoryId" /></mat-form-field>
+                  <div class="form-actions">
+                    <button mat-button type="button" (click)="showAddProductModal = false">Cancel</button>
+                    <button mat-raised-button color="primary" type="submit">Add Product</button>
+                  </div>
+                </form>
+
+                <!-- Add Product Category Form (inline) -->
+                <form *ngIf="showAddCategoryModal" (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm" class="add-category-form">
+                  <h5>Add Product Category</h5>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Name</mat-label><input matInput [(ngModel)]="addCategoryData.name" name="categoryName" required /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><input matInput [(ngModel)]="addCategoryData.description" name="categoryDescription" required /></mat-form-field>
+                  <div class="form-actions">
+                    <button mat-button type="button" (click)="showAddCategoryModal = false">Cancel</button>
+                    <button mat-raised-button color="accent" type="submit">Add Category</button>
+                  </div>
+                </form>
+
               </mat-card-content>
             </mat-card>
 
@@ -307,9 +340,13 @@
         <div class="tab-content">
           <div class="products-header">
             <h2>Product Management</h2>
-            <button mat-raised-button color="primary">
+            <button mat-raised-button color="primary" (click)="showAddProductModal = true">
               <mat-icon>add</mat-icon>
               Add New Product
+            </button>
+            <button mat-raised-button color="accent" (click)="showAddCategoryModal = true">
+              <mat-icon>category</mat-icon>
+              Add Product Category
             </button>
           </div>
           <p>Product management interface will be implemented here.</p>

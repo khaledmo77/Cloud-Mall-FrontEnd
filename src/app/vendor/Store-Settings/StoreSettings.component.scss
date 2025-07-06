@@ -4,6 +4,29 @@
   min-height: 100vh;
   font-family: 'Roboto', sans-serif;
 
+  // Custom success toast styling
+  ::ng-deep .success-toast {
+    background: #4caf50 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    
+    .mdc-snackbar__surface {
+      background: #4caf50 !important;
+      color: white !important;
+    }
+    
+    .mdc-snackbar__label {
+      color: white !important;
+      font-weight: 500 !important;
+    }
+    
+    .mat-mdc-snack-bar-action {
+      color: white !important;
+      font-weight: 600 !important;
+    }
+  }
+
   // Ensure Material Icons display properly
   mat-icon {
     font-family: 'Material Icons' !important;
@@ -213,65 +236,66 @@
             }
           }
 
+          mat-list {
+            padding: 8px 0;
+          }
+
           .order-item, .stock-item {
-            border-bottom: 1px solid #f1f3f4;
-            padding: 16px 0;
+            border: 1px solid #e9ecef;
+            padding: 24px 24px;
+            margin: 20px 0;
             min-height: 80px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+            position: relative;
+
+            &:hover {
+              background: #e9ecef;
+              box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+              transform: translateY(-1px);
+            }
 
             &:last-child {
-              border-bottom: none;
+              margin-bottom: 0;
             }
 
             .order-info, .stock-info {
               width: 100%;
               display: flex;
               flex-direction: column;
-              gap: 8px;
+              margin-top: 10px;
+              padding: 4px 0;
+            }
 
-              .order-header, .stock-details {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 8px;
+            .order-header, .stock-details {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 12px;
 
-                .order-id {
-                  font-weight: 600;
-                  color: #2c3e50;
-                  font-size: 0.9rem;
-                }
-
-                .customer-name, .product-name {
-                  font-weight: 500;
-                  color: #2c3e50;
-                  font-size: 1rem;
-                  flex: 1;
-                  min-width: 0;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
-
-                              .order-amount, .stock-count {
+              .order-id {
                 font-weight: 600;
-                color: #3498db;
-                font-size: 0.9rem;
-              }
+                color: #2c3e50;
+                font-size: 1rem;
+                margin-right: 12px;
               }
 
-              .order-details {
+              mat-chip {
+                margin-left: 0;
+                margin-top: 2px;
+                font-size: 0.95rem;
+                height: 28px;
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                flex-wrap: wrap;
-                gap: 8px;
               }
+            }
 
-              .order-date {
-                font-size: 0.85rem;
-                color: #6c757d;
-                margin-top: 4px;
-              }
+            .customer-name, .order-amount {
+              font-size: 1rem;
+              font-weight: 500;
             }
           }
 
@@ -488,4 +512,31 @@
       }
     }
   }
+}
+
+.add-product-form, .add-category-form {
+  padding: 32px 24px 24px 24px;
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.add-product-form .full-width,
+.add-category-form .full-width {
+  margin-bottom: 20px;
+}
+
+.add-product-form input,
+.add-product-form label,
+.add-product-form mat-label,
+.add-category-form input,
+.add-category-form label,
+.add-category-form mat-label {
+  color: #2c3e50 !important;
+}
+
+.add-product-form input,
+.add-category-form input {
+  background: #fff !important;
 }
