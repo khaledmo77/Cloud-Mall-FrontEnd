@@ -1,0 +1,47 @@
+.store-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(238, 9, 121, 0.15);
+    transition: all 0.2s;
+    border: 2px solid #fff;
+    margin-right: 2px;
+    user-select: none;
+    background-blend-mode: multiply;
+    
+    &:hover {
+      transform: scale(1.07) rotate(-2deg);
+      box-shadow: 0 4px 16px rgba(255, 106, 0, 0.18);
+    }
+  }
+  
+  .logo-text {
+    font-size: 1rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 2px;
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+  }
+}

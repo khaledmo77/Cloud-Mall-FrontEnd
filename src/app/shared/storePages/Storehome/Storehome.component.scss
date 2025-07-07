@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,300,500,700');
+
+// Modal overlay for centering
+.modal.fade.show.d-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  background: rgba(0,0,0,0.5);
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  z-index: 2011;
+  pointer-events: auto;
+}
+
+.product-popup-card {
+  width: 900px;
+  max-width: 98vw;
+  height: 600px;
+  max-height: 95vh;
+  position: relative;
+  background: white;
+  margin: 0 auto;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  transition: all 0.3s;
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  flex-direction: row;
+  z-index: 2021;
+  overflow: hidden;
+  pointer-events: auto;
+
+  &:hover {
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  nav {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #727272;
+    text-transform: uppercase;
+    padding: 20px;
+    border-bottom: none;
+    background: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: none;
+    z-index: 2;
+    svg.heart {
+      height: 24px;
+      width: 24px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      &:hover {
+        fill: red;
+      }
+    }
+    svg.arrow {
+      height: 15px;
+      width: 15px;
+      margin-right: 10px;
+    }
+    span {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .photo {
+    width: 45%;
+    height: 100%;
+    min-width: 220px;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    position: relative;
+    z-index: 1;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      background: #eaeaea;
+    }
+  }
+
+  .description {
+    flex: 1 1 0;
+    height: 100%;
+    padding: 60px 48px 48px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    min-width: 0;
+    max-height: 100%;
+    h1 {
+      color: #515151;
+      font-weight: 300;
+      padding-top: 15px;
+      margin: 0;
+      font-size: 38px;
+      font-weight: 300;
+    }
+    h2 {
+      color: #515151;
+      margin: 0;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    h4 {
+      margin: 0;
+      color: #727272;
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    p {
+      font-size: 15px;
+      line-height: 22px;
+      color: #727272;
+      padding: 20px 0;
+      margin: 0;
+    }
+    button {
+      outline: 0;
+      border: 0;
+      background: none;
+      border: 1px solid #d9d9d9;
+      padding: 10px 0px;
+      margin-bottom: 30px;
+      color: #515151;
+      text-transform: uppercase;
+      width: 160px;
+      font-family: inherit;
+      margin-right: 5px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: 16px;
+      &:hover {
+        border: 1px solid #aedaa6;
+        color: #aedaa6;
+        cursor: pointer;
+      }
+    }
+    div {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #727272;
+    }
+    // Hide scrollbar but allow scroll
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+  .description::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Webkit */
+  }
+}
+
+// Prevent background scroll when modal is open
+body.modal-open {
+  overflow: hidden !important;
+}
+
+// Responsive adjustments
+@media (max-width: 1100px) {
+  .product-popup-card {
+    width: 98vw;
+    height: auto;
+    min-width: 0;
+    max-width: 100vw;
+    flex-direction: column;
+    .photo {
+      width: 100%;
+      height: 220px;
+      min-width: 0;
+      max-width: 100vw;
+      img {
+        border-radius: 12px 12px 0 0;
+        height: 100%;
+      }
+    }
+    .description {
+      width: 100%;
+      border-left: none;
+      border-top: 2px solid #efefef;
+      padding: 24px;
+      height: auto;
+    }
+    nav {
+      padding: 10px;
+    }
+  }
+}

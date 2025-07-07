@@ -42,6 +42,9 @@ export class Storehome {
       description: ''
     };
     successMessage: string | null = null;
+    selectedProduct: any = null;
+    showProductModal = false;
+    isProductLoading = false;
 
      constructor( 
      private route: ActivatedRoute, 
@@ -255,5 +258,44 @@ export class Storehome {
 
   alert(`${product.name} added to cart!`);
 }
+
+  openProductModal(productId: number) {
+    document.body.classList.add('modal-open');
+    this.isProductLoading = true;
+    this.showProductModal = true;
+    this.selectedProduct = null;
+    const service = this.isVendor ? this.productService : this.clientProductService;
+    service.getProductById(productId).subscribe({
+      next: (data: any) => {
+        console.log('Product details API response:', data);
+        if (data && typeof data === 'object' && 'data' in data && data.data) {
+          this.selectedProduct = data.data;
+        } else {
+          this.selectedProduct = data;
+        }
+        this.isProductLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        this.isProductLoading = false;
+        this.selectedProduct = null;
+        this.errorMessage = 'Failed to load product details.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  closeProductModal() {
+    document.body.classList.remove('modal-open');
+    this.showProductModal = false;
+    this.selectedProduct = null;
+    this.isProductLoading = false;
+  }
+
+  addToCartFromModal(product: any) {
+    this.addToCart(product);
+    this.successMessage = 'Product added to cart!';
+    setTimeout(() => this.successMessage = null, 2000);
+  }
 
 }
