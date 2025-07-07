@@ -40,7 +40,7 @@ export class VendorStoresApiService {
     return this.http.get(`${environment.apiBaseUrl}/vendor/orders/store/${storeId}`);
   }
 
-  updateOrderStatus(orderId: number, status: string): Observable<any> {
-    return this.http.patch(`${environment.apiBaseUrl}/vendor/orders/${orderId}/status`, { status });
+  updateOrderStatus(orderId: number, newStatus: string): Observable<any> {
+    return this.http.patch(`${environment.apiBaseUrl}/vendor/orders/${orderId}/status`, { newStatus });
   }
 } 
