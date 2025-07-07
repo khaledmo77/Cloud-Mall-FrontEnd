@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from './core/auth.service';
 import { isPlatformBrowser } from '@angular/common';
+import { LandingPageComponent } from './shared';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, ReactiveFormsModule],

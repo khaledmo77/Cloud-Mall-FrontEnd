@@ -1,4 +1,7 @@
 /* Base nav container styling */
+html {
+  scroll-behavior: smooth;
+}
 .container.d-flex {
   position: relative;
   z-index: 1000;
@@ -10,6 +13,50 @@
   margin: 0;
   font-weight: bold;
 }
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 3px;
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  transition: all 0.3s ease-in-out;
+    margin-left: auto; /* Push to the right */
+
+}
+
+/* Center line */
+.hamburger-inner {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Top line */
+.hamburger-inner::before {
+  top: -10px;
+}
+
+/* Bottom line */
+.hamburger-inner::after {
+  top: 10px;
+}
+.hamburger {
+  display: none;
+}
+/* Hide nav by default on small screens */
+@media (max-width: 991px) {
+   .hamburger {
+    display: inline-block;
+        margin-left: auto; /* Push it to the far right */
+
+  }
+  }
+
+
+
 
 /* Main navigation menu */
 .navmenu {
@@ -22,10 +69,11 @@
 .navmenu ul {
   list-style: none;          //to remove dots     
   display: flex;
-  gap: 1.5rem;
   margin: 0;
   padding: 0;
   align-items: center;
+    gap: 2rem; /* spacing between links */
+
 }
 
 .navmenu li {
@@ -125,15 +173,19 @@
 }
 
 .navbar-overlay {
-  position: absolute;
+  position: fixed;
+    height: 80px;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 10;
   background-color: transparent;      /* Fully transparent */
   border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Light white underline */
-  padding: 0.5rem 2rem; /*reduce top/bottom spacing */
-
+  padding: 1.25rem 2rem; /*reduce top/bottom spacing */
+   display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push sitename left, hamburger right */
+  gap: 1rem;
   backdrop-filter: none; /* Remove glass blur if not wanted */
 }
 
@@ -160,6 +212,276 @@
 .navbar-overlay.scrolled .navmenu a,
 .navbar-overlay.scrolled .sitename {
   color: #fff; /* white text for dark background */
+}
+
+//about section//**
+#about{
+  padding-top: 20px; 
+  margin-top: 0;
+}
+#about h2{
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+    font-size: 40px;
+
+}
+#about h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -12px;  /* Adjust distance from text */
+  width: 60%;
+  height: 3px;
+  background-color: #007bff;
+}
+#about .section-title p {
+  margin-top: 30px;
+  color: #444;
+  font-size: 16px;
+}
+/* Style the icon like a right check mark */
+::ng-deep .bi-check2-circle {
+  color: #007bff;
+  font-size: 1.2rem;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+#about ul {
+  list-style: none;     /* Removes default bullet */
+  padding-left: 0;      /* Optional: align nicely with icon */
+}
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #007bff;     /* Blue background */
+  color: #fff;                   /* White text */
+  border: none;
+  border-radius: 30px;           /* Fully rounded corners */
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.read-more:hover {
+  background-color: #0056b3;     /* Darker blue on hover */
+  color: #fff;
+}
+
+.read-more i {
+  margin-left: 8px;
+}
+// service section 
+#services {
+  margin-top: -40px; /* Adjust value to pull it up more or less */
+}
+.services .service-item {
+  background-color: var(--surface-color);
+  box-shadow: 0px 5px 90px 0px rgba(0, 0, 0, 0.1);
+  padding: 60px 30px;
+  transition: all ease-in-out 0.3s;
+  border-radius: 18px;
+  border-bottom: 5px solid var(--surface-color);
+  height: 100%;
+}
+#services .section-title h2 {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+    font-size: 40px;
+     margin-bottom: 40px;
+}
+
+#services .section-title h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -12px;  /* Adjust distance from text */
+  width: 60%;
+  height: 3px;
+  background-color: #007bff;
+}
+
+.services .service-item .icon {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  margin: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  transition: ease-in-out 0.3s;
+
+   color: white;  //icon color
+   border: none; 
+   background-color: #247fd4;
+}
+
+.services .service-item h3 {
+  font-weight: 700;
+  margin: 10px 0 15px 0;
+  font-size: 22px;
+  transition: ease-in-out 0.3s;
+}
+
+.services .service-item p {
+  line-height: 24px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.services .service-item a  {
+  text-decoration: none;
+}
+@media (min-width: 1365px) {
+  .services .service-item:hover {
+    transform: translateY(-10px);
+    
+    
+  }
+
+  .services .service-item:hover h3 {
+    color: #0d6efd;
+  }
+}
+//pricing section 
+#pricing .section-title h2 {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+    font-size: 40px;
+     margin-bottom: 40px;
+}
+
+#pricing .section-title h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -12px;  /* Adjust distance from text */
+  width: 60%;
+  height: 3px;
+  background-color: #007bff;
+}
+.pricing .pricing-item {
+  background-color: var(--surface-color);
+  box-shadow: 0px 5px 90px rgba(0, 0, 0, 0.1);
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing .pricing-item h3 {
+  padding: 15px;
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pricing .pricing-item h4 {
+  color: var(--accent-color);
+  font-size: 42px;
+  font-family: var(--default-font);
+  font-weight: 500;
+}
+
+.pricing .pricing-item h4 sup {
+  font-size: 20px;
+  top: -15px;
+  left: -3px;
+}
+
+.pricing .pricing-item h4 span {
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.pricing .pricing-item ul {
+  padding: 20px 0;
+  list-style: none;
+  text-align: center;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.pricing .pricing-item ul li {
+  padding-bottom: 16px;
+}
+
+.pricing .pricing-item ul .na {
+  color: color-mix(in srgb, var(--default-color), transparent 60%);
+  text-decoration: line-through;
+}
+
+.pricing .pricing-item .btn-wrap {
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pricing .pricing-item .btn-buy {
+  color: var(--accent-color);
+  background-color: transparent;
+  border: 2px solid var(--accent-color);
+  display: inline-block;
+  padding: 10px 40px 12px 40px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-family: var(--heading-font);
+  font-weight: 600;
+  transition: 0.3s;
+text-decoration: none;  
+   color: #007bff;                 //  green text
+  border: 2px solid #007bff;      // green border
+}
+
+.pricing .pricing-item .btn-buy:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  text-decoration: none;  
+  color: white;
+  background: #007bff;           
+     
+}
+
+.pricing .recommended .btn-buy {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  color: #0d6efd;                 /*Blue text */
+  border: 2px solid #0d6efd;  
+    
+}
+
+.pricing .recommended .btn-buy:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  background: #007bff;           // slightly darker green
+  border-color: none;
+}
+
+.pricing .recommended-badge {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: 13px;
+  padding: 3px 25px 6px 25px;
+
+  color: var(--accent-color);
+  border-radius: 50px;
+    background-color: #f0f0f0;  /* ✅ Light gray background */
+  color: #0d6efd;             /* ✅ Bootstrap blue text */
+  border: 1px solid #dcdcdc;  /* ✅ Light gray border */
+  border-radius: 30px;
+
 }
 
 

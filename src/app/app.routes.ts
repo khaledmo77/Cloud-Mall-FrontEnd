@@ -7,7 +7,8 @@ import { landingRedirectGuard } from './core/auth.guard';
 export const routes: Routes = [
   // Auto-redirect based on user role
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
-  { path: 'landing', component: LandingPageComponent, canActivate: [landingRedirectGuard] },
+  { path: 'landing', component: LandingPageComponent,canActivate: [landingRedirectGuard] },
+  //
 
   // 🔹 Shared Authentication Routes (eager loaded)
   {
