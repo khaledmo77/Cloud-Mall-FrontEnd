@@ -291,23 +291,54 @@ export class Storehome {
 
   // Make sure this is public for template use
   public openProductModal(productId: number) {
+    console.log('Opening product modal for ID:', productId);
+    console.log('Is vendor:', this.isVendor);
+    console.log('Using service:', this.isVendor ? 'vendor' : 'client');
+    
     document.body.classList.add('modal-open');
     this.isProductLoading = true; // Show product details loader
     this.showProductModal = true;
     this.selectedProduct = null;
+    
+    // For clients, try to find the product from the existing products list first
+    if (!this.isVendor && this.products && this.products.length > 0) {
+      console.log('Client - Searching for product in existing products list');
+      const foundProduct = this.products.find(product => product.id === productId);
+      
+      if (foundProduct) {
+        console.log('Client - Found product in existing list:', foundProduct);
+        this.selectedProduct = foundProduct;
+        this.isProductLoading = false;
+        this.cdr.detectChanges();
+        return;
+      } else {
+        console.log('Client - Product not found in existing list, will try API call');
+      }
+    }
+    
+    // If not found in existing list or if vendor, make API call
     const service = this.isVendor ? this.productService : this.clientProductService;
+    
+    console.log('Calling getProductById with ID:', productId);
     service.getProductById(productId).subscribe({
       next: (data: any) => {
         console.log('Product details API response:', data);
+        console.log('Response type:', typeof data);
+        console.log('Response keys:', data && typeof data === 'object' ? Object.keys(data) : 'N/A');
+        
         if (data && typeof data === 'object' && 'data' in data && data.data) {
           this.selectedProduct = data.data;
+          console.log('Using data.data:', this.selectedProduct);
         } else {
           this.selectedProduct = data;
+          console.log('Using data directly:', this.selectedProduct);
         }
+        
         this.isProductLoading = false; // Hide product details loader
         this.cdr.detectChanges();
       },
       error: (err: any) => {
+        console.error('Error loading product details:', err);
         this.isProductLoading = false; // Hide product details loader
         this.selectedProduct = null;
         this.errorMessage = 'Failed to load product details.';

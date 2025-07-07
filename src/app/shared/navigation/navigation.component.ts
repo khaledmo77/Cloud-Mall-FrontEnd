@@ -28,6 +28,7 @@ showVendorRegister = false;
   isLoggedIn = false;
   name: string | null = null;
   isBrowser: boolean;
+  navOpen = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -117,5 +118,9 @@ closeVendorRegister() {
       
       console.log('refreshAuth - token:', token, 'name:', name, 'role:', role, 'isLoggedIn:', this.isLoggedIn);
     }
+  }
+
+  toggleNav() {
+    this.navOpen = !this.navOpen;
   }
 }

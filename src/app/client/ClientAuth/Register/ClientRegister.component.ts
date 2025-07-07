@@ -5,6 +5,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { ClientAuthApiService } from '../../../core/ClientCore/client-auth-api.service'; // adjust path
 import { Router } from '@angular/router'; // ✅ Import this
+import { AuthService } from '../../../core/auth.service';
 
 @Component({
   selector: 'app-ClientRegister',
@@ -24,6 +25,7 @@ export class ClientRegisterComponent {
   
   fb = inject(FormBuilder);
   authService = inject(ClientAuthApiService);
+  authServiceCore = inject(AuthService);
   router = inject(Router);
   platformId = inject(PLATFORM_ID);
 
@@ -116,19 +118,20 @@ export class ClientRegisterComponent {
         const role = response.data.roles[0];
         const userId = response.data.userId;
         
-        // Only set localStorage if we're in a browser environment
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('role', response.data.roles[0]);
-          localStorage.setItem('userId', response.data.userId);
-          localStorage.setItem('name', response.data.name); 
-          localStorage.setItem('email', response.data.email);
-        }
+        // Use the new setAuthData method for better token management
+        this.authServiceCore.setAuthData({
+          token: response.data.token,
+          role: response.data.roles[0],
+          userId: response.data.userId,
+          name: response.data.name,
+          email: response.data.email
+        });
         
         console.log('Stored token:', token);
         console.log('Stored role:', role);
         console.log('Stored userId:', userId);
         console.log('Registration successful');
+        console.log('Token info:', this.authServiceCore.getTokenInfo());
         
         // Close the popup first
         this.close.emit();

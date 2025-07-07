@@ -396,8 +396,24 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
         },
         error: (error) => {
           console.error('Error creating store:', error);
-          this.errorMessage = 'An error occurred while creating the store.';
           this.showLoader = false;
+          
+          // Handle authentication errors
+          if (error.message && error.message.includes('Authentication failed')) {
+            this.errorMessage = 'Your session has expired. Please log in again.';
+            // Redirect to login after a short delay
+            setTimeout(() => {
+              this.router.navigate(['/landing']);
+            }, 3000);
+          } else if (error.message && error.message.includes('token not found')) {
+            this.errorMessage = 'Authentication token not found. Please log in again.';
+            // Redirect to login after a short delay
+            setTimeout(() => {
+              this.router.navigate(['/landing']);
+            }, 3000);
+          } else {
+            this.errorMessage = error.message || 'An error occurred while creating the store.';
+          }
         }
       });
     }
