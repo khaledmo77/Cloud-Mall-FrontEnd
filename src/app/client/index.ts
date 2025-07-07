@@ -6,7 +6,6 @@ export { StoreDetailsComponent } from './store-details/store-details.component';
 export { ProductDetailsComponent } from './product-details/product-details.component';
 export { OrdersComponent } from './orders/orders.component';
 export { CartComponent } from './cart/cart.component';
-export { CheckoutComponent } from './checkout/checkout.component';
 
 // Client Auth Components
 export { ClientLoginComponent } from './ClientAuth/Login/ClientLogin.component';

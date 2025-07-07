@@ -24,7 +24,7 @@ export interface GetAllStoresResponse {
   providedIn: 'root'
 })
 export class ClientGetAllStoresApiService {
-  private apiUrl = 'https://cloudmall.runasp.net/api/store/get-all-stores'; // update this with your actual endpoint
+  private apiUrl = 'https://cloudmall.runasp.net/api/store/get-all-stores';
 
   constructor(private http: HttpClient) {}
 

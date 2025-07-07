@@ -22,6 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductApiService } from '../../core/storeCore/product-api.service';
 import { StoreProductCategoryApiService } from '../../core/storeCore/store-product-category-api.service';
@@ -54,6 +55,7 @@ import { VendorStoresApiService } from '../../core/VendorCore/vendor-stores-api.
     MatCheckboxModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule
   ],
@@ -65,12 +67,12 @@ export class StoreSettingsComponent implements OnInit {
   storeId: number | null = null;
   userId: string | null = null;
   storeStats = {
-    totalProducts: 45,
-    totalOrders: 128,
-    totalRevenue: 15420.50,
-    pendingOrders: 12,
-    lowStockProducts: 8,
-    activeProducts: 37
+    totalProducts: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    pendingOrders: 0,
+    lowStockProducts: 0,
+    activeProducts: 0
   };
 
   recentOrders: any[] = [];
@@ -78,12 +80,15 @@ export class StoreSettingsComponent implements OnInit {
   isEditingStatus = false;
   availableStatuses = ['Pending', 'Processing', 'Shipped', 'Fulfilled', 'Cancelled'];
 
-  lowStockProducts = [
-    { id: 1, name: 'Wireless Headphones', stock: 3, threshold: 10 },
-    { id: 2, name: 'Smart Watch', stock: 5, threshold: 15 },
-    { id: 3, name: 'Bluetooth Speaker', stock: 2, threshold: 8 },
-    { id: 4, name: 'Phone Case', stock: 7, threshold: 20 }
-  ];
+  lowStockProducts: any[] = [];
+  productCategories: any[] = [];
+  vendorStores: any[] = [];
+  selectedStore: any = null;
+  isLoading = false;
+  errorMessage: string | null = null;
+  categoriesLoading = false;
+  componentLoading = true;
+  hasCategoriesComputed = false;
 
   storeSettings = {
     storeName: 'Tech Gadgets Store',
@@ -109,7 +114,7 @@ export class StoreSettingsComponent implements OnInit {
     discount: null,
     stock: null,
     image: null,
-    productCategoryId: null
+    selectedCategoryId: null
   };
   addCategoryData: any = {
     name: '',
@@ -127,22 +132,70 @@ export class StoreSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get userId from localStorage
-    this.userId = localStorage.getItem('userId');
+    this.loadVendorStores();
+  }
+
+  private loadVendorStores() {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.componentLoading = true;
+    this.cdr.detectChanges();
     
-    if (this.userId) {
-      // Fetch vendor's stores to get the correct storeId
+    // First, get all vendor stores to determine which store to manage
       this.vendorStoresService.getAllStores().subscribe({
         next: (stores: any[]) => {
-          if (stores && stores.length > 0) {
-            // Use the first store (or you could let user select which store to manage)
+        setTimeout(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        });
+        
+        if (stores.length === 0) {
+          // No stores found - show message to create store first
+          this.showSuccessToast('⚠️ You need to create a store first before managing store settings!');
+          this.componentLoading = false;
+          return;
+        }
+        
+        if (stores.length === 1) {
+          // Only one store - use that storeId
+          this.storeId = stores[0].id;
+          this.selectedStore = stores[0];
+          this.vendorStores = stores;
+          this.loadStoreData();
+        } else {
+          // Multiple stores - store all stores and use the first one
+          this.vendorStores = stores;
+          this.selectedStore = stores[0];
             this.storeId = stores[0].id;
-            console.log('StoreSettings - Using storeId:', this.storeId);
-            // Fetch recent orders for this store
-            if (this.storeId !== null && this.storeId !== undefined) {
+          this.showSuccessToast(`Managing store: ${stores[0].name}. Use the store selector to switch between stores.`);
+          this.loadStoreData();
+        }
+      },
+      error: (err: any) => {
+        setTimeout(() => {
+          this.isLoading = false;
+          this.componentLoading = false;
+          this.cdr.detectChanges();
+        });
+        
+        this.errorMessage = 'Failed to load your stores. Please try again.';
+        this.showSuccessToast('❌ Failed to load your stores. Please try again.');
+      }
+    });
+  }
+
+  retryLoadStores() {
+    this.loadVendorStores();
+  }
+
+  private loadStoreData() {
+    if (!this.storeId) {
+      return;
+    }
+
+    // Fetch recent orders for this specific store
               this.vendorStoresService.getStoreOrders(this.storeId).subscribe({
                 next: (res: any) => {
-                  console.log('Orders API response:', res); // For debugging
                   if (res && res.success && res.data && Array.isArray(res.data.orders)) {
                     this.recentOrders = res.data.orders;
                     this.storeStats.totalOrders = res.data.totalOrders || this.recentOrders.length;
@@ -156,44 +209,92 @@ export class StoreSettingsComponent implements OnInit {
                     this.storeStats.pendingOrders = 0;
                     this.storeStats.totalRevenue = 0;
                   }
+        setTimeout(() => {
                   this.cdr.detectChanges();
+        });
                 },
                 error: (err: any) => {
-                  console.error('Error fetching store orders:', err);
                   this.recentOrders = [];
                   this.storeStats.totalOrders = 0;
                   this.storeStats.pendingOrders = 0;
                   this.storeStats.totalRevenue = 0;
+        setTimeout(() => {
                   this.cdr.detectChanges();
+        });
                 }
               });
+    
               // Fetch all products for this store and set totalProducts
               this.productService.getProductsByStore(this.storeId).subscribe({
                 next: (products: any[]) => {
                   this.storeStats.totalProducts = products.length;
+        
+        // Calculate low stock products (stock <= 5 or stock <= threshold if available)
+        this.storeStats.lowStockProducts = products.filter(product => {
+          const stock = product.stock || 0;
+          const threshold = product.stockThreshold || 5; // Default threshold of 5
+          return stock <= threshold;
+        }).length;
+        
+        // Calculate active products (products with stock > 0)
+        this.storeStats.activeProducts = products.filter(product => {
+          const stock = product.stock || 0;
+          return stock > 0;
+        }).length;
+        
+        this.lowStockProducts = products.filter(product => {
+          const stock = product.stock || 0;
+          const threshold = product.stockThreshold || 5; // Default threshold of 5
+          return stock <= threshold;
+        });
+        
+        setTimeout(() => {
                   this.cdr.detectChanges();
+        });
                 },
                 error: (err: any) => {
-                  console.error('Error fetching store products:', err);
                   this.storeStats.totalProducts = 0;
+        this.storeStats.lowStockProducts = 0;
+        this.storeStats.activeProducts = 0;
+        setTimeout(() => {
                   this.cdr.detectChanges();
-                }
-              });
-            }
+        });
+      }
+    });
+
+    // Fetch product categories for this store
+    this.categoriesLoading = true;
+    this.storeProductCategoryService.getProductCategories(this.storeId).subscribe({
+      next: (categories: any) => {
+        // Handle different response formats
+        if (Array.isArray(categories)) {
+          this.productCategories = categories;
+        } else if (categories && typeof categories === 'object' && 'data' in categories && Array.isArray(categories.data)) {
+          this.productCategories = categories.data;
+        } else if (categories && typeof categories === 'object' && 'success' in categories && 'data' in categories && Array.isArray(categories.data)) {
+          this.productCategories = categories.data;
           } else {
-            console.error('No stores found for vendor:', this.userId);
-            alert('No stores found. Please create a store first.');
-          }
+          this.productCategories = [];
+        }
+        
+        this.categoriesLoading = false;
+        this.hasCategoriesComputed = this.productCategories.length > 0;
+        this.componentLoading = false;
+        
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        });
         },
         error: (err: any) => {
-          console.error('Error fetching vendor stores:', err);
-          alert('Error loading store information. Please try again.');
-        }
-      });
-    } else {
-      console.error('No userId found in localStorage');
-      alert('User ID not found. Please log in again.');
-    }
+        this.productCategories = [];
+        this.categoriesLoading = false;
+        this.hasCategoriesComputed = false;
+        this.componentLoading = false;
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
   getStatusColor(status: string): string {
@@ -234,27 +335,43 @@ export class StoreSettingsComponent implements OnInit {
   }
 
   toggleAddProductModal() {
-    console.log('Toggle product modal clicked, current state:', this.showAddProductModal);
+    // Check if categories are still loading
+    if (this.categoriesLoading) {
+      this.showSuccessToast('⏳ Please wait while categories are loading...');
+      return;
+    }
+    
+    // Check if categories exist before allowing to add product
+    if (this.productCategories.length === 0) {
+      this.showSuccessToast('⚠️ You should add product categories for your store first!');
+      return;
+    }
+    
     this.showAddProductModal = !this.showAddProductModal;
-    console.log('New state:', this.showAddProductModal);
+    setTimeout(() => {
     this.cdr.detectChanges();
+    });
   }
 
   toggleAddCategoryModal() {
-    console.log('Toggle category modal clicked, current state:', this.showAddCategoryModal);
     this.showAddCategoryModal = !this.showAddCategoryModal;
-    console.log('New state:', this.showAddCategoryModal);
+    setTimeout(() => {
     this.cdr.detectChanges();
+    });
   }
 
   closeAddProductModal() {
     this.showAddProductModal = false;
+    setTimeout(() => {
     this.cdr.detectChanges();
+    });
   }
 
   closeAddCategoryModal() {
     this.showAddCategoryModal = false;
+    setTimeout(() => {
     this.cdr.detectChanges();
+    });
   }
 
   submitAddProduct() {
@@ -274,12 +391,8 @@ export class StoreSettingsComponent implements OnInit {
       formData.append('Image', this.addProductData.image);
     }
     formData.append('StoreID', this.storeId.toString());
-    if (this.addProductData.productCategoryId) {
-      formData.append('ProductCategoryID', this.addProductData.productCategoryId);
-    }
-    // Log FormData for debugging
-    for (let [key, value] of formData.entries()) {
-      console.log(key + ':', value);
+    if (this.addProductData.selectedCategoryId) {
+      formData.append('ProductCategoryID', this.addProductData.selectedCategoryId);
     }
     this.productService.addProduct(formData, this.storeId).subscribe({
       next: () => {
@@ -295,11 +408,16 @@ export class StoreSettingsComponent implements OnInit {
           discount: null,
           stock: null,
           image: null,
-          productCategoryId: null
+          selectedCategoryId: null
         };
         // Manually trigger change detection
+        setTimeout(() => {
         this.cdr.detectChanges();
-        // Optionally reload products here
+        });
+        // Optionally reload products here - defer to next cycle
+        setTimeout(() => {
+          this.refreshProducts();
+        });
       },
       error: (err) => {
         let errorMessage = 'Failed to add product';
@@ -314,18 +432,6 @@ export class StoreSettingsComponent implements OnInit {
         } else if (err.error && err.error.message) {
           errorMessage = err.error.message;
         }
-        // Log full error details for debugging
-        console.error('API Error:', err);
-        if (err.error) {
-          console.error('err.error:', err.error);
-        }
-        if (err.message) {
-          console.error('err.message:', err.message);
-        }
-        if (err.error && err.error.errors) {
-          console.error('err.error.errors:', err.error.errors);
-          errorMessage += '\n' + JSON.stringify(err.error.errors);
-        }
         alert(errorMessage);
       }
     });
@@ -337,12 +443,6 @@ export class StoreSettingsComponent implements OnInit {
       return;
     }
     
-    console.log('Adding category for store:', this.storeId);
-    console.log('Category data:', {
-      name: this.addCategoryData.name,
-      description: this.addCategoryData.description
-    });
-    
     this.storeProductCategoryService.addProductCategory(this.storeId, {
       name: this.addCategoryData.name,
       description: this.addCategoryData.description
@@ -352,9 +452,16 @@ export class StoreSettingsComponent implements OnInit {
         this.closeAddCategoryModal();
         // Reset form
         this.addCategoryData = { name: '', description: '' };
+        
+        // Refresh categories list - defer to next cycle
+        setTimeout(() => {
+          this.refreshCategories();
+        });
+        
         // Manually trigger change detection
+        setTimeout(() => {
         this.cdr.detectChanges();
-        // Optionally reload categories here
+        });
       },
       error: (err: any) => {
         let errorMessage = 'Failed to add category';
@@ -370,18 +477,6 @@ export class StoreSettingsComponent implements OnInit {
           errorMessage = err.error.message;
         }
         
-        // Log full error details for debugging
-        console.error('Category API Error:', err);
-        if (err.error) {
-          console.error('err.error:', err.error);
-        }
-        if (err.message) {
-          console.error('err.message:', err.message);
-        }
-        if (err.error && err.error.errors) {
-          console.error('err.error.errors:', err.error.errors);
-          errorMessage += '\n' + JSON.stringify(err.error.errors);
-        }
         alert(errorMessage);
       }
     });
@@ -411,23 +506,25 @@ export class StoreSettingsComponent implements OnInit {
 
   // Helper to recalculate store stats from recentOrders
   private updateStoreStatsFromOrders(orders: any[], totalOrdersFromApi?: number) {
+    setTimeout(() => {
     this.storeStats.totalOrders = totalOrdersFromApi || orders.length;
     this.storeStats.pendingOrders = orders.filter(order => (order.status || '').toLowerCase() === 'pending').length;
     this.storeStats.totalRevenue = orders
       .filter(order => (order.status || '').toLowerCase() === 'fulfilled')
       .reduce((sum, order) => sum + (order.subTotal || 0), 0);
     this.cdr.detectChanges();
+    });
   }
 
   updateOrderStatus(newStatus: string) {
     if (this.selectedOrder && this.selectedOrder.id) {
       const formattedStatus = this.formatStatus(newStatus);
-      console.log('Updating order status:', this.selectedOrder.id, formattedStatus); // Debug log
       this.vendorStoresService.updateOrderStatus(this.selectedOrder.id, formattedStatus).subscribe({
         next: (response) => {
           // Reload orders from backend for full sync
           this.vendorStoresService.getStoreOrders(this.storeId!).subscribe({
             next: (res: any) => {
+              setTimeout(() => {
               if (res && res.success && res.data && Array.isArray(res.data.orders)) {
                 this.recentOrders = res.data.orders;
                 this.updateStoreStatsFromOrders(this.recentOrders, res.data.totalOrders);
@@ -436,16 +533,22 @@ export class StoreSettingsComponent implements OnInit {
               this.isEditingStatus = false;
               this.showSuccessToast('Order status updated successfully');
               this.cdr.detectChanges();
+              });
             },
             error: (err) => {
+              setTimeout(() => {
               this.showSuccessToast('Order status updated, but failed to reload orders');
               this.isEditingStatus = false;
+                this.cdr.detectChanges();
+              });
             }
           });
         },
         error: (error) => {
-          console.error('Error updating order status:', error);
+          setTimeout(() => {
           this.showSuccessToast('Failed to update order status');
+            this.cdr.detectChanges();
+          });
         }
       });
     }
@@ -460,6 +563,98 @@ export class StoreSettingsComponent implements OnInit {
       case 'Cancelled':
       case 'Rejected': return 'bg-danger';
       default: return 'bg-secondary';
+    }
+  }
+
+  // Helper to check if categories exist
+  hasCategories(): boolean {
+    return this.hasCategoriesComputed;
+  }
+
+  // Method to handle store selection
+  selectStore(store: any) {
+    this.selectedStore = store;
+    this.storeId = store.id;
+    this.componentLoading = true;
+    setTimeout(() => {
+      this.cdr.detectChanges();
+      this.loadStoreData();
+    });
+  }
+
+  // Helper to refresh categories list
+  private refreshCategories() {
+    if (this.storeId) {
+      this.categoriesLoading = true;
+      this.storeProductCategoryService.getProductCategories(this.storeId).subscribe({
+        next: (categories: any) => {
+          setTimeout(() => {
+            // Handle different response formats
+            if (Array.isArray(categories)) {
+              this.productCategories = categories;
+            } else if (categories && typeof categories === 'object' && 'data' in categories && Array.isArray(categories.data)) {
+              this.productCategories = categories.data;
+            } else if (categories && typeof categories === 'object' && 'success' in categories && 'data' in categories && Array.isArray(categories.data)) {
+              this.productCategories = categories.data;
+            } else {
+              this.productCategories = [];
+            }
+            
+            this.categoriesLoading = false;
+            this.hasCategoriesComputed = this.productCategories.length > 0;
+            this.cdr.detectChanges();
+          });
+        },
+        error: (err: any) => {
+          setTimeout(() => {
+            this.categoriesLoading = false;
+            this.hasCategoriesComputed = false;
+            this.cdr.detectChanges();
+          });
+        }
+      });
+    }
+  }
+
+  // Helper to refresh products list
+  private refreshProducts() {
+    if (this.storeId) {
+      this.productService.getProductsByStore(this.storeId).subscribe({
+        next: (products: any[]) => {
+          setTimeout(() => {
+            this.storeStats.totalProducts = products.length;
+            
+            // Calculate low stock products (stock <= 5 or stock <= threshold if available)
+            this.storeStats.lowStockProducts = products.filter(product => {
+              const stock = product.stock || 0;
+              const threshold = product.stockThreshold || 5; // Default threshold of 5
+              return stock <= threshold;
+            }).length;
+            
+            // Calculate active products (products with stock > 0)
+            this.storeStats.activeProducts = products.filter(product => {
+              const stock = product.stock || 0;
+              return stock > 0;
+            }).length;
+            
+            this.lowStockProducts = products.filter(product => {
+              const stock = product.stock || 0;
+              const threshold = product.stockThreshold || 5; // Default threshold of 5
+              return stock <= threshold;
+            });
+            
+            this.cdr.detectChanges();
+          });
+        },
+        error: (err: any) => {
+          setTimeout(() => {
+            this.storeStats.totalProducts = 0;
+            this.storeStats.lowStockProducts = 0;
+            this.storeStats.activeProducts = 0;
+            this.cdr.detectChanges();
+          });
+        }
+      });
     }
   }
 }

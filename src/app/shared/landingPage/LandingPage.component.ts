@@ -13,7 +13,7 @@ import { VendorRegisterComponent } from "../../vendor/VendorAuth/Register/Vendor
 @Component({
   selector: 'app-LandingPage',
   standalone: true,
-  imports: [CommonModule, RouterLink, ClientLoginComponent, ClientRegisterComponent, VendorLoginComponent, VendorRegisterComponent],
+  imports: [CommonModule, ClientLoginComponent, ClientRegisterComponent, VendorLoginComponent, VendorRegisterComponent],
   templateUrl: './LandingPage.component.html',
   styleUrls: ['./LandingPage.component.scss']
 })

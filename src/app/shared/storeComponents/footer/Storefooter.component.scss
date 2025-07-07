@@ -1,0 +1,52 @@
+// Footer text color - make all text white
+.footer {
+  color: #fff !important;
+  
+  * {
+    color: #fff !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #fff !important;
+  }
+  
+  p, span, li, a, button, input, label {
+    color: #fff !important;
+  }
+  
+  .footer-logo h3 {
+    color: #fff !important;
+  }
+  
+  .single-footer {
+    h3 {
+      color: #fff !important;
+    }
+    
+    p, li, span {
+      color: #fff !important;
+    }
+  }
+  
+  .footer-newsletter {
+    .title {
+      color: #fff !important;
+      
+      span {
+        color: #fff !important;
+      }
+    }
+  }
+  
+  .copyright p {
+    color: #fff !important;
+  }
+  
+  .payment-gateway span {
+    color: #fff !important;
+  }
+  
+  .socila li span {
+    color: #fff !important;
+  }
+}

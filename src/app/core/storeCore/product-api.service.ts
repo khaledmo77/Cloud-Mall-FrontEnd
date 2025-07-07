@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,10 @@ import { environment } from '../../../environments/environment';
 export class ProductApiService {
   private baseUrl = 'https://cloudmall.runasp.net/api/Product/vendor';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   addProduct(formData: FormData, storeId: number): Observable<any> {
     return this.http.post(`${this.baseUrl}/${storeId}`, formData);
@@ -27,6 +31,15 @@ export class ProductApiService {
   }
 
   getStoreDetails(storeId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}/Store/Vendor/GetOneStore/${storeId}`);
+    const userRole = this.authService.getUserRole();
+    
+    // Use different endpoints based on user role
+    if (userRole === 'Client') {
+      // Client endpoint
+      return this.http.get(`${environment.apiBaseUrl}/Store/get-store/${storeId}`);
+    } else {
+      // Vendor endpoint (default)
+      return this.http.get(`${environment.apiBaseUrl}/Store/Vendor/GetOneStore/${storeId}`);
+    }
   }
 } 

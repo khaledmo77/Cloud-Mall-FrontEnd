@@ -1,1 +1,282 @@
-<p>checkout works!</p>
+<!--====== Checkout Form Steps Part Start ======-->
+
+<section class="checkout-wrapper section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="checkout-steps-form-style-1">
+                    <ul id="accordionExample">
+                        <!-- Single Step: Personal Details & Payment -->
+                        <li>
+                            <h6 class="title">Checkout Information</h6>
+                            <section class="checkout-steps-form-content show">
+                                <div class="row">
+                                    <!-- Personal Details -->
+                                    <div class="col-md-12">
+                                        <h5 class="mb-3">Personal Details</h5>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form form-default">
+                                            <label>User Name</label>
+                                            <div class="row">
+                                                <div class="col-md-6 form-input form">
+                                                    <input type="text" placeholder="First Name" 
+                                                           [(ngModel)]="firstName"
+                                                           name="firstName">
+                                                </div>
+                                                <div class="col-md-6 form-input form">
+                                                    <input type="text" placeholder="Last Name" 
+                                                           [(ngModel)]="lastName"
+                                                           name="lastName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>Email Address</label>
+                                            <div class="form-input form">
+                                                <input type="email" placeholder="Email Address" 
+                                                       [(ngModel)]="email"
+                                                       name="email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>Phone Number</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="Phone Number" 
+                                                       [(ngModel)]="phone"
+                                                       name="phone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form form-default">
+                                            <label>Mailing Address</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="Mailing Address" 
+                                                       [(ngModel)]="address"
+                                                       name="address">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>City</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="City" 
+                                                       [(ngModel)]="city"
+                                                       name="city">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>Post Code</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="Post Code" 
+                                                       [(ngModel)]="postCode"
+                                                       name="postCode">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>Country</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="Country" 
+                                                       [(ngModel)]="country"
+                                                       name="country">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="single-form form-default">
+                                            <label>Region/State</label>
+                                            <div class="select-items">
+                                                <select class="form-control" [(ngModel)]="region" name="region">
+                                                    <option value="">Select Region</option>
+                                                    <option value="region1">Region 1</option>
+                                                    <option value="region2">Region 2</option>
+                                                    <option value="region3">Region 3</option>
+                                                    <option value="region4">Region 4</option>
+                                                    <option value="region5">Region 5</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Information -->
+                                    <div class="col-md-12 mt-4">
+                                        <h5 class="mb-3">Payment Information</h5>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form form-default">
+                                            <label>Cardholder Name</label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="Cardholder Name" 
+                                                       [(ngModel)]="cardholderName"
+                                                       name="cardholderName">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="single-form form-default">
+                                            <label>Card Number</label>
+                                            <div class="form-input form">
+                                                <input id="credit-input" type="text" placeholder="0000 0000 0000 0000" 
+                                                       [(ngModel)]="cardNumber"
+                                                       name="cardNumber"
+                                                       (input)="formatCardNumber($event)">
+                                                <img src="assets/images/payment/card.png" alt="card">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="payment-card-info">
+                                        <div class="single-form form-default mm-yy">
+                                            <label>Expiration</label>
+                                            <div class="expiration d-flex">
+                                                <div class="form-input form">
+                                                    <input type="text" placeholder="MM" 
+                                                           [(ngModel)]="expiryMonth"
+                                                           name="expiryMonth">
+                                                </div>
+                                                <div class="form-input form">
+                                                    <input type="text" placeholder="YYYY" 
+                                                           [(ngModel)]="expiryYear"
+                                                           name="expiryYear">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="single-form form-default">
+                                            <label>CVC/CVV <span><i class="mdi mdi-alert-circle"></i></span></label>
+                                            <div class="form-input form">
+                                                <input type="text" placeholder="***" 
+                                                       [(ngModel)]="cvv"
+                                                       name="cvv">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Shipping Method -->
+                                    <div class="col-md-12 mt-4">
+                                        <div class="checkout-payment-option">
+                                            <h6 class="heading-6 font-weight-400 payment-title">Select Delivery Option</h6>
+                                            <div class="payment-option-wrapper">
+                                                <div class="single-payment-option">
+                                                    <input type="radio" name="shipping" id="shipping-1" 
+                                                           [(ngModel)]="shippingMethod" value="standard">
+                                                    <label for="shipping-1">
+                                                        <img src="assets/images/shipping/shipping-1.png" alt="Shipping">
+                                                        <p>Standard Shipping</p>
+                                                        <span class="price">${{ getShippingCost() }}</span>
+                                                    </label>
+                                                </div>
+                                                <div class="single-payment-option">
+                                                    <input type="radio" name="shipping" id="shipping-2" 
+                                                           [(ngModel)]="shippingMethod" value="express">
+                                                    <label for="shipping-2">
+                                                        <img src="assets/images/shipping/shipping-2.png" alt="Shipping">
+                                                        <p>Express Shipping</p>
+                                                        <span class="price">$25.00</span>
+                                                    </label>
+                                                </div>
+                                                <div class="single-payment-option">
+                                                    <input type="radio" name="shipping" id="shipping-3" 
+                                                           [(ngModel)]="shippingMethod" value="overnight">
+                                                    <label for="shipping-3">
+                                                        <img src="assets/images/shipping/shipping-3.png" alt="Shipping">
+                                                        <p>Overnight Shipping</p>
+                                                        <span class="price">$50.00</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Checkout Button -->
+                                    <div class="col-md-12">
+                                        <div class="single-form button">
+                                            <button class="btn" type="button" (click)="submitOrder()" [disabled]="isSubmitting">
+                                                <span *ngIf="!isSubmitting">Place Order</span>
+                                                <span *ngIf="isSubmitting">Processing...</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="checkout-sidebar">
+                    <div class="checkout-sidebar-coupon">
+                        <p>Apply Coupon to get discount!</p>
+                        <div class="single-form form-default">
+                            <div class="form-input form">
+                                <input type="text" placeholder="Coupon Code" [(ngModel)]="couponCode" name="couponCode">
+                            </div>
+                            <div class="button">
+                                <button class="btn" type="button" (click)="applyCoupon()">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkout-sidebar-price-table mt-30">
+                        <h5 class="title">Pricing Table</h5>
+
+                        <div class="sub-total-price">
+                            <div class="total-price">
+                                <p class="value">Subtotal Price:</p>
+                                <p class="price">${{ totalAmount.toFixed(2) }}</p>
+                            </div>
+                            <div class="total-price shipping">
+                                <p class="value">Shipping Cost:</p>
+                                <p class="price">${{ getShippingCost().toFixed(2) }}</p>
+                            </div>
+                            <div class="total-price discount">
+                                <p class="value">Discount:</p>
+                                <p class="price">$0.00</p>
+                            </div>
+                        </div>
+
+                        <div class="total-payable">
+                            <div class="payable-price">
+                                <p class="value">Total Payable:</p>
+                                <p class="price">${{ getTotalWithShipping().toFixed(2) }}</p>
+                            </div>
+                        </div>
+                        <div class="price-table-btn button">
+                            <button class="btn btn-alt" type="button" 
+                                    (click)="submitOrder()" 
+                                    [disabled]="isSubmitting">
+                                <span *ngIf="!isSubmitting">Place Order</span>
+                                <span *ngIf="isSubmitting">Processing...</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="checkout-sidebar-banner mt-30">
+                        <a href="product-grids.html">
+                            <img src="assets/images/banner/banner.jpg" alt="#">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Loading Overlay -->
+<div *ngIf="isSubmitting" class="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+    <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Processing order...</span>
+        </div>
+        <h4 class="mt-3">Processing Your Order...</h4>
+        <p class="text-muted">Please wait while we process your payment</p>
+    </div>
+</div>

@@ -1,17 +1,83 @@
 <div class="store-settings-container">
-  <!-- Header Section -->
-  <div class="header-section">
-    <div class="header-content">
-      <h1 class="page-title">
-        <mat-icon>store</mat-icon>
-        Store Settings & Dashboard
-      </h1>
-      <p class="page-subtitle">Manage your store, products, and orders from one central location</p>
-    </div>
+  <!-- Component Loading State -->
+  <div *ngIf="componentLoading" class="component-loading-section">
+    <mat-card class="component-loading-card">
+      <mat-card-content>
+        <div class="component-loading-content">
+          <mat-spinner diameter="60"></mat-spinner>
+          <h3>Loading Store Settings...</h3>
+          <p>Please wait while we load your store data</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="stats-grid">
+  <!-- Main Content (only show when not loading) -->
+  <div *ngIf="!componentLoading">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-content">
+        <h1 class="page-title">
+          <mat-icon>store</mat-icon>
+          Store Settings & Dashboard
+        </h1>
+        <p class="page-subtitle">Manage your store, products, and orders from one central location</p>
+      </div>
+    </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-card class="loading-card">
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading your stores...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-section">
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">error</mat-icon>
+          <h3>Error Loading Stores</h3>
+          <p>{{ errorMessage }}</p>
+          <button mat-raised-button color="primary" (click)="retryLoadStores()">
+            <mat-icon>refresh</mat-icon>
+            Retry
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Store Selector (only show if multiple stores) -->
+  <div *ngIf="vendorStores.length > 1 && !isLoading && !errorMessage" class="store-selector-section">
+    <mat-card class="store-selector-card">
+      <mat-card-content>
+        <div class="store-selector-content">
+          <h3>Select Store to Manage</h3>
+          <div class="store-buttons">
+            <button 
+              *ngFor="let store of vendorStores" 
+              mat-raised-button 
+              [color]="selectedStore?.id === store.id ? 'primary' : 'basic'"
+              (click)="selectStore(store)"
+              class="store-button">
+              <mat-icon>store</mat-icon>
+              {{ store.name }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Stats Cards (only show when store is selected) -->
+  <div *ngIf="selectedStore && !isLoading && !errorMessage" class="stats-grid">
     <mat-card class="stat-card">
       <mat-card-content>
         <div class="stat-content">
@@ -69,8 +135,8 @@
     </mat-card>
   </div>
 
-  <!-- Main Content Tabs -->
-  <mat-card class="main-content-card">
+  <!-- Main Content Tabs (only show when store is selected) -->
+  <mat-card *ngIf="selectedStore && !isLoading && !errorMessage" class="main-content-card">
     <mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="300ms">
       
       <!-- Dashboard Tab -->
@@ -149,9 +215,13 @@
               </mat-card-header>
               <mat-card-content>
                 <div *ngIf="!showAddProductModal && !showAddCategoryModal" class="quick-actions">
-                  <button mat-raised-button color="primary" class="action-btn" (click)="toggleAddProductModal()">
-                    <mat-icon>add</mat-icon>
-                    Add Product
+                  <button mat-raised-button 
+                          [color]="hasCategories() ? 'primary' : 'warn'" 
+                          class="action-btn" 
+                          (click)="toggleAddProductModal()"
+                          [disabled]="!hasCategories() || categoriesLoading">
+                    <mat-icon>{{ hasCategories() ? 'add' : (categoriesLoading ? 'hourglass_empty' : 'warning') }}</mat-icon>
+                    {{ hasCategories() ? 'Add Product' : (categoriesLoading ? 'Loading Categories...' : 'Add Categories First') }}
                   </button>
                   <button mat-raised-button color="accent" class="action-btn" (click)="toggleAddCategoryModal()">
                     <mat-icon>category</mat-icon>
@@ -181,7 +251,17 @@
                     <label style="display:block; color:#2c3e50; margin-bottom: 6px;">Image</label>
                     <input type="file" (change)="onProductImageChange($event)" />
                   </div>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Product Category ID</mat-label><input matInput type="number" [(ngModel)]="addProductData.productCategoryId" name="productCategoryId" /></mat-form-field>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Product Category</mat-label>
+                    <mat-select [(ngModel)]="addProductData.selectedCategoryId" name="selectedCategoryId" required>
+                      <mat-option *ngFor="let category of productCategories" [value]="category.id">
+                        {{ category.name }}
+                      </mat-option>
+                      <mat-option *ngIf="productCategories.length === 0" disabled>
+                        No categories available. Please add categories first.
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                   <div class="form-actions">
                     <button mat-button type="button" (click)="closeAddProductModal()">Cancel</button>
                     <button mat-raised-button color="primary" type="submit">Add Product</button>
@@ -361,6 +441,7 @@
 
     </mat-tab-group>
   </mat-card>
+  </div>
 </div>
 
 <!-- Order Details Modal (moved to root for full-page overlay) -->

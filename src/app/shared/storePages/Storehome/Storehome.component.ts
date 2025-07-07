@@ -9,12 +9,12 @@ import { StoreProductCategoryApiService } from '../../../core/storeCore/store-pr
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../core/ClientCore/client-cart-api.service';
-
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-Storehome',
   standalone: true,
-  imports: [RouterLink, HeroSlider, CommonModule, FormsModule],
+  imports: [RouterLink, HeroSlider, CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './Storehome.component.html',
   styleUrls: ['./Storehome.component.scss']
 })
@@ -22,7 +22,18 @@ export class Storehome {
     storeId: number = 0;
     products: any[] = [];
     isVendor = false;
+    
+    // Main page loader - shows when first accessing the store
+    isPageLoading = true;
+    
+    // Products loading state
     isLoading = false;
+    
+    // Individual operation loaders
+    isProductLoading = false;
+    isAddingProduct = false;
+    isAddingCategory = false;
+    
     errorMessage: string | null = null;
     showAddProductModal = false;
     showAddCategoryModal = false;
@@ -44,7 +55,6 @@ export class Storehome {
     successMessage: string | null = null;
     selectedProduct: any = null;
     showProductModal = false;
-    isProductLoading = false;
 
      constructor( 
      private route: ActivatedRoute, 
@@ -53,11 +63,15 @@ export class Storehome {
      private auth: AuthService,
      private storeProductCategoryService: StoreProductCategoryApiService,
      private cdr: ChangeDetectorRef,
-     private cartService : CartService
+     private cartService : CartService,
+     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     console.log('Storehome ngOnInit');
+    
+    // Show main page loader immediately
+    this.isPageLoading = true;
     
     // Check if this is a vendor route or client route
     const currentUrl = window.location.pathname;
@@ -75,9 +89,15 @@ export class Storehome {
       if (id) {
         this.storeId = +id;
         this.loadProducts();
+      } else {
+        // No store ID found, hide loader and show error
+        this.isPageLoading = false;
+        this.errorMessage = 'Store ID not found.';
+        this.cdr.detectChanges();
       }
     });
   }
+  
    loadProducts(): void {
     this.isLoading = true;
     this.errorMessage = null;
@@ -91,6 +111,7 @@ export class Storehome {
     service.getProductsByStore(this.storeId).subscribe({
       next: (data) => {
         this.isLoading = false;
+        this.isPageLoading = false; // Hide main page loader
         console.log('isLoading set to false (next)');
         console.log('Raw API response:', data);
         console.log('Response type:', typeof data);
@@ -120,6 +141,7 @@ export class Storehome {
       },
       error: (err) => {
         this.isLoading = false;
+        this.isPageLoading = false; // Hide main page loader even on error
         console.log('isLoading set to false (error)');
         console.error('Error loading store products:', err);
         this.products = [];
@@ -146,6 +168,9 @@ export class Storehome {
 
   submitAddProduct() {
     if (!this.storeId) return;
+    
+    this.isAddingProduct = true; // Show add product loader
+    
     const formData = new FormData();
     formData.append('Name', this.addProductData.name);
     formData.append('Description', this.addProductData.description);
@@ -170,14 +195,15 @@ export class Storehome {
     
     this.productService.addProduct(formData, this.storeId).subscribe({
       next: () => {
-        this.successMessage = 'Product added successfully!';
+        this.isAddingProduct = false; // Hide add product loader
+        this.showSuccessToast('Product added successfully!');
         setTimeout(() => {
-          this.successMessage = null;
           this.showAddProductModal = false;
         }, 2000);
-        this.loadProducts();
+        this.loadProducts(); // Reload products
       },
       error: (err) => {
+        this.isAddingProduct = false; // Hide add product loader
         console.error('Error adding product:', err);
         let errorMessage = 'Failed to add product';
         
@@ -193,26 +219,30 @@ export class Storehome {
           errorMessage = err.error.message;
         }
         
-        alert(errorMessage);
+        this.showErrorToast(errorMessage);
       }
     });
   }
 
   submitAddCategory() {
     if (!this.storeId) return;
+    
+    this.isAddingCategory = true; // Show add category loader
+    
     this.storeProductCategoryService.addProductCategory(this.storeId, {
       name: this.addCategoryData.name,
       description: this.addCategoryData.description
     }).subscribe({
       next: () => {
-        this.successMessage = 'Category added successfully!';
+        this.isAddingCategory = false; // Hide add category loader
+        this.showSuccessToast('Category added successfully!');
         setTimeout(() => {
-          this.successMessage = null;
           this.showAddCategoryModal = false;
         }, 2000);
       },
       error: (err) => {
-        alert('Failed to add category: ' + err.message);
+        this.isAddingCategory = false; // Hide add category loader
+        this.showErrorToast('Failed to add category: ' + err.message);
       }
     });
   }
@@ -244,25 +274,25 @@ export class Storehome {
     console.log('Image failed to load:', imageUrl);
   }
 
-
   addToCart(product: any) {
-  if (this.isVendor) return; // check
+    if (this.isVendor) return; // check
 
-  this.cartService.addToCart({
-    productId: product.id,
-    productName: product.name,
-    price: product.price,
-    quantity: 1,
-    imageUrl: product.imagesURL
-  });
+    this.cartService.addToCart({
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      quantity: 1,
+      imageUrl: product.imagesURL
+    });
 
-  alert(`${product.name} added to cart!`);
-}
+    // Show success toast instead of alert
+    this.showSuccessToast(`✅ ${product.name} added to cart!`);
+  }
 
   // Make sure this is public for template use
   public openProductModal(productId: number) {
     document.body.classList.add('modal-open');
-    this.isProductLoading = true;
+    this.isProductLoading = true; // Show product details loader
     this.showProductModal = true;
     this.selectedProduct = null;
     const service = this.isVendor ? this.productService : this.clientProductService;
@@ -274,11 +304,11 @@ export class Storehome {
         } else {
           this.selectedProduct = data;
         }
-        this.isProductLoading = false;
+        this.isProductLoading = false; // Hide product details loader
         this.cdr.detectChanges();
       },
       error: (err: any) => {
-        this.isProductLoading = false;
+        this.isProductLoading = false; // Hide product details loader
         this.selectedProduct = null;
         this.errorMessage = 'Failed to load product details.';
         this.cdr.detectChanges();
@@ -295,8 +325,26 @@ export class Storehome {
 
   addToCartFromModal(product: any) {
     this.addToCart(product);
-    this.successMessage = 'Product added to cart!';
-    setTimeout(() => this.successMessage = null, 2000);
+    this.showSuccessToast('Product added to cart!');
+  }
+
+  // Toast notification methods
+  showSuccessToast(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 4000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['success-toast']
+    });
+  }
+
+  showErrorToast(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['error-toast']
+    });
   }
 
 }
