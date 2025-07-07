@@ -53,8 +53,8 @@ export const landingRedirectGuard: CanActivateFn = () => {
     console.log('landingRedirectGuard - User logged in with role:', role);
     
     if (role === 'Vendor') {
-      console.log('landingRedirectGuard - Redirecting to vendor dashboard');
-      router.navigate(['/vendor/dashboard']);
+      console.log('landingRedirectGuard - Redirecting to vendor landing page');
+      router.navigate(['/vendor']);
       return false;
     } else if (role === 'Client') {
       console.log('landingRedirectGuard - Redirecting to client home');

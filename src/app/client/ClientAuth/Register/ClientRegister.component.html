@@ -25,38 +25,116 @@
               <h3 class="mb-4 fw-semibold text-center text-primary">Create Your Customer Account</h3>
 
               <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+                <!-- Name Field -->
                 <div class="row">
                   <div class="col-md-12 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="name" class="form-control" formControlName="name" />
-                      <label class="form-label" for="name">Full Name</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        class="form-control" 
+                        [class.is-invalid]="name?.invalid && name?.touched"
+                        [class.is-valid]="name?.valid && name?.touched"
+                        formControlName="name" 
+                        placeholder="Enter your full name"
+                      />
+                      <label class="form-label" for="name"></label>
+                    </div>
+                    <div *ngIf="name?.invalid && name?.touched" class="invalid-feedback d-block">
+                      <i class="fas fa-exclamation-circle me-1"></i>
+                      {{ getNameErrorMessage() }}
                     </div>
                   </div>
                 </div>
 
+                <!-- Email Field -->
                 <div class="form-outline mb-4">
-                  <input type="email" id="email" class="form-control" formControlName="email" />
-                  <label class="form-label" for="email">Email Address</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    class="form-control" 
+                    [class.is-invalid]="email?.invalid && email?.touched"
+                    [class.is-valid]="email?.valid && email?.touched"
+                    formControlName="email" 
+                    placeholder="Enter your email"
+                  />
+                  <label class="form-label" for="email"></label>
+                  <div *ngIf="email?.invalid && email?.touched" class="invalid-feedback d-block">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    {{ getEmailErrorMessage() }}
+                  </div>
                 </div>
 
+                <!-- Password Field -->
                 <div class="form-outline mb-4">
-                  <input type="password" id="password" class="form-control" formControlName="password" />
-                  <label class="form-label" for="password">Password</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showPassword ? 'text' : 'password'" 
+                      id="password" 
+                      class="form-control" 
+                      [class.is-invalid]="password?.invalid && password?.touched"
+                      [class.is-valid]="password?.valid && password?.touched"
+                      formControlName="password" 
+                      placeholder="Enter your password"
+                    />
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility()"
+                      [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                    >
+                      <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                    <label class="form-label" for="password"></label>
+                  </div>
+                  <div *ngIf="password?.invalid && password?.touched" class="invalid-feedback d-block">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    {{ getPasswordErrorMessage() }}
+                  </div>
                 </div>
 
+                <!-- Confirm Password Field -->
                 <div class="form-outline mb-4">
-                  <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" />
-                  <label class="form-label" for="confirmPassword">Confirm Password</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showConfirmPassword ? 'text' : 'password'" 
+                      id="confirmPassword" 
+                      class="form-control" 
+                      [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+                      [class.is-valid]="confirmPassword?.valid && confirmPassword?.touched"
+                      formControlName="confirmPassword" 
+                      placeholder="Confirm your password"
+                    />
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="toggleConfirmPasswordVisibility()"
+                      [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+                    >
+                      <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </button>
+                    <label class="form-label" for="confirmPassword"></label>
+                  </div>
+                  <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="invalid-feedback d-block">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    {{ getConfirmPasswordErrorMessage() }}
+                  </div>
                 </div>
 
                 <!-- Error Message -->
-                <div *ngIf="errorMessage" class="alert alert-danger text-start">
+                <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
                   {{ errorMessage }}
+                  <button type="button" class="btn-close" (click)="errorMessage = null"></button>
                 </div>
 
-                <button type="submit" 
-                        class="btn btn-primary btn-lg btn-block w-100 mb-3" 
-                        [disabled]="isSubmitting">
+                <!-- Submit Button -->
+                <button 
+                  type="submit" 
+                  class="btn btn-primary btn-lg btn-block w-100 mb-3" 
+                  [disabled]="isSubmitting || registerForm.invalid"
+                >
+                  <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
                   {{ isSubmitting ? 'Registering...' : 'Sign Up' }}
                 </button>
 

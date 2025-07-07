@@ -35,12 +35,7 @@ showVendorRegister = false;
 
   ngOnInit(): void {
     if (this.isBrowser) {
-      const token = localStorage.getItem('token');
-      const name = localStorage.getItem('name'); // Make sure to store this during login
-
-      this.isLoggedIn = !!token;
-      this.name = name;
-      console.log(this.isLoggedIn, this.name);
+      this.refreshAuth(); // Use the same method for consistency
     }
   }
 
@@ -113,8 +108,14 @@ closeVendorRegister() {
 
   refreshAuth() {
     if (this.isBrowser) {
-      this.isLoggedIn = !!localStorage.getItem('token');
-      this.name = localStorage.getItem('userName'); // Again: 'userName', not 'name'
+      const token = localStorage.getItem('token');
+      const name = localStorage.getItem('name');
+      const role = localStorage.getItem('role');
+      
+      this.isLoggedIn = !!token;
+      this.name = name;
+      
+      console.log('refreshAuth - token:', token, 'name:', name, 'role:', role, 'isLoggedIn:', this.isLoggedIn);
     }
   }
 }

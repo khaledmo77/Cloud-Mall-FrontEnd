@@ -47,7 +47,7 @@ export class AuthService {
     const role = this.getUserRole();
     switch (role) {
       case 'Vendor':
-        return '/vendor/dashboard';
+        return '/vendor';
       case 'Client':
         return '/client';
       default:

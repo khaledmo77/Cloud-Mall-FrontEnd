@@ -35,6 +35,33 @@ export class ClientLoginComponent {
 
   isLoggingIn = false;
   loginErrorMessage: string | null = null;
+  showPassword = false;
+
+  // Getter methods for form validation
+  get email() { return this.loginForm.get('email'); }
+  get password() { return this.loginForm.get('password'); }
+
+  // Validation error messages
+  getEmailErrorMessage(): string {
+    if (this.email?.hasError('required')) {
+      return 'Email is required';
+    }
+    if (this.email?.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+    return '';
+  }
+
+  getPasswordErrorMessage(): string {
+    if (this.password?.hasError('required')) {
+      return 'Password is required';
+    }
+    return '';
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   submitLoginForm() {
     if (this.loginForm.invalid) {
@@ -77,7 +104,8 @@ export class ClientLoginComponent {
       },
       error: (err) => {
         this.isLoggingIn = false;
-        this.loginErrorMessage = err?.error?.message || 'Login failed.';
+        this.loginErrorMessage = err?.error?.message || 'Login failed. Please check your credentials and try again.';
+        console.error('Login error:', err);
       }
     });
   }

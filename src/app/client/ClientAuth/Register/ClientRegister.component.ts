@@ -36,6 +36,60 @@ export class ClientRegisterComponent {
 
   isSubmitting = false;
   errorMessage: string | null = null;
+  showPassword = false;
+  showConfirmPassword = false;
+
+  // Getter methods for form validation
+  get name() { return this.registerForm.get('name'); }
+  get email() { return this.registerForm.get('email'); }
+  get password() { return this.registerForm.get('password'); }
+  get confirmPassword() { return this.registerForm.get('confirmPassword'); }
+
+  // Validation error messages
+  getNameErrorMessage(): string {
+    if (this.name?.hasError('required')) {
+      return 'Name is required';
+    }
+    return '';
+  }
+
+  getEmailErrorMessage(): string {
+    if (this.email?.hasError('required')) {
+      return 'Email is required';
+    }
+    if (this.email?.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+    return '';
+  }
+
+  getPasswordErrorMessage(): string {
+    if (this.password?.hasError('required')) {
+      return 'Password is required';
+    }
+    if (this.password?.hasError('minlength')) {
+      return 'Password must be at least 6 characters long';
+    }
+    return '';
+  }
+
+  getConfirmPasswordErrorMessage(): string {
+    if (this.confirmPassword?.hasError('required')) {
+      return 'Please confirm your password';
+    }
+    if (this.registerForm.hasError('notMatching')) {
+      return 'Passwords do not match';
+    }
+    return '';
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   matchPasswords(group: FormGroup) {
     const pass = group.get('password')?.value;
@@ -84,7 +138,8 @@ export class ClientRegisterComponent {
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = err?.error?.message || 'Registration failed.';
+        this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
+        console.error('Registration error:', err);
       }
     });
   }
