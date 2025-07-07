@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 export interface Product {
   id: number;
@@ -34,6 +35,13 @@ export class ClientProductApiService {
   }
 
   getProductById(productId: number): Observable<Product> {
-    return this.https.get<Product>(`${this.baseUrl}/${productId}`);
+    return this.https.get<any>(`${this.baseUrl}/${productId}`).pipe(
+      map((response: any) => {
+        if (response && Array.isArray(response.allProducts) && response.allProducts.length > 0) {
+          return response.allProducts[0];
+        }
+        return null;
+      })
+    );
   }
 } 

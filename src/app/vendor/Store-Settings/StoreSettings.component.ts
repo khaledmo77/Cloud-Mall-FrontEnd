@@ -73,12 +73,10 @@ export class StoreSettingsComponent implements OnInit {
     activeProducts: 37
   };
 
-  recentOrders = [
-    { id: '#ORD-001', customer: 'John Doe', amount: 299.99, status: 'Pending', date: '2024-01-15' },
-    { id: '#ORD-002', customer: 'Jane Smith', amount: 149.50, status: 'Delivered', date: '2024-01-14' },
-    { id: '#ORD-003', customer: 'Mike Johnson', amount: 89.99, status: 'Processing', date: '2024-01-13' },
-    { id: '#ORD-004', customer: 'Sarah Wilson', amount: 199.99, status: 'Pending', date: '2024-01-12' }
-  ];
+  recentOrders: any[] = [];
+  selectedOrder: any = null;
+  isEditingStatus = false;
+  availableStatuses = ['Pending', 'Processing', 'Fulfilled', 'Delivered', 'Cancelled', 'Rejected'];
 
   lowStockProducts = [
     { id: 1, name: 'Wireless Headphones', stock: 3, threshold: 10 },
@@ -140,6 +138,25 @@ export class StoreSettingsComponent implements OnInit {
             // Use the first store (or you could let user select which store to manage)
             this.storeId = stores[0].id;
             console.log('StoreSettings - Using storeId:', this.storeId);
+            // Fetch recent orders for this store
+            if (this.storeId !== null && this.storeId !== undefined) {
+              this.vendorStoresService.getStoreOrders(this.storeId).subscribe({
+                next: (res: any) => {
+                  console.log('Orders API response:', res); // For debugging
+                  if (res && res.success && res.data && Array.isArray(res.data.orders)) {
+                    this.recentOrders = res.data.orders;
+                  } else {
+                    this.recentOrders = [];
+                  }
+                  this.cdr.detectChanges();
+                },
+                error: (err: any) => {
+                  console.error('Error fetching store orders:', err);
+                  this.recentOrders = [];
+                  this.cdr.detectChanges();
+                }
+              });
+            }
           } else {
             console.error('No stores found for vendor:', this.userId);
             alert('No stores found. Please create a store first.');
@@ -345,5 +362,54 @@ export class StoreSettingsComponent implements OnInit {
         alert(errorMessage);
       }
     });
+  }
+
+  openOrderDetails(order: any) {
+    this.selectedOrder = order;
+    this.isEditingStatus = false;
+  }
+
+  closeOrderDetails() {
+    this.selectedOrder = null;
+    this.isEditingStatus = false;
+  }
+
+  toggleStatusEdit() {
+    this.isEditingStatus = !this.isEditingStatus;
+  }
+
+  updateOrderStatus(newStatus: string) {
+    if (this.selectedOrder && this.selectedOrder.id) {
+      this.vendorStoresService.updateOrderStatus(this.selectedOrder.id, newStatus).subscribe({
+        next: (response) => {
+          // Update the order status in the list
+          const orderIndex = this.recentOrders.findIndex(order => order.id === this.selectedOrder.id);
+          if (orderIndex !== -1) {
+            this.recentOrders[orderIndex].status = newStatus;
+          }
+          // Update the selected order
+          this.selectedOrder.status = newStatus;
+          this.isEditingStatus = false;
+          this.showSuccessToast('Order status updated successfully');
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error updating order status:', error);
+          this.showSuccessToast('Failed to update order status');
+        }
+      });
+    }
+  }
+
+  getOrderStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'Pending': return 'bg-warning';
+      case 'Processing': return 'bg-info';
+      case 'Fulfilled':
+      case 'Delivered': return 'bg-success';
+      case 'Cancelled':
+      case 'Rejected': return 'bg-danger';
+      default: return 'bg-secondary';
+    }
   }
 }
