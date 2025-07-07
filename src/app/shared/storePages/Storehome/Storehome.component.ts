@@ -259,7 +259,8 @@ export class Storehome {
   alert(`${product.name} added to cart!`);
 }
 
-  openProductModal(productId: number) {
+  // Make sure this is public for template use
+  public openProductModal(productId: number) {
     document.body.classList.add('modal-open');
     this.isProductLoading = true;
     this.showProductModal = true;

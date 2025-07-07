@@ -122,17 +122,19 @@
   }
   
   .hero-area .hero-slider .single-slider .content h2 {
-    font-size: 30px;
-    font-weight: 800;
-    color: #081828;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    margin-bottom: 0.5rem;
   }
   
   .hero-area .hero-slider .single-slider .content h2 span {
-    font-size: 17px;
-    font-weight: 600;
     display: block;
-    color: #8a8a8a;
-    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #fff !important;
+    margin-bottom: 0.25rem;
   }
   
   @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -162,7 +164,11 @@
   }
   
   .hero-area .hero-slider .single-slider .content p {
-    margin-top: 20px;
+    font-size: 1.15rem;
+    color: #fff !important;
+    font-weight: 400;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
   
   @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -178,18 +184,17 @@
   }
   
   .hero-area .hero-slider .single-slider .content h3 {
-    margin-top: 20px;
-    font-size: 25px;
-    font-weight: 800;
-    color: #081828;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff !important;
+    margin-bottom: 1.5rem;
   }
   
   .hero-area .hero-slider .single-slider .content h3 span {
-    display: inline-block;
-    margin-right: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #8a8a8a;
+    font-size: 1rem;
+    color: #fff !important;
+    font-weight: 400;
+    margin-right: 0.5rem;
   }
   
   @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -220,5 +225,20 @@
   
   .hero-area .hero-slider .single-slider .content .button {
     margin-top: 30px;
+  }
+  
+  .hero-area .hero-slider .single-slider .content .button .btn {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.75rem 2.2rem;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #fff 0%, #fff 100%);
+    color: #222 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.2s, color 0.2s;
+    &:hover {
+      background: linear-gradient(90deg, #fff 0%, #fff 100%);
+      color: #222 !important;
+    }
   }
   

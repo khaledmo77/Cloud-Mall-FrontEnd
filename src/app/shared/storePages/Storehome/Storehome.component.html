@@ -10,37 +10,43 @@
         <div class="row">
             <div class="col-lg-8 col-12 custom-padding-right">
                 <div class="slider-head">
-                    <app-hero-slider></app-hero-slider>
+                    <app-hero-slider
+                      [products]="products"
+                      [isVendor]="isVendor"
+                      [getProductImageUrl]="getProductImageUrl.bind(this)"
+                      [openProductModal]="openProductModal.bind(this)">
+                    </app-hero-slider>
                 </div>
             </div>
             <div class="col-lg-4 col-12">
                 <div class="row">
-                    <div class="col-lg-12 col-md-6 col-12 md-custom-padding">
+                    <div class="col-lg-12 col-md-6 col-12 md-custom-padding" *ngIf="products && products.length > 0">
                         <!-- Start Small Banner -->
                         <div class="hero-small-banner"
-                            style="background-image: url('assets/images/hero/slider-bnr.jpg');">
-                            <div class="content">
-                                <h2>
-                                    <span>New line required</span>
-                                    iPhone 12 Pro Max
+                            [style.background-image]="'url(' + getProductImageUrl(products[0].imagesURL) + ')'">
+                            <div class="content" style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                                <h2 style="font-size: 2.2rem; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                                    <span style="display: block; font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 0.25rem;">{{ products[0].brand || products[0].categoryName }}</span>
+                                    {{ products[0].name }}
                                 </h2>
-                                <h3>$259.99</h3>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 1rem;">${{ products[0].price }}</h3>
                             </div>
                         </div>
                         <!-- End Small Banner -->
                     </div>
-                    <div class="col-lg-12 col-md-6 col-12">
+                    <div class="col-lg-12 col-md-6 col-12" *ngIf="products && products.length > 1">
                         <!-- Start Small Banner -->
-                        <div class="hero-small-banner style2">
+                        <div class="hero-small-banner style2"
+                            [style.background-image]="'url(' + getProductImageUrl(products[1].imagesURL) + ')'">
                             <div class="content">
-                                <h2>Weekly Sale!</h2>
-                                <p>Saving up to 50% off all online store items this week.</p>
-                                <div class="button">
-                                    <a class="btn" routerLink="/product-grids">Shop Now</a>
+                                <h2>{{ products[1].name }}</h2>
+                                <p>{{ products[1].description }}</p>
+                                <div class="button" *ngIf="!isVendor">
+                                    <a class="btn" (click)="openProductModal(products[1].id)">View Details</a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Start Small Banner -->
+                        <!-- End Small Banner -->
                     </div>
                 </div>
             </div>
