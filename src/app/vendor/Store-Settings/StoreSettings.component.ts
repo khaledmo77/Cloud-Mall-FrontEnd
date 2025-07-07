@@ -76,7 +76,7 @@ export class StoreSettingsComponent implements OnInit {
   recentOrders: any[] = [];
   selectedOrder: any = null;
   isEditingStatus = false;
-  availableStatuses = ['Pending', 'Processing', 'Fulfilled', 'Delivered', 'Cancelled', 'Rejected'];
+  availableStatuses = ['Pending', 'Processing', 'Shipped', 'Fulfilled', 'Cancelled'];
 
   lowStockProducts = [
     { id: 1, name: 'Wireless Headphones', stock: 3, threshold: 10 },
@@ -145,14 +145,37 @@ export class StoreSettingsComponent implements OnInit {
                   console.log('Orders API response:', res); // For debugging
                   if (res && res.success && res.data && Array.isArray(res.data.orders)) {
                     this.recentOrders = res.data.orders;
+                    this.storeStats.totalOrders = res.data.totalOrders || this.recentOrders.length;
+                    this.storeStats.pendingOrders = this.recentOrders.filter(order => (order.status || '').toLowerCase() === 'pending').length;
+                    this.storeStats.totalRevenue = this.recentOrders
+                      .filter(order => (order.status || '').toLowerCase() === 'fulfilled')
+                      .reduce((sum, order) => sum + (order.subTotal || 0), 0);
                   } else {
                     this.recentOrders = [];
+                    this.storeStats.totalOrders = 0;
+                    this.storeStats.pendingOrders = 0;
+                    this.storeStats.totalRevenue = 0;
                   }
                   this.cdr.detectChanges();
                 },
                 error: (err: any) => {
                   console.error('Error fetching store orders:', err);
                   this.recentOrders = [];
+                  this.storeStats.totalOrders = 0;
+                  this.storeStats.pendingOrders = 0;
+                  this.storeStats.totalRevenue = 0;
+                  this.cdr.detectChanges();
+                }
+              });
+              // Fetch all products for this store and set totalProducts
+              this.productService.getProductsByStore(this.storeId).subscribe({
+                next: (products: any[]) => {
+                  this.storeStats.totalProducts = products.length;
+                  this.cdr.detectChanges();
+                },
+                error: (err: any) => {
+                  console.error('Error fetching store products:', err);
+                  this.storeStats.totalProducts = 0;
                   this.cdr.detectChanges();
                 }
               });
@@ -378,20 +401,47 @@ export class StoreSettingsComponent implements OnInit {
     this.isEditingStatus = !this.isEditingStatus;
   }
 
+  // Helper to ensure status is capitalized as expected by backend
+  private formatStatus(status: string): string {
+    // Map of allowed statuses (add more as needed)
+    const allowed = ['Pending', 'Processing', 'Shipped', 'Fulfilled', 'Cancelled'];
+    const found = allowed.find(s => s.toLowerCase() === status.toLowerCase());
+    return found || status;
+  }
+
+  // Helper to recalculate store stats from recentOrders
+  private updateStoreStatsFromOrders(orders: any[], totalOrdersFromApi?: number) {
+    this.storeStats.totalOrders = totalOrdersFromApi || orders.length;
+    this.storeStats.pendingOrders = orders.filter(order => (order.status || '').toLowerCase() === 'pending').length;
+    this.storeStats.totalRevenue = orders
+      .filter(order => (order.status || '').toLowerCase() === 'fulfilled')
+      .reduce((sum, order) => sum + (order.subTotal || 0), 0);
+    this.cdr.detectChanges();
+  }
+
   updateOrderStatus(newStatus: string) {
     if (this.selectedOrder && this.selectedOrder.id) {
-      this.vendorStoresService.updateOrderStatus(this.selectedOrder.id, newStatus).subscribe({
+      const formattedStatus = this.formatStatus(newStatus);
+      console.log('Updating order status:', this.selectedOrder.id, formattedStatus); // Debug log
+      this.vendorStoresService.updateOrderStatus(this.selectedOrder.id, formattedStatus).subscribe({
         next: (response) => {
-          // Update the order status in the list
-          const orderIndex = this.recentOrders.findIndex(order => order.id === this.selectedOrder.id);
-          if (orderIndex !== -1) {
-            this.recentOrders[orderIndex].status = newStatus;
-          }
-          // Update the selected order
-          this.selectedOrder.status = newStatus;
-          this.isEditingStatus = false;
-          this.showSuccessToast('Order status updated successfully');
-          this.cdr.detectChanges();
+          // Reload orders from backend for full sync
+          this.vendorStoresService.getStoreOrders(this.storeId!).subscribe({
+            next: (res: any) => {
+              if (res && res.success && res.data && Array.isArray(res.data.orders)) {
+                this.recentOrders = res.data.orders;
+                this.updateStoreStatsFromOrders(this.recentOrders, res.data.totalOrders);
+              }
+              this.selectedOrder = this.recentOrders.find(order => order.id === this.selectedOrder.id) || null;
+              this.isEditingStatus = false;
+              this.showSuccessToast('Order status updated successfully');
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              this.showSuccessToast('Order status updated, but failed to reload orders');
+              this.isEditingStatus = false;
+            }
+          });
         },
         error: (error) => {
           console.error('Error updating order status:', error);
