@@ -1,31 +1,16 @@
 <!-- Start Hero Slider -->
 <div class="hero-slider">
     <!-- Start Single Slider -->
-    <div class="single-slider" style="background-image: url(assets/images/hero/slider-bg1.jpg);">
-        <div class="content">
-            <h2><span>No restocking fee ($35 savings)</span>
-                M75 Sport Watch
+    <div *ngFor="let product of products | slice:0:2" class="single-slider" [style.background-image]="'url(' + getProductImageUrl(product.imagesURL) + ')'">
+        <div class="content" style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+            <h2 style="font-size: 2.2rem; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                <span style="display: block; font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 0.25rem;">{{ product.brand || product.categoryName }}</span>
+                {{ product.name }}
             </h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.</p>
-            <h3><span>Now Only</span> $320.99</h3>
-            <div class="button">
-                <a routerLink="/product-grids" class="btn">Shop Now</a>
-            </div>
-        </div>
-    </div>
-    <!-- End Single Slider -->
-    <!-- Start Single Slider -->
-    <div class="single-slider" style="background-image: url(assets/images/hero/slider-bg2.jpg);">
-        <div class="content">
-            <h2><span>Big Sale Offer</span>
-                Get the Best Deal on CCTV Camera
-            </h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.</p>
-            <h3><span>Combo Only:</span> $590.00</h3>
-            <div class="button">
-                <a routerLink="/product-grids" class="btn">Shop Now</a>
+            <p style="font-size: 1.15rem; color: #fff; font-weight: 400; margin-bottom: 1.2rem; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">{{ product.description }}</p>
+            <h3 style="font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 1rem;"><span style="font-size: 1rem; color: #fff; font-weight: 400; margin-right: 0.5rem;">Now Only</span> ${{ product.price }}</h3>
+            <div class="button" *ngIf="!isVendor">
+                <a class="btn" (click)="openProductModal(product.id)" style="font-size: 1.1rem; font-weight: 600; padding: 0.75rem 2.2rem; border-radius: 30px; background: linear-gradient(90deg, #fff 0%, #fff 100%); color: #222; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: background 0.2s, color 0.2s;">View Details</a>
             </div>
         </div>
     </div>
