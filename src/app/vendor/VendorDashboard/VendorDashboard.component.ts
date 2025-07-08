@@ -50,21 +50,21 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   isLoadingStores = false;
   
   filterCategories: FilterCategory[] = [
-    { filter: '*', label: 'ALL' },
+    // { filter: '*', label: 'ALL' },
     { filter: '.your-stores', label: 'Your Stores' },
-    { filter: '.navigation', label: 'navigation' },
-    { filter: '.header', label: 'header' },
-    { filter: '.features', label: 'features' },
-    { filter: '.content', label: 'content' },
-    { filter: '.team', label: 'team' },
-    { filter: '.cta', label: 'cta' },
-    { filter: '.gallery', label: 'gallery' },
-    { filter: '.forms', label: 'forms' },
-    { filter: '.partners', label: 'partners' },
-    { filter: '.testimonials', label: 'testimonials' },
-    { filter: '.pricing', label: 'pricing' },
-    { filter: '.contact', label: 'contact' },
-    { filter: '.footer', label: 'footer' }
+    // { filter: '.navigation', label: 'navigation' },
+    { filter: '.header', label: 'View Our Store Templates' },
+    // { filter: '.features', label: 'features' },
+    // { filter: '.content', label: 'content' },
+    // { filter: '.team', label: 'team' },
+    // { filter: '.cta', label: 'cta' },
+    // { filter: '.gallery', label: 'gallery' },
+    // { filter: '.forms', label: 'forms' },
+    // { filter: '.partners', label: 'partners' },
+    // { filter: '.testimonials', label: 'testimonials' },
+    // { filter: '.pricing', label: 'pricing' },
+    // { filter: '.contact', label: 'contact' },
+    // { filter: '.footer', label: 'footer' }
   ];
 
   allItems: DashboardItem[] = [
@@ -107,15 +107,7 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
     { category: 'header', link: 'blocks/header-6', image: 'assets/img/screenshots/blocks/header-6.jpg' },
     { category: 'header', link: 'blocks/header-7', image: 'assets/img/screenshots/blocks/header-7.jpg' },
     { category: 'header', link: 'blocks/header-8', image: 'assets/img/screenshots/blocks/header-8.jpg' },
-    { category: 'header', link: 'blocks/header-9', image: 'assets/img/screenshots/blocks/header-9.jpg' },
-    { category: 'header', link: 'blocks/header-10', image: 'assets/img/screenshots/blocks/header-10.jpg' },
-    { category: 'header', link: 'blocks/header-11', image: 'assets/img/screenshots/blocks/header-11.jpg' },
-    { category: 'header', link: 'blocks/header-12', image: 'assets/img/screenshots/blocks/header-12.jpg' },
-    { category: 'header', link: 'blocks/header-13', image: 'assets/img/screenshots/blocks/header-13.jpg' },
-    { category: 'header', link: 'blocks/header-14', image: 'assets/img/screenshots/blocks/header-14.jpg' },
-    { category: 'header', link: 'blocks/header-15', image: 'assets/img/screenshots/blocks/header-15.jpg' },
-    { category: 'header', link: 'blocks/header-16', image: 'assets/img/screenshots/blocks/header-16.jpg' },
-    { category: 'header', link: 'blocks/header-17', image: 'assets/img/screenshots/blocks/header-17.jpg' },
+ 
     
     // Features items
     { category: 'features', link: 'blocks/features-1', image: 'assets/img/screenshots/blocks/features-1.jpg' },

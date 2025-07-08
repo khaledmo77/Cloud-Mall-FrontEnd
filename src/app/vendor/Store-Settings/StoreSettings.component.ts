@@ -353,6 +353,14 @@ export class StoreSettingsComponent implements OnInit {
     });
   }
 
+  showErrorToast(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      panelClass: ['mat-toolbar', 'mat-warn'],
+      verticalPosition: 'top',
+    });
+  }
+
   toggleAddProductModal() {
     // Check if categories are still loading
     if (this.categoriesLoading) {
@@ -395,7 +403,7 @@ export class StoreSettingsComponent implements OnInit {
 
   submitAddProduct() {
     if (!this.storeId) {
-      alert('Store ID not available. Please wait for store information to load.');
+      this.showErrorToast('Store ID not available. Please wait for store information to load.');
       return;
     }
     const formData = new FormData();
@@ -451,14 +459,14 @@ export class StoreSettingsComponent implements OnInit {
         } else if (err.error && err.error.message) {
           errorMessage = err.error.message;
         }
-        alert(errorMessage);
+        this.showErrorToast(errorMessage);
       }
     });
   }
 
   submitAddCategory() {
     if (!this.storeId) {
-      alert('Store ID not available. Please wait for store information to load.');
+      this.showErrorToast('Store ID not available. Please wait for store information to load.');
       return;
     }
     
@@ -495,8 +503,7 @@ export class StoreSettingsComponent implements OnInit {
         } else if (err.error && err.error.message) {
           errorMessage = err.error.message;
         }
-        
-        alert(errorMessage);
+        this.showErrorToast(errorMessage);
       }
     });
   }

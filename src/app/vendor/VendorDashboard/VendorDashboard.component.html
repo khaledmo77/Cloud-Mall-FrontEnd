@@ -131,15 +131,18 @@
                    loading="lazy">
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <h6 class="text-white mb-2">{{ item.category | titlecase }} Component</h6>
+                  <h6 class="text-white mb-2">Store Template</h6>
                   <div class="d-flex flex-column gap-2">
                     <button class="btn btn-success btn-sm rounded-pill" 
                             (click)="openCreateStorePopup(); $event.stopPropagation()">
                       <span class="fas fa-store me-2"></span>
                       Create Store
                     </button>
-                    <a [routerLink]="['/' + item.link]" 
-                       class="btn btn-primary btn-sm rounded-pill">
+                    <a *ngIf="item.category === 'header'" [routerLink]="['/vendor/dashboard/preview']" [queryParams]="{ block: item.link.replace('blocks/', '') + '.html' }" class="btn btn-primary btn-sm rounded-pill">
+                      <span class="fas fa-eye me-2"></span>
+                      View Component
+                    </a>
+                    <a *ngIf="item.category !== 'header'" [routerLink]="['/' + item.link]" class="btn btn-primary btn-sm rounded-pill">
                       <span class="fas fa-eye me-2"></span>
                       View Component
                     </a>
@@ -149,8 +152,8 @@
             </div>
             <div class="card-footer bg-transparent border-0 p-3">
               <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-primary rounded-pill">{{ item.category | titlecase }}</span>
-                <small class="text-muted">{{ item.link.split('/').pop() | titlecase }}</small>
+                <span class="badge bg-primary rounded-pill">store</span>
+             
               </div>
             </div>
           </div>

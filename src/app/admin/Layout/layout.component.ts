@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,4 +11,12 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminLayoutComponent {
   superAdmin = true; // TODO: Replace with real role check
+
+  constructor(private router: Router) {}
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/']); // Go to landing page
+  }
 }

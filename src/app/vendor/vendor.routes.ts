@@ -9,6 +9,7 @@ import {
   ManageProductsComponent, 
   VendorOrdersComponent 
 } from './index';
+import { PreviewBlockComponent } from './preview-block/preview-block.component';
 import { roleGuard } from '../core/auth.guard';
 
 export const VENDOR_ROUTES: Routes = [
@@ -19,6 +20,7 @@ export const VENDOR_ROUTES: Routes = [
     children: [
       { path: '', component: VendorHomeComponent },
       { path: 'dashboard', component: VendorDashboardComponent },
+      { path: 'dashboard/preview', component: PreviewBlockComponent },
       { path: 'create-store', component: CreateStoreComponent },
       { path: 'store-settings', component: StoreSettingsComponent },
       { path: 'store-settings/:storeId', component: StoreSettingsComponent },

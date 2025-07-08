@@ -97,4 +97,9 @@ export class ClientProductApiService {
       })
     );
   }
+
+  // Add this public method for direct generic endpoint access
+  public getProductByIdPublic(productId: number): Observable<any> {
+    return this.https.get<any>(`${this.baseUrl}/${productId}`);
+  }
 } 

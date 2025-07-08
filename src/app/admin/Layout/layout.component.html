@@ -12,6 +12,9 @@
         <li class="nav-item mb-2" *ngIf="superAdmin"><a class="nav-link text-white" routerLink="/admin/admins" routerLinkActive="active"><i class="bi bi-person-plus me-2"></i>Admins</a></li>
       </ul>
     </nav>
+    <div class="mt-auto pt-4">
+      <button class="btn btn-outline-light w-100" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+    </div>
   </aside>
   <main class="content flex-grow-1 p-4">
     <router-outlet></router-outlet>

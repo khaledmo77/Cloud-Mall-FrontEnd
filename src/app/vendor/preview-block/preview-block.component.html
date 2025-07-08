@@ -1,0 +1,8 @@
+<div class="container-fluid p-0">
+
+  <div *ngIf="loading" class="alert alert-info">Loading block...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="!loading && !error">
+    <div [innerHTML]="html"></div>
+  </div>
+</div>

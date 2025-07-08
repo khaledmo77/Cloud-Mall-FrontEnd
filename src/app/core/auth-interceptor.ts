@@ -19,6 +19,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   console.log('AuthInterceptor - Token exists:', !!token);
   console.log('AuthInterceptor - Token:', token ? token.substring(0, 50) + '...' : 'null');
   
+  // Skip adding auth headers for static asset requests
+  if (req.url.includes('/assets/')) {
+    return next(req);
+  }
+
   if (token) {
     // Check if token is expired before making request
     if (authService.isTokenExpired(token)) {

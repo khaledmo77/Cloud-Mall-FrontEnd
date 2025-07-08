@@ -8,6 +8,8 @@ import { Observable, Subscription } from 'rxjs';
 import { ProductApiService } from '../../../core/storeCore/product-api.service';
 import { OrderEventsService } from '../../../core/order-events.service';
 import { StoreInfoService } from '../../../core/storeCore/store-info.service';
+import { environment } from '../../../../environments/environment';
+import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 
 @Component({
   selector: 'app-StoreHeader',
@@ -39,12 +41,19 @@ export class StoreHeader implements OnInit, OnDestroy {
   showOrderDetails = false;
   isRefreshingAfterOrder = false;
 
+  // Product details modal state
+  showProductModal = false;
+  selectedProduct: any = null;
+  isProductLoading = false;
+  errorMessage: string | null = null;
+
   constructor(
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductApiService,
+    private clientProductService: ClientProductApiService,
     private ordersService: ClientOrdersApiService,
     private cdr: ChangeDetectorRef,
     private orderEventsService: OrderEventsService,
@@ -149,6 +158,18 @@ export class StoreHeader implements OnInit, OnDestroy {
     } else {
       return words.map(word => word.charAt(0)).join('').toUpperCase();
     }
+  }
+
+  getProductImageUrl(item: any): string {
+    const url = item.imageUrl || item.imageURL || item.productImageUrl;
+    if (!url) return 'assets/images/default.jpg';
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/')) return environment.imageBaseUrl + url;
+    return url;
+  }
+
+  onImgError(event: any) {
+    event.target.src = 'assets/images/default.jpg';
   }
 
   ngOnDestroy(): void {
@@ -313,5 +334,64 @@ export class StoreHeader implements OnInit, OnDestroy {
     this.cartService.cleanCart();
     // Navigate to landing page
     this.router.navigate(['/']);
+  }
+
+  public openProductModal(productId: number) {
+    document.body.classList.add('modal-open');
+    this.isProductLoading = true;
+    this.showProductModal = true;
+    this.selectedProduct = null;
+    this.errorMessage = null;
+    let loadingTimeout = setTimeout(() => {
+      if (this.isProductLoading) {
+        this.isProductLoading = false;
+        this.errorMessage = 'Request timed out. Please try again.';
+        this.cdr.detectChanges();
+      }
+    }, 5000);
+    // Use the new public method to fetch product details
+    this.clientProductService.getProductByIdPublic(productId).subscribe({
+      next: (response: any) => {
+        clearTimeout(loadingTimeout);
+        if (response && response.data) {
+          this.selectedProduct = response.data;
+        } else if (response && typeof response === 'object' && response.id) {
+          this.selectedProduct = response;
+        } else if (Array.isArray(response) && response.length > 0) {
+          this.selectedProduct = response[0];
+        } else {
+          this.selectedProduct = null;
+        }
+        this.isProductLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        clearTimeout(loadingTimeout);
+        this.isProductLoading = false;
+        this.selectedProduct = null;
+        this.errorMessage = 'Failed to load product details.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  public closeProductModal() {
+    document.body.classList.remove('modal-open');
+    this.showProductModal = false;
+    this.selectedProduct = null;
+    this.isProductLoading = false;
+  }
+
+  addToCart(product: any) {
+    if (this.isVendor) return;
+    this.cartService.addToCart({
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      quantity: 1,
+      imageUrl: product.imagesURL
+    });
+    // Optionally, show a toast or alert here if you want
+    // Example: this.showSuccessToast(`${product.name} added to cart!`);
   }
 }
