@@ -477,11 +477,119 @@ text-decoration: none;
 
   color: var(--accent-color);
   border-radius: 50px;
-    background-color: #f0f0f0;  /* ✅ Light gray background */
-  color: #0d6efd;             /* ✅ Bootstrap blue text */
-  border: 1px solid #dcdcdc;  /* ✅ Light gray border */
+    background-color: #f0f0f0;  /* Light gray background */
+  color: #0d6efd;             /*Bootstrap blue text */
+  border: 1px solid #dcdcdc;  /* Light gray border */
   border-radius: 30px;
 
+}
+//contact section 
+#contact .section-title h2 {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+    font-size: 40px;
+     margin-bottom: 40px;
+}
+
+#contact .section-title h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -12px;  /* Adjust distance from text */
+  width: 60%;
+  height: 3px;
+  background-color: #007bff;
+}
+.contact .info-item+.info-item {
+  margin-top: 40px;
+}
+
+.contact .info-item i {
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color), transparent 92%);
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+  margin-right: 15px;
+}
+
+.contact .info-item h3 {
+  padding: 0;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contact .info-item p {
+  padding: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+
+}
+.contact .info-item i {
+  color: #0d6efd; /* blue icon by default */
+  font-size: 24px;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 10px;
+  border-radius: 50%; /* optional: makes icon background round */
+}
+.contact .info-item:hover i {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+   background-color: #0d6efd; /* blue background */
+  color: #ffffff; /* white icon */
+}
+
+.contact .php-email-form {
+  height: 100%;
+}
+
+.contact .php-email-form input[type=text],
+.contact .php-email-form input[type=email],
+.contact .php-email-form textarea {
+  font-size: 14px;
+  padding: 10px 15px;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--default-color);
+  background-color: var(--surface-color);
+  border-color: color-mix(in srgb, var(--default-color), transparent 80%);
+}
+
+.contact .php-email-form input[type=text]:focus,
+.contact .php-email-form input[type=email]:focus,
+.contact .php-email-form textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.contact .php-email-form input[type=text]::placeholder,
+.contact .php-email-form input[type=email]::placeholder,
+.contact .php-email-form textarea::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
+}
+
+.contact .php-email-form button[type=submit] {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+   border: 2px solid #0056b3; /* visible blue border */
+  padding: 10px 30px;
+  transition: 0.4s;
+  border-radius: 50px;
+  
+  color: #0056b3;
+ 
+}
+
+.contact .php-email-form button[type=submit]:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 25%);
+ background-color: #0056b3;
+  color: #f0f0f0;
 }
 
 
