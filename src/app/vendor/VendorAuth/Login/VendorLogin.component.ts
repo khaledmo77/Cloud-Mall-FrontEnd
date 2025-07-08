@@ -1,4 +1,4 @@
-import { Component, inject, Output, EventEmitter, PLATFORM_ID } from '@angular/core';
+import { Component, inject, Output, EventEmitter, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -29,6 +29,7 @@ export class VendorLoginComponent {
   authServiceCore = inject(AuthService);
   router = inject(Router);
   platformId = inject(PLATFORM_ID);
+  cdRef = inject(ChangeDetectorRef);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -110,8 +111,9 @@ export class VendorLoginComponent {
       },
       error: (err) => {
         this.isLoggingIn = false;
-        this.loginErrorMessage = err?.error?.message || 'Login failed. Please check your credentials and try again.';
+        this.loginErrorMessage = err?.error?.errors?.[0] || 'Login failed. Please check your credentials and try again.';
         console.error('Login error:', err);
+        this.cdRef.detectChanges();
       }
     });
   }
