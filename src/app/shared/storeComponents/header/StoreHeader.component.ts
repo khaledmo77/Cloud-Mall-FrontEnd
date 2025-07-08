@@ -7,6 +7,7 @@ import { AuthService } from '../../../core/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { ProductApiService } from '../../../core/storeCore/product-api.service';
 import { OrderEventsService } from '../../../core/order-events.service';
+import { StoreInfoService } from '../../../core/storeCore/store-info.service';
 
 @Component({
   selector: 'app-StoreHeader',
@@ -46,7 +47,8 @@ export class StoreHeader implements OnInit, OnDestroy {
     private productService: ProductApiService,
     private ordersService: ClientOrdersApiService,
     private cdr: ChangeDetectorRef,
-    private orderEventsService: OrderEventsService
+    private orderEventsService: OrderEventsService,
+    private storeInfoService: StoreInfoService // <-- Inject the new service
   ) {}
 
   ngOnInit(): void {
@@ -88,22 +90,40 @@ export class StoreHeader implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       const storeId = params['storeId'];
       if (storeId) {
-        this.productService.getStoreDetails(storeId).subscribe({
-          next: (res: any) => {
-            if (res && res.data) {
-              this.storeName = res.data.name;
-              this.addresses = res.data.addresses || [];
-              this.logoUrl = res.data.logoURL || null;
+        if (this.isVendor) {
+          this.productService.getStoreDetails(storeId).subscribe({
+            next: (res: any) => {
+              if (res && res.data) {
+                this.storeName = res.data.name;
+                this.addresses = res.data.addresses || [];
+                this.logoUrl = res.data.logoURL || null;
+                this.cdr.detectChanges();
+              }
+            },
+            error: (err: any) => {
+              this.storeName = '';
+              this.addresses = [];
+              this.logoUrl = null;
               this.cdr.detectChanges();
             }
-          },
-          error: (err: any) => {
-            this.storeName = '';
-            this.addresses = [];
-            this.logoUrl = null;
-            this.cdr.detectChanges();
-          }
-        });
+          });
+        } else {
+          // Use StoreInfoService for clients
+          this.storeInfoService.getStoreById(+storeId).subscribe({
+            next: (store: any) => {
+              this.storeName = store.name;
+              this.addresses = store.addresses || [];
+              this.logoUrl = store.logoURL || null;
+              this.cdr.detectChanges();
+            },
+            error: (err: any) => {
+              this.storeName = '';
+              this.addresses = [];
+              this.logoUrl = null;
+              this.cdr.detectChanges();
+            }
+          });
+        }
       }
     });
   }

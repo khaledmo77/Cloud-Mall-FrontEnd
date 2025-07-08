@@ -1,14 +1,9 @@
-<main class="main"  id="top">
-
-    <div class="navbar-overlay w-100 position-fixed top-0 start-0 px-4 py-1 d-flex align-items-center justify-content-between" 
+<main class="main" id="top">
+  <div class="navbar-overlay w-100 position-fixed top-0 start-0 px-4 py-1 d-flex align-items-center justify-content-between"
     [ngClass]="{ 'scrolled': isScrolled }">
-
-      
-          <h1 class="sitename text-white">QuickCrow</h1>
-  
-  
-    <nav id="navmenu" class="navmenu" >
-     
+    <h1 class="sitename text-white">QuickCrow</h1>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
+    <nav id="navmenu" class="navmenu">
       <ul>
         <li><a (click)="scrollToSection('home')" style="cursor: pointer; " class="active">Home</a></li>
         <li><a (click)="scrollToSection('about')" style="cursor: pointer; ">About</a></li>
@@ -16,52 +11,39 @@
         <li><a (click)="scrollToSection('pricing')" style="cursor: pointer; ">Pricing</a></li>
         <li><a (click)="scrollToSection('contact')" style="cursor: pointer; ">Contact</a></li>
       </ul>
-      
-      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
-    <button class="navbar-toggler hamburger hamburger--emphatic"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#primaryNavbarCollapse"
-        aria-controls="primaryNavbarCollapse"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-  <span class="hamburger-box">
-    <span class="hamburger-inner"></span>
-  </span>
-</button>
     <a class="cta-btn" href="">Get Started</a>
- 
+    <label for="nav-toggle" class="mobile-nav-toggle d-xl-none bi bi-list"></label>
   </div>
   <section class="pt-7 pt-md-9 pb-0 text-center">
     <!-- Client Login Popup -->
-    <app-ClientLogin 
-      *ngIf="showClientLogin" 
-      (switchToRegister)="openClientRegister()"  
+    <app-ClientLogin
+      *ngIf="showClientLogin"
+      (switchToRegister)="openClientRegister()"
       (close)="closeClientLogin()">
     </app-ClientLogin>
-    
+
     <!-- Client Register Popup -->
-    <app-ClientRegister 
+    <app-ClientRegister
       *ngIf="showClientRegister"
-      (close)="closeClientRegister()" 
+      (close)="closeClientRegister()"
       (switchToLogin)="openClientLogin()">
     </app-ClientRegister>
 
     <!-- Vendor Login Popup -->
-    <app-VendorLogin 
-      *ngIf="showVendorLogin" 
-      (switchToRegister)="openVendorRegister()"  
+    <app-VendorLogin
+      *ngIf="showVendorLogin"
+      (switchToRegister)="openVendorRegister()"
       (close)="closeVendorLogin()">
     </app-VendorLogin>
-    
+
     <!-- Vendor Register Popup -->
-    <app-VendorRegister 
+    <app-VendorRegister
       *ngIf="showVendorRegister"
-      (close)="closeVendorRegister()" 
+      (close)="closeVendorRegister()"
       (switchToLogin)="openVendorLogin()">
     </app-VendorRegister>
-    
+
     <div id="home"class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
     <div class="container-fluid p-0">
       <div class="row flex-center mx-auto showcase-banner">
@@ -71,7 +53,7 @@
           <div class="mt-5">
             <button class="btn btn-primary btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateVendorWithAuth('/vendor')">Get Started</button>
             <button class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateWithAuth('/client/store-list')">Browse Stores</button>
-           
+
           </div>
         </div>
       </div>
