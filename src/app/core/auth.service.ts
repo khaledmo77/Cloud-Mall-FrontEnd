@@ -216,6 +216,9 @@ export class AuthService {
         return '/vendor';
       case 'Client':
         return '/client';
+      case 'Admin':
+      case 'SuperAdmin':
+        return '/admin';
       default:
         return '/landing';
     }

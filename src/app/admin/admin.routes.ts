@@ -1,14 +1,27 @@
 import { Routes } from '@angular/router';
-import { AdminLayoutComponent, AdminHomeComponent } from './index';
+import { AdminLayoutComponent } from './Layout/layout.component';
+import { AdminHomeComponent } from './Home/home.component';
+import { UsersComponent } from './users/users.component';
+import { StoresComponent } from './stores/stores.component';
+import { OrdersComponent } from './orders/orders.component';
+import { RevenueComponent } from './revenue/revenue.component';
+import { AdminsComponent } from './admins/admins.component';
+import { StoreCategoriesComponent } from './store-categories/store-categories.component';
 import { roleGuard } from '../core/auth.guard';
 
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
-    canActivate: [roleGuard(['Admin'])],
+    canActivate: [roleGuard(['Admin', 'SuperAdmin'])],
     component: AdminLayoutComponent,
     children: [
       { path: '', component: AdminHomeComponent },
+      { path: 'users', component: UsersComponent },
+      { path: 'stores', component: StoresComponent },
+      { path: 'orders', component: OrdersComponent },
+      { path: 'revenue', component: RevenueComponent },
+      { path: 'admins', component: AdminsComponent, canActivate: [roleGuard(['SuperAdmin'])] },
+      { path: 'store-categories', component: StoreCategoriesComponent },
     ],
   },
 ]; 

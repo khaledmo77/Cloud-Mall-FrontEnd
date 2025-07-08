@@ -1,0 +1,12 @@
+<div class="dashboard-card card shadow-sm text-center p-3 mb-4">
+  <div class="card-body">
+    <div class="icon mb-2">
+      <i class="bi bi-graph-up" *ngIf="title === 'Revenue'"></i>
+      <i class="bi bi-people" *ngIf="title === 'Total Users'"></i>
+      <i class="bi bi-shop" *ngIf="title === 'Total Stores'"></i>
+      <i class="bi bi-bag-check" *ngIf="title === 'Total Orders'"></i>
+    </div>
+    <h5 class="card-title">{{ title }}</h5>
+    <p class="card-text display-6 fw-bold">{{ value }}</p>
+  </div>
+</div>

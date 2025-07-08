@@ -40,6 +40,14 @@ export class VendorLoginComponent {
   loginErrorMessage: string | null = null;
   showPassword = false;
 
+  // Add login mode toggle
+  loginMode: 'vendor' | 'admin' = 'vendor';
+
+  // Add admin login service stub (replace with real service if available)
+  adminAuthService = {
+    login: (payload: any) => this.authService.login(payload) // TODO: Replace with real admin login API
+  };
+
   // Getter methods for form validation
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
@@ -66,6 +74,7 @@ export class VendorLoginComponent {
     this.showPassword = !this.showPassword;
   }
 
+  // Update submitLoginForm to handle both modes
   submitLoginForm() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -76,16 +85,14 @@ export class VendorLoginComponent {
     this.loginErrorMessage = null;
 
     const payload = this.loginForm.value;
+    const loginService = this.loginMode === 'admin' ? this.adminAuthService : this.authService;
 
-    this.authService.login(payload).subscribe({
-      next: (response) => {
+    loginService.login(payload).subscribe({
+      next: (response: any) => {
         this.isLoggingIn = false;
-        
         const token = response.data.token;
         const role = response.data.roles[0];
         const userId = response.data.userId;
-        
-        // Use the new setAuthData method for better token management
         this.authServiceCore.setAuthData({
           token: response.data.token,
           role: response.data.roles[0],
@@ -93,23 +100,16 @@ export class VendorLoginComponent {
           name: response.data.name,
           email: response.data.email
         });
-
-        console.log('Login successful');
-        console.log('Stored token:', token);
-        console.log('Stored role:', role);
-        console.log('Stored userId:', userId);
-        console.log('Token info:', this.authServiceCore.getTokenInfo());
-
-        // Close the popup first
         this.close.emit();
-        
-        // Add a small delay to ensure localStorage is properly set
         setTimeout(() => {
-          // Navigate to vendor landing page
-          this.router.navigate(['/vendor']);
+          if (role === 'Admin' || role === 'SuperAdmin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/vendor']);
+          }
         }, 100);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isLoggingIn = false;
         this.loginErrorMessage = err?.error?.errors?.[0] || 'Login failed. Please check your credentials and try again.';
         console.error('Login error:', err);
