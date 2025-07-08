@@ -27,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductApiService } from '../../core/storeCore/product-api.service';
 import { StoreProductCategoryApiService } from '../../core/storeCore/store-product-category-api.service';
 import { VendorStoresApiService } from '../../core/VendorCore/vendor-stores-api.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-StoreSettings',
@@ -90,6 +91,9 @@ export class StoreSettingsComponent implements OnInit {
   componentLoading = true;
   hasCategoriesComputed = false;
 
+  // Add property to hold storeId from route
+  routeStoreId: string | null = null;
+
   storeSettings = {
     storeName: 'Tech Gadgets Store',
     description: 'Premium electronics and gadgets for modern lifestyle',
@@ -132,6 +136,10 @@ export class StoreSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to parent route paramMap to get storeId from URL if present
+    this.route.parent?.paramMap.subscribe(params => {
+      this.routeStoreId = params.get('storeId');
+    });
     this.loadVendorStores();
   }
 
@@ -142,8 +150,8 @@ export class StoreSettingsComponent implements OnInit {
     this.cdr.detectChanges();
     
     // First, get all vendor stores to determine which store to manage
-      this.vendorStoresService.getAllStores().subscribe({
-        next: (stores: any[]) => {
+    this.vendorStoresService.getAllStores().subscribe({
+      next: (stores: any[]) => {
         setTimeout(() => {
           this.isLoading = false;
           this.cdr.detectChanges();
@@ -156,20 +164,19 @@ export class StoreSettingsComponent implements OnInit {
           return;
         }
         
-        if (stores.length === 1) {
-          // Only one store - use that storeId
-          this.storeId = stores[0].id;
-          this.selectedStore = stores[0];
-          this.vendorStores = stores;
-          this.loadStoreData();
-        } else {
-          // Multiple stores - store all stores and use the first one
-          this.vendorStores = stores;
-          this.selectedStore = stores[0];
-            this.storeId = stores[0].id;
-          this.showSuccessToast(`Managing store: ${stores[0].name}. Use the store selector to switch between stores.`);
-          this.loadStoreData();
+        // If routeStoreId is set, try to select that store as default
+        let defaultStore = stores[0];
+        if (this.routeStoreId) {
+          const found = stores.find(s => String(s.id) === String(this.routeStoreId));
+          if (found) {
+            defaultStore = found;
+          }
         }
+        this.storeId = defaultStore.id;
+        this.selectedStore = defaultStore;
+        this.vendorStores = stores;
+        this.showSuccessToast(`Managing store: ${defaultStore.name}. Use the store selector to switch between stores.`);
+        this.loadStoreData();
       },
       error: (err: any) => {
         setTimeout(() => {
@@ -198,6 +205,18 @@ export class StoreSettingsComponent implements OnInit {
                 next: (res: any) => {
                   if (res && res.success && res.data && Array.isArray(res.data.orders)) {
                     this.recentOrders = res.data.orders;
+                    const imageBaseUrl = environment.imageBaseUrl || '';
+                    this.recentOrders.forEach(order => {
+                      if (order.orderItems && Array.isArray(order.orderItems)) {
+                        order.orderItems.forEach((item: any) => {
+                          let img = item.productImageUrl;
+                          if (img && !img.startsWith('http')) {
+                            img = imageBaseUrl + img;
+                          }
+                          item.productImageUrl = img || 'assets/img/no-image.png'; // fallback if missing
+                        });
+                      }
+                    });
                     this.storeStats.totalOrders = res.data.totalOrders || this.recentOrders.length;
                     this.storeStats.pendingOrders = this.recentOrders.filter(order => (order.status || '').toLowerCase() === 'pending').length;
                     this.storeStats.totalRevenue = this.recentOrders
@@ -527,6 +546,18 @@ export class StoreSettingsComponent implements OnInit {
               setTimeout(() => {
               if (res && res.success && res.data && Array.isArray(res.data.orders)) {
                 this.recentOrders = res.data.orders;
+                const imageBaseUrl = environment.imageBaseUrl || '';
+                this.recentOrders.forEach(order => {
+                  if (order.orderItems && Array.isArray(order.orderItems)) {
+                    order.orderItems.forEach((item: any) => {
+                      let img = item.productImageUrl;
+                      if (img && !img.startsWith('http')) {
+                        img = imageBaseUrl + img;
+                      }
+                      item.productImageUrl = img || 'assets/img/no-image.png'; // fallback if missing
+                    });
+                  }
+                });
                 this.updateStoreStatsFromOrders(this.recentOrders, res.data.totalOrders);
               }
               this.selectedOrder = this.recentOrders.find(order => order.id === this.selectedOrder.id) || null;

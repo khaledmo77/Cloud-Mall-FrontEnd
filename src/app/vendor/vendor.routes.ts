@@ -21,6 +21,7 @@ export const VENDOR_ROUTES: Routes = [
       { path: 'dashboard', component: VendorDashboardComponent },
       { path: 'create-store', component: CreateStoreComponent },
       { path: 'store-settings', component: StoreSettingsComponent },
+      { path: 'store-settings/:storeId', component: StoreSettingsComponent },
       { path: 'store-preview', component: StorePreviewComponent },
       { path: 'manage-products', component: ManageProductsComponent },
       { path: 'orders', component: VendorOrdersComponent },
