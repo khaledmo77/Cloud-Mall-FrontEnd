@@ -29,7 +29,7 @@ export class ClientProductApiService {
   constructor(private https: HttpClient) {}
 
   getProductsByStore(storeId: number): Observable<Product[]> {
-    const url = `${environment.apiBaseUrl}/Product/${storeId}`;
+    const url = `${environment.apiBaseUrl}/Product/getallbystore/${storeId}`;
     console.log('Client API - Calling URL:', url);
     console.log('Client API - Store ID:', storeId);
     return this.https.get<Product[]>(url);
