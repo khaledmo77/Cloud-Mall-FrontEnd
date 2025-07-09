@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 interface Vendor {
   id: string;
@@ -43,7 +44,7 @@ export class VendorsComponent implements OnInit {
   storesLoading = false;
   storesError = '';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {
     this.loadVendors();
@@ -125,6 +126,7 @@ export class VendorsComponent implements OnInit {
   viewStoreProducts(store: Store): void {
     // TODO: Implement view store products functionality
     console.log('View products for store:', store.name);
+    this.router.navigate(['/admin/adminstore', store.id, 'products']);
   }
 
   enableStore(store: Store): void {

@@ -27,6 +27,24 @@ interface Vendor {
   createdAt: string;
 }
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  brand: string;
+  sku: string;
+  price: number;
+  discount: number | null;
+  stock: number;
+  imagesURL: string;
+  storeID: number;
+  storeName: string;
+  productCategoryID: number;
+  productCategoryName: string;
+  averageRating: number;
+  reviewCount: number;
+}
+
 @Component({
   selector: 'app-vendors-stores',
   standalone: true,
@@ -34,11 +52,18 @@ interface Vendor {
   templateUrl: './vendors-stores.component.html',
   styleUrls: ['./vendors-stores.component.scss']
 })
+
 export class VendorsStoresComponent implements OnInit {
   vendor: Vendor | null = null;
   vendorStores: Store[] = [];
   storesLoading = false;
   storesError = '';
+  // Product modal state
+  products: Product[] = [];
+  productsLoading = false;
+  productsError = '';
+  showProductsModal = false;
+  selectedStore: Store | null = null;
 
   constructor(
     private http: HttpClient, 
@@ -112,8 +137,16 @@ export class VendorsStoresComponent implements OnInit {
   }
 
   viewStoreProducts(store: Store): void {
-    // TODO: Implement view store products functionality
-    console.log('View products for store:', store.name);
+    console.log('Viewing products for store:', store.id);
+    this.router.navigate(['/admin/adminstore', store.id, 'products']);
+  }
+
+  closeProductsModal(): void {
+    this.showProductsModal = false;
+    this.products = [];
+    this.selectedStore = null;
+    this.productsError = '';
+    this.productsLoading = false;
   }
 
   enableStore(store: Store): void {

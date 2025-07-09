@@ -26,8 +26,14 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'admins', component: AdminsComponent, canActivate: [roleGuard(['SuperAdmin'])] },
       { path: 'store-categories', component: StoreCategoriesComponent },
       { path: 'vendors', component: VendorsComponent },
-      { path: 'vendors-stores', component: VendorsStoresComponent },
+    
       {path: 'deleted-stores', component: DeletedStoresComponent},
+      {
+        path: 'adminstore/:storeId/products',
+        loadComponent: () => import('./store-products/store-products.component').then(m => m.StoreProductsComponent)
+      },
     ],
   },
-]; 
+];
+
+export default ADMIN_ROUTES; 
