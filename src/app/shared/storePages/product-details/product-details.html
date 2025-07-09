@@ -1,1 +1,125 @@
-<p>product-details works!</p>
+<div class="product-details-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading product details...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading product details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && error" class="error-container">
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Error Loading Product</h4>
+      <p>{{ error }}</p>
+      <button class="btn btn-outline-danger" (click)="loadProduct()">Try Again</button>
+    </div>
+  </div>
+
+  <!-- Product Details -->
+  <div *ngIf="!isLoading && !error && product" class="product-details-card">
+    <!-- Navigation Header -->
+    <nav class="product-nav">
+      <div class="nav-left">
+        <button class="back-btn" (click)="goBack()">
+          <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" fill="none" stroke-width="24"/>
+          </svg>
+          <span>Back to Products</span>
+        </button>
+      </div>
+      <div class="nav-right">
+        <button class="wishlist-btn" *ngIf="!isVendor">
+          <svg class="heart" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" fill="none" stroke-width="16"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Product Content -->
+    <div class="product-content">
+      <!-- Product Image -->
+      <div class="product-photo">
+        <img [src]="getProductImageUrl(product)" [alt]="product.name" (error)="onImgError($event)">
+      </div>
+
+      <!-- Product Description -->
+      <div class="product-description">
+        <h2 class="product-name">{{ product.name }}</h2>
+        <h4 class="product-category">{{ product.categoryName || product.productCategoryName }}</h4>
+        <h1 class="product-price">${{ product.price }}</h1>
+        <p class="product-description-text">{{ product.description }}</p>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons" *ngIf="!isVendor">
+          <button class="add-to-cart-btn" (click)="addToCart(product)">
+            Add to Cart
+          </button>
+          <button class="wishlist-btn-large">
+            Wishlist
+          </button>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-details-info">
+          <!-- Vendor: show all fields with fallback; Client: only show if value exists -->
+          <ng-container *ngIf="isVendor; else clientFields">
+            <div class="detail-item">
+              <strong>Brand:</strong> {{ product.brand || 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>SKU:</strong> {{ product.sku || 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>Stock:</strong> {{ product.stock !== undefined && product.stock !== null ? product.stock : 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>Discount:</strong> 
+              {{ product.discount !== null && product.discount !== undefined ? (product.discount + '%') : 'No discount' }}
+            </div>
+            <div class="detail-item">
+              <strong>Average Rating:</strong> {{ product.averageRate || product.averageRating || 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>Reviews:</strong> {{ product.reviewCount || product.reviews || 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>Store:</strong> {{ product.storeName || 'N/A' }}
+            </div>
+            <div class="detail-item">
+              <strong>Product ID:</strong> {{ product.id || 'N/A' }}
+            </div>
+          </ng-container>
+          <ng-template #clientFields>
+            <div class="detail-item" *ngIf="product.brand">
+              <strong>Brand:</strong> {{ product.brand }}
+            </div>
+            <div class="detail-item" *ngIf="product.sku">
+              <strong>SKU:</strong> {{ product.sku }}
+            </div>
+            <div class="detail-item" *ngIf="product.stock !== undefined && product.stock !== null">
+              <strong>Stock:</strong> {{ product.stock }}
+            </div>
+            <div class="detail-item">
+              <strong>Discount:</strong> 
+              {{ product.discount !== null && product.discount !== undefined ? (product.discount + '%') : 'No discount' }}
+            </div>
+            <div class="detail-item" *ngIf="product.averageRate || product.averageRating">
+              <strong>Average Rating:</strong> {{ product.averageRate || product.averageRating }}
+            </div>
+            <div class="detail-item" *ngIf="product.reviewCount || product.reviews">
+              <strong>Reviews:</strong> {{ product.reviewCount || product.reviews }}
+            </div>
+            <div class="detail-item" *ngIf="product.storeName">
+              <strong>Store:</strong> {{ product.storeName }}
+            </div>
+            <div class="detail-item">
+              <strong>Product ID:</strong> {{ product.id }}
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
