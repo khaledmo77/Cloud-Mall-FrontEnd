@@ -31,12 +31,15 @@ export interface StoresResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AdminStoresApiService {
-  private baseUrl = 'https://cloudmall.runasp.net/api/Store/Admin';
+  public baseUrl = 'https://cloudmall.runasp.net/api/Store/Admin';
+  public http: HttpClient;
 
   constructor(
-    private http: HttpClient,
+    http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) {
+    this.http = http;
+  }
 
   getAllStores(
     pageNumber: number = 1,

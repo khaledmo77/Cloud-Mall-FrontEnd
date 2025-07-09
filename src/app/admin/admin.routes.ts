@@ -10,6 +10,7 @@ import { StoreCategoriesComponent } from './store-categories/store-categories.co
 import { VendorsComponent } from './vendors/vendors.component';
 import { VendorsStoresComponent } from './vendors-stores/vendors-stores.component';
 import { DeletedStoresComponent } from './deleted-stores/deleted-stores.component';
+import { DisabledStoresComponent } from './disabled-stores/disabled-stores.component';
 import { roleGuard } from '../core/auth.guard';
 
 export const ADMIN_ROUTES: Routes = [
@@ -28,6 +29,10 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'vendors', component: VendorsComponent },
     
       {path: 'deleted-stores', component: DeletedStoresComponent},
+      {
+        path: 'disabled-stores',
+        loadComponent: () => import('./disabled-stores/disabled-stores.component').then(m => m.DisabledStoresComponent)
+      },
       {
         path: 'adminstore/:storeId/products',
         loadComponent: () => import('./store-products/store-products.component').then(m => m.StoreProductsComponent)

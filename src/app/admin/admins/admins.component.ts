@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-admins',
@@ -11,15 +12,12 @@ import { environment } from '../../../environments/environment';
   templateUrl: './admins.component.html',
   styleUrls: ['./admins.component.scss']
 })
-export class AdminsComponent {
+export class AdminsComponent implements OnInit {
   showAdd = false;
   showConfirm = false;
   deleteIndex: number | null = null;
   newAdmin = { name: '', email: '', password: '', confirmPassword: '' };
-  admins = [
-    { name: 'Super Admin', email: 'superadmin@example.com' },
-    { name: 'Alice Admin', email: 'alice.admin@example.com' },
-  ];
+  admins: any[] = [];
   loading = false;
   error = '';
   success = '';
@@ -27,7 +25,7 @@ export class AdminsComponent {
   showPassword = false;
   showConfirmPassword = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
     // Check role from token (for demo, set true; in real app, decode token)
     const token = localStorage.getItem('token');
     if (token) {
@@ -37,6 +35,35 @@ export class AdminsComponent {
       } catch {
         this.isSuperAdmin = false;
       }
+    }
+  }
+
+  ngOnInit() {
+    if (this.isSuperAdmin) {
+      this.loading = true;
+      this.error = '';
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+      this.http.get<any>('https://cloudmall.runasp.net/api/Auth/SuperAdmin/GetAllAdminsBySuperAdmin', { headers })
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.admins = response.data;
+            } else {
+              this.error = response.message || 'Failed to fetch admins.';
+            }
+            this.loading = false;
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.error = err.error?.message || 'Error fetching admins.';
+            this.loading = false;
+            this.cdr.detectChanges();
+          }
+        });
     }
   }
 

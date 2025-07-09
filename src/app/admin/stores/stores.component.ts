@@ -28,6 +28,10 @@ export class StoresComponent implements OnInit {
   // Filters
   selectedCategory = '';
   searchTerm = '';
+  // Status filter
+  showStatusFilter = false;
+  selectedStatusFilter = '';
+  statusLoadingId: number | null = null;
   
   // Category filter dropdown
   showCategoryFilter = false;
@@ -104,11 +108,17 @@ export class StoresComponent implements OnInit {
     
     if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase();
-      filtered = this.stores.filter(store => 
+      filtered = filtered.filter(store => 
         store.name.toLowerCase().includes(searchLower) ||
         store.vendorName.toLowerCase().includes(searchLower) ||
         store.categoryName.toLowerCase().includes(searchLower)
       );
+    }
+    // Status filter
+    if (this.selectedStatusFilter === 'enabled') {
+      filtered = filtered.filter(store => store.isActive);
+    } else if (this.selectedStatusFilter === 'disabled') {
+      filtered = filtered.filter(store => !store.isActive);
     }
     
     this.totalCount = filtered.length;
@@ -147,6 +157,16 @@ export class StoresComponent implements OnInit {
 
   toggleCategoryFilter() {
     this.showCategoryFilter = !this.showCategoryFilter;
+  }
+
+  toggleStatusFilter() {
+    this.showStatusFilter = !this.showStatusFilter;
+  }
+
+  setStatusFilter(status: string) {
+    this.selectedStatusFilter = status;
+    this.currentPage = 1;
+    this.applySearchFilter();
   }
 
   getPageNumbers(): number[] {
@@ -211,5 +231,28 @@ export class StoresComponent implements OnInit {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  toggleStoreStatus(store: Store) {
+    this.statusLoadingId = store.id;
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const url = store.isActive
+      ? `/DisableStoreByAdmin/${store.id}`
+      : `/EnableStoreByAdmin/${store.id}`;
+    this.storesApi.http.post<any>(`${this.storesApi.baseUrl}${url}`, {}, { headers })
+      .subscribe({
+        next: () => {
+          store.isActive = !store.isActive;
+          this.statusLoadingId = null;
+          this.applySearchFilter();
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.statusLoadingId = null;
+          this.error = 'Failed to update store status.';
+          this.cdr.markForCheck();
+        }
+      });
   }
 }

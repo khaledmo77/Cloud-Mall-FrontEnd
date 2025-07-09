@@ -10,9 +10,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./layout.component.scss']
 })
 export class AdminLayoutComponent {
-  superAdmin = true; // TODO: Replace with real role check
+  superAdmin = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        this.superAdmin = payload.role === 'SuperAdmin';
+      } catch (e) {
+        this.superAdmin = false;
+      }
+    }
+  }
 
   logout() {
     localStorage.clear();

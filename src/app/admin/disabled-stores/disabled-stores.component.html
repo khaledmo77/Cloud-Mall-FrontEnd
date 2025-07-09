@@ -1,7 +1,7 @@
 <div class="container py-4">
   <!-- Header with search and filters -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-shop me-2"></i>Stores</h2>
+    <h2><i class="bi bi-slash-circle me-2"></i>Disabled Stores</h2>
     <div class="d-flex gap-3">
       <!-- Category Filter -->
       <div class="dropdown">
@@ -21,22 +21,10 @@
           </li>
         </ul>
       </div>
-      <!-- Status Filter -->
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" (click)="toggleStatusFilter()" [class.show]="showStatusFilter">
-          <i class="bi bi-toggle-on me-1"></i>
-          {{ selectedStatusFilter || 'All Statuses' }}
-        </button>
-        <ul class="dropdown-menu" [class.show]="showStatusFilter">
-          <li><a class="dropdown-item" href="#" (click)="setStatusFilter(''); $event.preventDefault()">All Statuses</a></li>
-          <li><a class="dropdown-item" href="#" (click)="setStatusFilter('enabled'); $event.preventDefault()">Enabled</a></li>
-          <li><a class="dropdown-item" href="#" (click)="setStatusFilter('disabled'); $event.preventDefault()">Disabled</a></li>
-        </ul>
-      </div>
       <!-- Search -->
       <input type="text" 
              class="form-control" 
-             placeholder="Search stores..." 
+             placeholder="Search disabled stores..." 
              [(ngModel)]="searchTerm"
              (ngModelChange)="onSearchChange()"
              style="width: 250px;">
@@ -53,7 +41,7 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <p class="mt-2 text-muted">Loading stores...</p>
+    <p class="mt-2 text-muted">Loading disabled stores...</p>
   </div>
 
   <!-- Stores Table -->
@@ -66,8 +54,7 @@
           <th>Owner</th>
           <th>Category</th>
           <th>Status</th>
-          <th>Created</th>
-          <th>Actions</th>
+          <th>Created Date</th>
         </tr>
       </thead>
       <tbody>
@@ -95,29 +82,11 @@
             <span [class]="getStatusBadgeClass(store)">
               {{ getStatusText(store) }}
             </span>
-            <button class="btn btn-sm ms-2" [ngClass]="store.isActive ? 'btn-outline-danger' : 'btn-outline-success'"
-                    (click)="toggleStoreStatus(store)" [disabled]="statusLoadingId === store.id">
-              <i class="bi" [ngClass]="store.isActive ? 'bi-toggle-off' : 'bi-toggle-on'"></i>
-              {{ store.isActive ? 'Disable' : 'Enable' }}
-            </button>
           </td>
           <td>
             <small class="text-muted">
               {{ store.createdAt | date:'shortDate' }}
             </small>
-          </td>
-          <td>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-primary btn-sm" title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-outline-warning btn-sm" title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-outline-danger btn-sm" title="Delete" (click)="deleteStore(store)">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
           </td>
         </tr>
       </tbody>
@@ -125,19 +94,19 @@
 
     <!-- No Results Message -->
     <div *ngIf="filteredStores.length === 0 && !loading" class="text-center py-5">
-      <i class="bi bi-search display-1 text-muted"></i>
-      <h4 class="mt-3 text-muted">No stores found</h4>
-      <p class="text-muted">Try adjusting your search criteria or filters.</p>
+      <i class="bi bi-slash-circle display-1 text-muted"></i>
+      <h4 class="mt-3 text-muted">No disabled stores found</h4>
+      <p class="text-muted">There are no disabled stores matching your criteria.</p>
     </div>
   </div>
 
   <!-- Pagination -->
   <div *ngIf="totalPages > 1 && !loading" class="d-flex justify-content-between align-items-center mt-4">
     <div class="text-muted">
-      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} stores
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} disabled stores
     </div>
     
-    <nav aria-label="Stores pagination">
+    <nav aria-label="Disabled stores pagination">
       <ul class="pagination pagination-sm mb-0">
         <!-- Previous Page -->
         <li class="page-item" [class.disabled]="currentPage === 1">
@@ -167,35 +136,4 @@
       </ul>
     </nav>
   </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteConfirmModalLabel">
-          <i class="bi bi-exclamation-triangle text-warning me-2"></i>
-          Confirm Delete
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete <strong>"{{ storeToDelete?.name }}"</strong>?</p>
-        <p class="text-muted mb-0">This action cannot be undone.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle me-2"></i>Cancel
-        </button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="deleting">
-          <i class="bi bi-trash me-2"></i>
-          <span *ngIf="!deleting">Delete Store</span>
-          <span *ngIf="deleting">
-            <i class="bi bi-arrow-repeat spin me-2"></i>Deleting...
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+</div> 
