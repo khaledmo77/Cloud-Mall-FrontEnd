@@ -1,0 +1,126 @@
+<div class="revenue-chart-container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="bi bi-graph-up me-2"></i>Revenue Analytics</h3>
+    <button class="btn btn-primary" (click)="refreshData()" [disabled]="loading">
+      <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading revenue data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Revenue Breakdown Cards -->
+  <div *ngIf="!loading && !error" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white revenue-card" (click)="showRevenueExplanation('Total Revenue')">
+        <div class="card-body text-center">
+          <i class="bi bi-currency-dollar display-4"></i>
+          <h5 class="card-title">Total Revenue</h5>
+          <p class="card-text display-6 fw-bold">${{ totalRevenue.toLocaleString() }}</p>
+          <small class="text-white-50">Click for details</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white revenue-card" (click)="showRevenueExplanation('Commission Revenue')">
+        <div class="card-body text-center">
+          <i class="bi bi-percent display-4"></i>
+          <h5 class="card-title">Commission Revenue</h5>
+          <p class="card-text display-6 fw-bold">${{ commissionRevenue.toLocaleString() }}</p>
+          <small class="text-white-50">Click for details</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white revenue-card" (click)="showRevenueExplanation('Subscription Revenue')">
+        <div class="card-body text-center">
+          <i class="bi bi-calendar-check display-4"></i>
+          <h5 class="card-title">Subscription Revenue</h5>
+          <p class="card-text display-6 fw-bold">${{ subscriptionRevenue.toLocaleString() }}</p>
+          <small class="text-white-50">Click for details</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white revenue-card" (click)="showRevenueExplanation('Upsell Revenue')">
+        <div class="card-body text-center">
+          <i class="bi bi-star display-4"></i>
+          <h5 class="card-title">Upsell Revenue</h5>
+          <p class="card-text display-6 fw-bold">${{ upsellRevenue.toLocaleString() }}</p>
+          <small class="text-white-50">Click for details</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Chart -->
+  <div *ngIf="!loading && !error" class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-graph-up me-2"></i>Revenue Trend Analysis
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="position: relative; height: 400px;">
+            <canvas #revenueChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Vendors by Revenue -->
+  <div *ngIf="!loading && !error && vendorRevenue.length > 0" class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-trophy me-2"></i>Top Vendors by Revenue
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Vendor Name</th>
+                  <th>Revenue</th>
+                  <th>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let vendor of vendorRevenue; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ vendor.vendor }}</td>
+                  <td>${{ vendor.revenue.toLocaleString() }}</td>
+                  <td>{{ ((vendor.revenue / totalRevenue) * 100).toFixed(1) }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Explanation Modal -->
+  <app-revenue-explanation-modal
+    [showModal]="showModal"
+    [explanation]="selectedExplanation"
+    (closeModal)="closeModal()">
+  </app-revenue-explanation-modal>
+</div> 

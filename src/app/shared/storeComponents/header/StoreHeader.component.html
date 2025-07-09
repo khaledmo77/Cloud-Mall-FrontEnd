@@ -144,12 +144,12 @@
                                 <div *ngIf="!isSearching && searchResults.length === 0 && searchQuery.trim()" class="no-results">
                                     <p>No products found for "{{ searchQuery }}"</p>
                                                             </div>
-                          </div>
+                            </div>
                         </div>
                         <!-- navbar search Ends -->
-                      </div>
-                      <!-- End Main Menu Search -->
                     </div>
+                    <!-- End Main Menu Search -->
+                </div>
 
                     <!-- Product Details Modal -->
                     <div *ngIf="showProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 2000;" (click)="closeProductModal()">

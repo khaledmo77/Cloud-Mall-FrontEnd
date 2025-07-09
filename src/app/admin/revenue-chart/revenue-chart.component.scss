@@ -1,0 +1,79 @@
+.revenue-chart-container {
+  .card {
+    border: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transition: transform 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  .bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  }
+  
+  .bg-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  }
+  
+  .bg-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  }
+  
+  .bg-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+  }
+  
+  // Make numbers white in revenue cards
+  .card.bg-primary .display-6,
+  .card.bg-success .display-6,
+  .card.bg-info .display-6,
+  .card.bg-warning .display-6 {
+    color: white !important;
+  }
+  
+  // Revenue card hover effects
+  .revenue-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    &:active {
+      transform: translateY(-2px);
+    }
+  }
+  
+  .chart-container {
+    position: relative;
+    height: 400px;
+    
+    canvas {
+      max-height: 400px;
+    }
+  }
+  
+  .table {
+    th {
+      font-weight: 600;
+      border-top: none;
+    }
+    
+    td {
+      vertical-align: middle;
+    }
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .display-6 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+} 

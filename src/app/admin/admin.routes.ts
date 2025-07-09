@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './Layout/layout.component';
 import { AdminHomeComponent } from './Home/home.component';
-import { UsersComponent } from './users/users.component';
+import { ClientsComponent } from './clients/clients.component';
 import { StoresComponent } from './stores/stores.component';
 import { OrdersComponent } from './orders/orders.component';
 import { RevenueComponent } from './revenue/revenue.component';
+import { RevenuePredictionsComponent } from './revenue-predictions/revenue-predictions.component';
 import { AdminsComponent } from './admins/admins.component';
 import { StoreCategoriesComponent } from './store-categories/store-categories.component';
 import { VendorsComponent } from './vendors/vendors.component';
@@ -20,10 +21,11 @@ export const ADMIN_ROUTES: Routes = [
     component: AdminLayoutComponent,
     children: [
       { path: '', component: AdminHomeComponent },
-      { path: 'users', component: UsersComponent },
+      { path: 'clients', component: ClientsComponent },
       { path: 'stores', component: StoresComponent },
       { path: 'orders', component: OrdersComponent },
       { path: 'revenue', component: RevenueComponent },
+      { path: 'revenue-predictions', component: RevenuePredictionsComponent },
       { path: 'admins', component: AdminsComponent, canActivate: [roleGuard(['SuperAdmin'])] },
       { path: 'store-categories', component: StoreCategoriesComponent },
       { path: 'vendors', component: VendorsComponent },
@@ -39,6 +41,6 @@ export const ADMIN_ROUTES: Routes = [
       },
     ],
   },
-];
+]; 
 
 export default ADMIN_ROUTES; 

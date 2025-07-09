@@ -2,11 +2,17 @@
   <div class="card-body">
     <div class="icon mb-2">
       <i class="bi bi-graph-up" *ngIf="title === 'Revenue'"></i>
-      <i class="bi bi-people" *ngIf="title === 'Total Users'"></i>
+      <i class="bi bi-people" *ngIf="title === 'Total Clients'"></i>
+      <i class="bi bi-person-badge" *ngIf="title === 'Total Vendors'"></i>
       <i class="bi bi-shop" *ngIf="title === 'Total Stores'"></i>
       <i class="bi bi-bag-check" *ngIf="title === 'Total Orders'"></i>
     </div>
     <h5 class="card-title">{{ title }}</h5>
-    <p class="card-text display-6 fw-bold">{{ value }}</p>
+    <div *ngIf="loading" class="mt-2">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div *ngIf="!loading" class="card-text display-6 fw-bold" [innerHTML]="value"></div>
   </div>
 </div>

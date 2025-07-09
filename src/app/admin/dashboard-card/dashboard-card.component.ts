@@ -11,4 +11,5 @@ import { CommonModule } from '@angular/common';
 export class DashboardCardComponent {
   @Input() title: string = '';
   @Input() value: string | number = '';
+  @Input() loading: boolean = false;
 }

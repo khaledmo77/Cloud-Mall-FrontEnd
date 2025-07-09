@@ -1,0 +1,340 @@
+.revenue-predictions-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px 0;
+
+  .container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  // Metric Cards
+  .metric-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+
+      i {
+        font-size: 24px;
+        color: white;
+      }
+    }
+
+    .metric-content {
+      flex: 1;
+
+      .metric-name {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+      }
+
+      .metric-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 5px;
+      }
+
+      .metric-description {
+        color: #6c757d;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  // Gantt Chart
+  .gantt-chart-container {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .gantt-timeline {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #dee2e6;
+
+      .gantt-month {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        position: relative;
+
+        .month-label {
+          font-weight: 600;
+          color: #495057;
+          font-size: 14px;
+        }
+
+        &:not(:last-child)::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 1px;
+          height: 20px;
+          background: #dee2e6;
+        }
+      }
+    }
+
+    .gantt-phases {
+      position: relative;
+      height: 60px;
+      background: #e9ecef;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .gantt-phase {
+        position: absolute;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        &.active {
+          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8);
+          animation: pulse 2s infinite;
+        }
+
+        .phase-name {
+          color: white;
+          font-weight: 600;
+          font-size: 12px;
+          text-align: center;
+          padding: 0 8px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  // Phase Legend
+  .phase-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      min-width: 200px;
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+
+      .legend-text {
+        font-weight: 600;
+        color: #495057;
+        margin-right: 8px;
+      }
+
+      .legend-description {
+        color: #6c757d;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+    }
+  }
+
+  // Summary Cards
+  .summary-card {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .summary-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      flex-shrink: 0;
+
+      i {
+        font-size: 28px;
+      }
+    }
+
+    .summary-content {
+      flex: 1;
+
+      .summary-value {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .summary-label {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  // Analysis List
+  .analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid #e9ecef;
+      position: relative;
+      padding-left: 20px;
+
+      &:before {
+        content: '•';
+        color: #007bff;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        top: 8px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      strong {
+        color: #495057;
+      }
+    }
+  }
+
+  // Table Styling
+  .table {
+    th {
+      background: #343a40;
+      color: white;
+      border: none;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    td {
+      vertical-align: middle;
+      text-align: center;
+      border-color: #e9ecef;
+    }
+
+    tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  // Card Styling
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .card-header {
+      border: none;
+      padding: 20px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 25px;
+    }
+  }
+
+  // Animations
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    .metric-card {
+      margin-bottom: 15px;
+    }
+
+    .summary-card {
+      margin-bottom: 15px;
+    }
+
+    .phase-legend {
+      .legend-item {
+        min-width: 100%;
+      }
+    }
+
+    .gantt-chart-container {
+      .gantt-timeline {
+        .gantt-month {
+          .month-label {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+} 

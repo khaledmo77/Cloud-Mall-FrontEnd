@@ -1,7 +1,43 @@
 <div class="container py-4">
-  <div class="row g-4 justify-content-center">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+    <div>
+      <button class="btn btn-outline-primary me-2" (click)="toggleRevenueChart()">
+        <i class="bi bi-graph-up me-2"></i>{{ showRevenueChart ? 'Hide' : 'Show' }} Revenue Analytics
+      </button>
+      <button class="btn btn-primary" (click)="refreshData()" [disabled]="loading">
+        <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Loading overlay -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading dashboard data...</p>
+  </div>
+
+  <!-- Revenue Chart Section -->
+  <div *ngIf="showRevenueChart && !loading" class="mb-4">
+    <app-revenue-chart></app-revenue-chart>
+  </div>
+
+  <!-- Dashboard cards -->
+  <div *ngIf="!loading" class="row g-4 justify-content-center">
     <div class="col-12 col-sm-6 col-md-3" *ngFor="let stat of stats">
-      <dashboard-card [title]="stat.title" [value]="stat.value"></dashboard-card>
+      <dashboard-card 
+        [title]="stat.title" 
+        [value]="stat.value"
+        [loading]="stat.loading">
+      </dashboard-card>
     </div>
   </div>
 </div>

@@ -1,0 +1,53 @@
+<div class="modal-overlay" *ngIf="showModal" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">
+        <i class="bi bi-info-circle me-2"></i>
+        {{ explanation?.title }} - Business Logic
+      </h4>
+      <button type="button" class="btn-close" (click)="onClose()" aria-label="Close"></button>
+    </div>
+    
+    <div class="modal-body" *ngIf="explanation">
+      <div class="explanation-section">
+        <h6 class="section-title">
+          <i class="bi bi-lightbulb me-2"></i>Description
+        </h6>
+        <p class="description">{{ explanation.description }}</p>
+      </div>
+
+      <div class="explanation-section">
+        <h6 class="section-title">
+          <i class="bi bi-calculator me-2"></i>Calculation Method
+        </h6>
+        <div class="calculation-box">
+          <code>{{ explanation.calculation }}</code>
+        </div>
+      </div>
+
+      <div class="explanation-section">
+        <h6 class="section-title">
+          <i class="bi bi-gear me-2"></i>Business Assumptions
+        </h6>
+        <ul class="assumptions-list">
+          <li *ngFor="let assumption of explanation.assumptions">
+            <i class="bi bi-check-circle me-2"></i>{{ assumption }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="explanation-section">
+        <h6 class="section-title">
+          <i class="bi bi-graph-up me-2"></i>Business Logic
+        </h6>
+        <p class="business-logic">{{ explanation.businessLogic }}</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">
+        <i class="bi bi-x-circle me-2"></i>Close
+      </button>
+    </div>
+  </div>
+</div> 

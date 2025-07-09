@@ -4,17 +4,21 @@
     <nav>
       <ul class="nav flex-column">
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
-        <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/users" routerLinkActive="active"><i class="bi bi-people me-2"></i>Users</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/clients" routerLinkActive="active"><i class="bi bi-people me-2"></i>Clients</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/stores" routerLinkActive="active"><i class="bi bi-shop me-2"></i>Stores</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/disabled-stores" routerLinkActive="active"><i class="bi bi-slash-circle me-2"></i>Disabled Stores</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/deleted-stores" routerLinkActive="active"><i class="bi bi-trash me-2"></i>Deleted Stores</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/orders" routerLinkActive="active"><i class="bi bi-bag-check me-2"></i>Orders</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/revenue" routerLinkActive="active"><i class="bi bi-graph-up me-2"></i>Revenue</a></li>
+        <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/revenue-predictions" routerLinkActive="active"><i class="bi bi-chart-line me-2"></i>Revenue Predictions</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/store-categories" routerLinkActive="active"><i class="bi bi-tags me-2"></i>Store Categories</a></li>
         <li class="nav-item mb-2"><a class="nav-link text-white" routerLink="/admin/vendors" routerLinkActive="active"><i class="bi bi-person-badge me-2"></i>Vendors</a></li>
         <li class="nav-item mb-2" *ngIf="superAdmin"><a class="nav-link text-white" routerLink="/admin/admins" routerLinkActive="active"><i class="bi bi-person-plus me-2"></i>Admins</a></li>
       </ul>
     </nav>
+
+
+
     <div class="mt-auto pt-4">
       <button class="btn btn-outline-light w-100" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
     </div>
