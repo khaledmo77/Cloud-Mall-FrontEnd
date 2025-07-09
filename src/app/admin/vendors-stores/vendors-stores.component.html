@@ -1,0 +1,85 @@
+<div class="container py-4">
+  <!-- Header with Back Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>Back to Vendors
+      </button>
+      <div>
+        <h2 class="mb-1">
+          <i class="bi bi-shop me-2"></i>
+          {{ vendor?.name || 'Vendor' }} Stores
+        </h2>
+        <p class="text-muted mb-0" *ngIf="vendor">
+          {{ vendor.email }} • {{ vendorStores.length }} stores
+        </p>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="loadVendorStores(vendor!.id)" [disabled]="storesLoading">
+      <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+    </button>
+  </div>
+
+  <!-- Stores Loading State -->
+  <div *ngIf="storesLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading stores...</p>
+  </div>
+
+  <!-- Stores Error State -->
+  <div *ngIf="storesError && !storesLoading" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ storesError }}
+    <button class="btn btn-outline-danger btn-sm ms-3" (click)="loadVendorStores(vendor!.id)">Retry</button>
+  </div>
+
+  <!-- Stores Grid -->
+  <div *ngIf="!storesLoading && !storesError" class="row g-4">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let store of vendorStores">
+      <div class="card h-100 border-0 shadow-sm card-hover">
+        <div class="card-body p-0">
+          <div class="position-relative overflow-hidden">
+            <img class="img-fluid w-100" 
+                 [src]="getStoreImageUrl(store.logoURL)" 
+                 [alt]="store.name + ' store'"
+                 loading="lazy"
+                 style="height: 200px; object-fit: cover;">
+            <div class="card-overlay">
+              <div class="overlay-content">
+                <h6 class="text-white mb-2">{{ store.name }}</h6>
+                <div class="d-flex flex-column gap-2">
+                  <button class="btn btn-success btn-sm rounded-pill" 
+                          (click)="viewStoreProducts(store); $event.stopPropagation()">
+                    <span class="fas fa-box me-2"></span>
+                    View Products
+                  </button>
+                  <button class="btn btn-primary btn-sm rounded-pill" 
+                          (click)="enableStore(store); $event.stopPropagation()">
+                    <span class="fas fa-toggle-on me-2"></span>
+                    Enable Store
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent border-0 p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-primary rounded-pill">{{ store.categoryName }}</span>
+              <small class="text-muted">{{ store.addresses.length }} locations</small>
+            </div>
+            <p class="text-muted small mt-2 mb-0">{{ store.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Stores State -->
+  <div *ngIf="!storesLoading && !storesError && vendorStores.length === 0" class="text-center py-5">
+    <i class="bi bi-shop display-1 text-muted"></i>
+    <h4 class="mt-3 text-muted">No stores found</h4>
+    <p class="text-muted">This vendor doesn't have any stores yet.</p>
+  </div>
+</div> 

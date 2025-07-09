@@ -7,6 +7,9 @@ import { OrdersComponent } from './orders/orders.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { AdminsComponent } from './admins/admins.component';
 import { StoreCategoriesComponent } from './store-categories/store-categories.component';
+import { VendorsComponent } from './vendors/vendors.component';
+import { VendorsStoresComponent } from './vendors-stores/vendors-stores.component';
+import { DeletedStoresComponent } from './deleted-stores/deleted-stores.component';
 import { roleGuard } from '../core/auth.guard';
 
 export const ADMIN_ROUTES: Routes = [
@@ -22,6 +25,9 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'revenue', component: RevenueComponent },
       { path: 'admins', component: AdminsComponent, canActivate: [roleGuard(['SuperAdmin'])] },
       { path: 'store-categories', component: StoreCategoriesComponent },
+      { path: 'vendors', component: VendorsComponent },
+      { path: 'vendors-stores', component: VendorsStoresComponent },
+      {path: 'deleted-stores', component: DeletedStoresComponent},
     ],
   },
 ]; 

@@ -6,13 +6,13 @@ import { AdminStoresApiService, Store, StoresResponse } from '../../adminCore/ad
 import { StoreCategoryApiService } from '../../adminCore/store-category-api';
 
 @Component({
-  selector: 'app-stores',
+  selector: 'app-deleted-stores',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
-  templateUrl: './stores.component.html',
-  styleUrls: ['./stores.component.scss']
+  templateUrl: './deleted-stores.component.html',
+  styleUrls: ['./deleted-stores.component.scss']
 })
-export class StoresComponent implements OnInit {
+export class DeletedStoresComponent implements OnInit {
   stores: Store[] = [];
   categories: any[] = [];
   filteredStores: Store[] = [];
@@ -32,10 +32,6 @@ export class StoresComponent implements OnInit {
   // Category filter dropdown
   showCategoryFilter = false;
 
-  // Delete confirmation modal
-  storeToDelete: Store | null = null;
-  deleting = false;
-
   constructor(
     private storesApi: AdminStoresApiService,
     private categoryApi: StoreCategoryApiService,
@@ -44,7 +40,7 @@ export class StoresComponent implements OnInit {
 
   ngOnInit() {
     this.loadCategories();
-    this.loadStores();
+    this.loadDeletedStores();
   }
 
   loadCategories() {
@@ -61,17 +57,18 @@ export class StoresComponent implements OnInit {
     });
   }
 
-  loadStores() {
+  loadDeletedStores() {
     this.loading = true;
     this.error = '';
     
-    // Load a larger page size to account for filtering
-    const loadPageSize = this.pageSize * 5; // Load more to ensure we have enough non-deleted stores
+    // Load all stores and filter for deleted ones
+    // We need to load a larger page size to account for filtering
+    const loadPageSize = this.pageSize * 3; // Load more to account for filtering
     this.storesApi.getAllStores(1, loadPageSize, this.selectedCategory || undefined)
       .subscribe({
         next: (response: StoresResponse) => {
-          // Filter out deleted stores from the main stores list
-          this.stores = response.allStores.filter(store => !store.isDeleted);
+          // Filter only deleted stores
+          this.stores = response.allStores.filter(store => store.isDeleted);
           this.filteredStores = [...this.stores];
           this.totalCount = this.stores.length;
           this.totalPages = Math.ceil(this.totalCount / this.pageSize);
@@ -81,8 +78,8 @@ export class StoresComponent implements OnInit {
           this.cdr.markForCheck();
         },
         error: (err) => {
-          console.error('Error loading stores:', err);
-          this.error = 'Failed to load stores. Please try again.';
+          console.error('Error loading deleted stores:', err);
+          this.error = 'Failed to load deleted stores. Please try again.';
           this.loading = false;
           this.cdr.markForCheck();
         }
@@ -91,7 +88,7 @@ export class StoresComponent implements OnInit {
 
   onCategoryChange() {
     this.currentPage = 1;
-    this.loadStores();
+    this.loadDeletedStores();
   }
 
   onSearchChange() {
@@ -126,23 +123,11 @@ export class StoresComponent implements OnInit {
   }
 
   getStatusBadgeClass(store: Store): string {
-    if (store.isDeleted) {
-      return 'badge bg-danger';
-    } else if (store.isActive) {
-      return 'badge bg-success';
-    } else {
-      return 'badge bg-warning';
-    }
+    return 'badge bg-danger';
   }
 
   getStatusText(store: Store): string {
-    if (store.isDeleted) {
-      return 'Deleted';
-    } else if (store.isActive) {
-      return 'Active';
-    } else {
-      return 'Inactive';
-    }
+    return 'Deleted';
   }
 
   toggleCategoryFilter() {
@@ -168,48 +153,4 @@ export class StoresComponent implements OnInit {
 
   // Make Math available in template
   Math = Math;
-
-  deleteStore(store: Store) {
-    this.storeToDelete = store;
-    // Show the modal using Bootstrap
-    const modal = document.getElementById('deleteConfirmModal');
-    if (modal) {
-      const bootstrapModal = new (window as any).bootstrap.Modal(modal);
-      bootstrapModal.show();
-    }
-  }
-
-  confirmDelete() {
-    if (!this.storeToDelete) return;
-    
-    this.deleting = true;
-    this.error = '';
-    
-    this.storesApi.deleteStore(this.storeToDelete.id).subscribe({
-      next: () => {
-        // Remove the store from the current list
-        this.stores = this.stores.filter(s => s.id !== this.storeToDelete!.id);
-        this.applySearchFilter();
-        this.deleting = false;
-        this.storeToDelete = null;
-        
-        // Hide the modal
-        const modal = document.getElementById('deleteConfirmModal');
-        if (modal) {
-          const bootstrapModal = (window as any).bootstrap.Modal.getInstance(modal);
-          if (bootstrapModal) {
-            bootstrapModal.hide();
-          }
-        }
-        
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Error deleting store:', err);
-        this.error = 'Failed to delete store. Please try again.';
-        this.deleting = false;
-        this.cdr.markForCheck();
-      }
-    });
-  }
-}
+} 

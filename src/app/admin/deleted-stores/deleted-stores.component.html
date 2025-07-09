@@ -1,7 +1,7 @@
 <div class="container py-4">
   <!-- Header with search and filters -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-shop me-2"></i>Stores</h2>
+    <h2><i class="bi bi-trash me-2"></i>Deleted Stores</h2>
     <div class="d-flex gap-3">
       <!-- Category Filter -->
       <div class="dropdown">
@@ -25,7 +25,7 @@
       <!-- Search -->
       <input type="text" 
              class="form-control" 
-             placeholder="Search stores..." 
+             placeholder="Search deleted stores..." 
              [(ngModel)]="searchTerm"
              (ngModelChange)="onSearchChange()"
              style="width: 250px;">
@@ -42,7 +42,7 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <p class="mt-2 text-muted">Loading stores...</p>
+    <p class="mt-2 text-muted">Loading deleted stores...</p>
   </div>
 
   <!-- Stores Table -->
@@ -55,7 +55,7 @@
           <th>Owner</th>
           <th>Category</th>
           <th>Status</th>
-          <th>Created</th>
+          <th>Deleted Date</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -95,11 +95,8 @@
               <button class="btn btn-outline-primary btn-sm" title="View Details">
                 <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-outline-warning btn-sm" title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-outline-danger btn-sm" title="Delete" (click)="deleteStore(store)">
-                <i class="bi bi-trash"></i>
+              <button class="btn btn-outline-success btn-sm" title="Restore">
+                <i class="bi bi-arrow-clockwise"></i>
               </button>
             </div>
           </td>
@@ -109,19 +106,19 @@
 
     <!-- No Results Message -->
     <div *ngIf="filteredStores.length === 0 && !loading" class="text-center py-5">
-      <i class="bi bi-search display-1 text-muted"></i>
-      <h4 class="mt-3 text-muted">No stores found</h4>
-      <p class="text-muted">Try adjusting your search criteria or filters.</p>
+      <i class="bi bi-trash display-1 text-muted"></i>
+      <h4 class="mt-3 text-muted">No deleted stores found</h4>
+      <p class="text-muted">There are no deleted stores matching your criteria.</p>
     </div>
   </div>
 
   <!-- Pagination -->
   <div *ngIf="totalPages > 1 && !loading" class="d-flex justify-content-between align-items-center mt-4">
     <div class="text-muted">
-      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} stores
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} deleted stores
     </div>
     
-    <nav aria-label="Stores pagination">
+    <nav aria-label="Deleted stores pagination">
       <ul class="pagination pagination-sm mb-0">
         <!-- Previous Page -->
         <li class="page-item" [class.disabled]="currentPage === 1">
@@ -151,35 +148,4 @@
       </ul>
     </nav>
   </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteConfirmModalLabel">
-          <i class="bi bi-exclamation-triangle text-warning me-2"></i>
-          Confirm Delete
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete <strong>"{{ storeToDelete?.name }}"</strong>?</p>
-        <p class="text-muted mb-0">This action cannot be undone.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle me-2"></i>Cancel
-        </button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="deleting">
-          <i class="bi bi-trash me-2"></i>
-          <span *ngIf="!deleting">Delete Store</span>
-          <span *ngIf="deleting">
-            <i class="bi bi-arrow-repeat spin me-2"></i>Deleting...
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+</div> 
