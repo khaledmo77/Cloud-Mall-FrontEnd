@@ -25,12 +25,11 @@ export class StoreCategoriesComponent implements OnInit {
   }
 
   loadCategories() {
-    this.loading = true;
-    this.error = '';
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdXBlcmFkbWluQGdtYWlsLmNvbSIsImp0aSI6ImY2YmUyN2RmLTBmZTItNGUwMi04MzY5LWNhNjI2ZDkzMGQ2ZSIsImVtYWlsIjoiU3VwZXJhZG1pbkBnbWFpbC5jb20iLCJpZCI6IjJiZjgxZDhhLWU0NmQtNGYxOS1hMDAzLTI1OTQ1ODI2OWFhMyIsInJvbGUiOiJTdXBlckFkbWluIiwibmJmIjoxNzUxOTk1MzI3LCJleHAiOjE3NTIwMzEzMjcsImlhdCI6MTc1MTk5NTMyNywiaXNzIjoiQ2xvdWRNYWxsQVBJIiwiYXVkIjoiQ2xvdWRNYWxsQ2xpZW50In0.AxbJ25uL_sswY2DBZN_h71yXN09cgTSBpnLTjMCo7UU';
+    const token = localStorage.getItem('token') || '';
+    
     this.storeCategoryApi.getAllCategoriesByAdmin(token).subscribe({
       next: (data) => {
-        this.categories = [...data];
+        this.categories = data;
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -45,7 +44,7 @@ export class StoreCategoriesComponent implements OnInit {
   addCategory() {
     if (!this.newCategory.name || !this.newCategory.description) return;
     this.adding = true;
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdXBlcmFkbWluQGdtYWlsLmNvbSIsImp0aSI6ImY2YmUyN2RmLTBmZTItNGUwMi04MzY5LWNhNjI2ZDkzMGQ2ZSIsImVtYWlsIjoiU3VwZXJhZG1pbkBnbWFpbC5jb20iLCJpZCI6IjJiZjgxZDhhLWU0NmQtNGYxOS1hMDAzLTI1OTQ1ODI2OWFhMyIsInJvbGUiOiJTdXBlckFkbWluIiwibmJmIjoxNzUxOTk1MzI3LCJleHAiOjE3NTIwMzEzMjcsImlhdCI6MTc1MTk5NTMyNywiaXNzIjoiQ2xvdWRNYWxsQVBJIiwiYXVkIjoiQ2xvdWRNYWxsQ2xpZW50In0.AxbJ25uL_sswY2DBZN_h71yXN09cgTSBpnLTjMCo7UU';
+    const token = localStorage.getItem('token') || '';
     this.storeCategoryApi.createCategory(token, this.newCategory.name, this.newCategory.description).subscribe({
       next: () => {
         this.adding = false;

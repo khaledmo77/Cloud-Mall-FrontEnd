@@ -52,7 +52,7 @@ export class StoresComponent implements OnInit {
   }
 
   loadCategories() {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJTdXBlcmFkbWluQGdtYWlsLmNvbSIsImp0aSI6ImU1OWYxMDM5LTdmMzgtNGFmZi1hYTk3LWRkNjViYzllOTNkYSIsImVtYWlsIjoiU3VwZXJhZG1pbkBnbWFpbC5jb20iLCJpZCI6IjJiZjgxZDhhLWU0NmQtNGYxOS1hMDAzLTI1OTQ1ODI2OWFhMyIsInJvbGUiOiJTdXBlckFkbWluIiwibmJmIjoxNzUyMDU3MjAzLCJleHAiOjE3NTIwOTMyMDMsImlhdCI6MTc1MjA1NzIwMywiaXNzIjoiQ2xvdWRNYWxsQVBJIiwiYXVkIjoiQ2xvdWRNYWxsQ2xpZW50In0.5DYXwu1-T0kVDW_pJxoy6InQ8UbIrlostVDN-wMS-aQ';
+    const token = localStorage.getItem('token') || '';
     
     this.categoryApi.getAllCategoriesByAdmin(token).subscribe({
       next: (data) => {
