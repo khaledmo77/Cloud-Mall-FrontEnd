@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { ClientGetAllStoresApiService, Store } from '../../core/ClientCore/client-getallstores-api.service';
+import { FormsModule } from '@angular/forms';
+import { ClientGetAllStoresApiService, Store, StoreFilterParams } from '../../core/ClientCore/client-getallstores-api.service';
 import { GetCategoryStoresApiService, StoreCategory } from '../../core/SiteCore/Get-CategoryStores-api.service';
+import { GoverningLocationApiService, GoverningLocation } from '../../core/SiteCore/governing-location-api.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-store-list',
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './store-list.component.html',
   styleUrl: './store-list.component.scss'
 })
@@ -15,6 +17,7 @@ export class StoreListComponent implements OnInit, OnDestroy {
   stores: Store[] = [];
   filteredStores: Store[] = [];
   storeCategories: StoreCategory[] = [];
+  governingLocations: GoverningLocation[] = [];
   error = '';
 
   // Pagination
@@ -22,19 +25,23 @@ export class StoreListComponent implements OnInit, OnDestroy {
   pageSize = 9;
   totalPages = 1;
   totalItems = 0;
-  selectedCategory: string | null = null;
+  selectedCategoryId: number | null = null;
+  selectedLocationId: number | null = null;
+  selectedStreetAddress: string = '';
   isLoading = false;
   private fetchTimeout: any;
 
   constructor(
     private storeService: ClientGetAllStoresApiService,
     private categoryService: GetCategoryStoresApiService,
+    private locationService: GoverningLocationApiService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
     this.loadStoreCategories();
+    this.loadGoverningLocations();
   }
 
   ngOnDestroy(): void {
@@ -47,11 +54,10 @@ export class StoreListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.categoryService.getStoreCategories().subscribe({
       next: (categories) => {
+        console.log('Loaded categories:', categories);
         this.storeCategories = categories;
-        // Set default category to first category if available
-        if (categories.length > 0) {
-          this.selectedCategory = categories[0].name;
-        }
+        // Don't set a default category - let user see all stores first
+        this.selectedCategoryId = null;
         this.fetchStores();
       },
       error: (err) => {
@@ -59,8 +65,20 @@ export class StoreListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.storeCategories = [];
         // If categories fail to load, try to load all stores
-        this.selectedCategory = null;
+        this.selectedCategoryId = null;
         this.fetchStores();
+      }
+    });
+  }
+
+  loadGoverningLocations() {
+    this.locationService.getGoverningLocations().subscribe({
+      next: (locations) => {
+        this.governingLocations = locations;
+      },
+      error: (err) => {
+        console.error('Error loading governing locations:', err);
+        this.governingLocations = [];
       }
     });
   }
@@ -69,38 +87,82 @@ export class StoreListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.cdr.detectChanges();
     
-    // If no category is selected, try to get all stores
-    const params: any = {
+    // Build filter parameters
+    const params: StoreFilterParams = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
     
-    if (this.selectedCategory) {
-      params.categoryName = this.selectedCategory;
+    if (this.selectedCategoryId) {
+      params.categoryId = this.selectedCategoryId;
     }
+    
+    if (this.selectedLocationId) {
+      params.governingLocationId = this.selectedLocationId;
+    }
+    
+    if (this.selectedStreetAddress) {
+      params.streetAddress = this.selectedStreetAddress;
+    }
+    
+    console.log('Fetching stores with params:', params);
     
     this.storeService.getStoresPaginated(params).subscribe({
       next: (response) => {
+        console.log('API Response:', response);
         this.isLoading = false;
         let items: Store[] = [];
-        if (response && Array.isArray(response.allStores)) {
+        
+        // Handle different response formats
+        if (response && (response as any).success && (response as any).data) {
+          // API returns {success: true, data: {...}}
+          const data = (response as any).data;
+          if (data.allStores && Array.isArray(data.allStores)) {
+            items = data.allStores;
+          } else if (Array.isArray(data)) {
+            items = data;
+          } else if (data.items && Array.isArray(data.items)) {
+            items = data.items;
+          }
+          
+          // Extract pagination info from data
+          this.totalItems = data.totalCount || items.length;
+          this.pageNumber = data.currentPage || 1;
+          this.totalPages = data.totalNumberOfPages || 1;
+        } else if (response && Array.isArray(response.allStores)) {
           items = response.allStores;
+          this.totalItems = response.totalCount || items.length;
+          this.pageNumber = response.currentPage || 1;
+          this.totalPages = response.totalNumberOfPages || 1;
         } else if (Array.isArray(response)) {
           items = response;
+          this.totalItems = items.length;
+          this.pageNumber = 1;
+          this.totalPages = 1;
         }
+        
+        console.log('Processed items:', items);
+        console.log('Pagination info:', {
+          totalItems: this.totalItems,
+          pageNumber: this.pageNumber,
+          totalPages: this.totalPages
+        });
         
         this.stores = items;
         this.filteredStores = items;
-        this.totalItems = response.totalCount || items.length;
-        this.pageNumber = response.currentPage || 1;
-        this.totalPages = response.totalNumberOfPages || 1;
         this.error = '';
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching stores:', err);
+        console.error('Error details:', {
+          status: err.status,
+          statusText: err.statusText,
+          message: err.message,
+          url: err.url
+        });
         this.isLoading = false;
-        this.error = 'Failed to load stores';
+        this.error = `Failed to load stores: ${err.status} ${err.statusText}`;
         this.stores = [];
         this.filteredStores = [];
         this.cdr.detectChanges();
@@ -108,19 +170,49 @@ export class StoreListComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterStores(category: string | null) {
+  filterStores(categoryId: number | null) {
     // Clear any existing timeout
     if (this.fetchTimeout) {
       clearTimeout(this.fetchTimeout);
     }
     
-    this.selectedCategory = category;
+    this.selectedCategoryId = categoryId;
     
     // Add a small delay to prevent rapid successive calls
     this.fetchTimeout = setTimeout(() => {
       this.fetchStores();
     }, 100);
   }
+
+  filterByLocation(locationId: number | null) {
+    // Clear any existing timeout
+    if (this.fetchTimeout) {
+      clearTimeout(this.fetchTimeout);
+    }
+    
+    this.selectedLocationId = locationId;
+    
+    // Add a small delay to prevent rapid successive calls
+    this.fetchTimeout = setTimeout(() => {
+      this.fetchStores();
+    }, 100);
+  }
+
+  filterByAddress(address: string) {
+    // Clear any existing timeout
+    if (this.fetchTimeout) {
+      clearTimeout(this.fetchTimeout);
+    }
+    
+    this.selectedStreetAddress = address;
+    
+    // Add a small delay to prevent rapid successive calls
+    this.fetchTimeout = setTimeout(() => {
+      this.fetchStores();
+    }, 100);
+  }
+
+
 
   openVendorStore(store: Store) {
     // Navigate to vendor store route (same as vendor, but will use different API based on user role)

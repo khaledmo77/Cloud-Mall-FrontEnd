@@ -5,10 +5,13 @@ import { Observable } from 'rxjs';
 export interface Store {
   id: number;
   name: string;
-  logoURL: string;
-  description: string;
-  categoryName: string;
-  vendorID: string;
+  logoURL?: string;
+  description?: string;
+  categoryId?: number;
+  categoryName?: string;
+  vendorID?: string;
+  governingLocationId?: number;
+  streetAddress?: string;
   // add any other fields returned by your API
 }
 
@@ -20,11 +23,19 @@ export interface GetAllStoresResponse {
   allStores: Store[];
 }
 
+export interface StoreFilterParams {
+  categoryId?: number;
+  governingLocationId?: number;
+  streetAddress?: string;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ClientGetAllStoresApiService {
-  private apiUrl = 'https://cloudmall.runasp.net/api/store/get-all-stores';
+  private apiUrl = 'https://cloudmall.runasp.net/api/Store/get-all-stores';
 
   constructor(private http: HttpClient) {}
 
@@ -32,11 +43,15 @@ export class ClientGetAllStoresApiService {
     return this.http.get<GetAllStoresResponse>(this.apiUrl);
   }
 
-  getStoresPaginated(options?: { categoryName?: string; pageNumber?: number; pageSize?: number }): Observable<GetAllStoresResponse> {
+  getStoresPaginated(options?: StoreFilterParams): Observable<GetAllStoresResponse> {
     let params: any = {};
-    if (options?.categoryName) params.categoryName = options.categoryName;
+    if (options?.categoryId) params.CategoryId = options.categoryId;
+    if (options?.governingLocationId) params.GoverningLocationId = options.governingLocationId;
+    if (options?.streetAddress) params.StreetAddress = options.streetAddress;
     if (options?.pageNumber) params.pageNumber = options.pageNumber;
     if (options?.pageSize) params.pageSize = options.pageSize;
+    
+    console.log('API Service - Sending params:', params);
     return this.http.get<GetAllStoresResponse>(this.apiUrl, { params });
   }
 }

@@ -15,23 +15,60 @@
     </div>
   </section>
 
-  <!-- Category Filter -->
+  <!-- Filters Section -->
   <div class="container">
-    <div class="category-filter">
-      <div class="filter-buttons">
-        <button 
-          class="filter-btn"
-          [class.active]="selectedCategory === null"
-          (click)="filterStores(null)">
-          All Stores
-        </button>
-        <button 
-          *ngFor="let category of storeCategories" 
-          class="filter-btn"
-          [class.active]="selectedCategory === category.name"
-          (click)="filterStores(category.name)">
-          {{ category.name }}
-        </button>
+    <div class="filters-section">
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <h6 class="filter-label">Category</h6>
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedCategoryId === null"
+            (click)="filterStores(null)">
+            All Categories
+          </button>
+          <button 
+            *ngFor="let category of storeCategories" 
+            class="filter-btn"
+            [class.active]="selectedCategoryId === category.id"
+            (click)="filterStores(category.id)">
+            {{ category.name }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Location Filter -->
+      <div class="filter-group">
+        <h6 class="filter-label">Location</h6>
+        <div class="filter-buttons">
+          <button 
+            class="filter-btn"
+            [class.active]="selectedLocationId === null"
+            (click)="filterByLocation(null)">
+            All Locations
+          </button>
+          <button 
+            *ngFor="let location of governingLocations" 
+            class="filter-btn"
+            [class.active]="selectedLocationId === location.id"
+            (click)="filterByLocation(location.id)">
+            {{ location.name }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Address Search -->
+      <div class="filter-group">
+        <h6 class="filter-label">Address Search</h6>
+        <div class="search-input">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Enter street address..."
+            [(ngModel)]="selectedStreetAddress"
+            (input)="filterByAddress(selectedStreetAddress)">
+        </div>
       </div>
     </div>
   </div>
