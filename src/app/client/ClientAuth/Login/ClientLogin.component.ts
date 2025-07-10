@@ -103,8 +103,9 @@ export class ClientLoginComponent {
         // Close the popup first
         this.close.emit();
         
-        // Navigate to client dashboard
-        this.router.navigate(['/client']);
+        // Navigate based on user role
+        const defaultRoute = this.authServiceCore.getDefaultRoute();
+        this.router.navigate([defaultRoute]);
       },
       error: (err) => {
         this.isLoggingIn = false;

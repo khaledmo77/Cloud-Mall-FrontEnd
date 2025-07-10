@@ -102,11 +102,9 @@ export class VendorLoginComponent {
         });
         this.close.emit();
         setTimeout(() => {
-          if (role === 'Admin' || role === 'SuperAdmin') {
-            this.router.navigate(['/admin']);
-          } else {
-            this.router.navigate(['/vendor']);
-          }
+          // Navigate based on user role
+          const defaultRoute = this.authServiceCore.getDefaultRoute();
+          this.router.navigate([defaultRoute]);
         }, 100);
       },
       error: (err: any) => {

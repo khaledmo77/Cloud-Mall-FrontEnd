@@ -52,7 +52,11 @@ export const landingRedirectGuard: CanActivateFn = () => {
     const role = auth.getUserRole();
     console.log('landingRedirectGuard - User logged in with role:', role);
     
-    if (role === 'Vendor') {
+    if (role === 'Admin' || role === 'SuperAdmin') {
+      console.log('landingRedirectGuard - Redirecting to admin dashboard');
+      router.navigate(['/admin']);
+      return false;
+    } else if (role === 'Vendor') {
       console.log('landingRedirectGuard - Redirecting to vendor landing page');
       router.navigate(['/vendor']);
       return false;
