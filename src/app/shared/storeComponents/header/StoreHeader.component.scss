@@ -1,3 +1,18 @@
+// Header Gray Background
+.header {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e9ecef;
+  
+  .header-middle {
+    background-color: #f8f9fa;
+    padding: 15px 0;
+  }
+  
+  .navbar-area {
+    background-color: #f8f9fa;
+  }
+}
+
 .store-logo {
   display: flex;
   align-items: center;
@@ -19,25 +34,48 @@
       box-shadow: 0 4px 16px rgba(255, 106, 0, 0.18);
     }
   }
-  .logo-icon {
-    /* Enhance for premium look */
-    font-size: 1.3rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
-    color: #fff;
-    border-radius: 50%;
+  .logo-container {
     width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
     box-shadow: 0 2px 8px rgba(238, 9, 121, 0.15);
     border: 2px solid #fff;
-    margin-right: 6px;
-    letter-spacing: 1.5px;
-    user-select: none;
+    background: #fff;
     transition: all 0.2s;
-    background-blend-mode: multiply;
+    
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    
+    .logo-icon {
+      /* Enhance for premium look */
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+      color: #fff;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 1.5px;
+      user-select: none;
+      transition: all 0.2s;
+      background-blend-mode: multiply;
+    }
   }
   
   .logo-text {

@@ -76,10 +76,11 @@
           <td>
             <div class="d-flex align-items-center">
               <img *ngIf="store.logoURL" 
-                   [src]="store.logoURL" 
+                   [src]="getStoreImageUrl(store.logoURL)" 
                    alt="Store logo" 
                    class="rounded me-2" 
-                   style="width: 40px; height: 40px; object-fit: cover;">
+                   style="width: 40px; height: 40px; object-fit: cover;"
+                   (error)="onImgError($event)">
               <div>
                 <strong>{{ store.name }}</strong>
                 <br>

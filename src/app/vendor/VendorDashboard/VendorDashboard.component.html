@@ -9,29 +9,26 @@
             [vendorId]="vendorId">
 </app-loader> -->
 
+<div class="dashboard-bg">
 <main class="main" id="top" *ngIf="!showLoader">
   <!-- ============================================-->
   <!-- <section> begin ============================-->
-  <section class="pt-7 pt-md-9 pb-0 text-center">
-    <div class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
+  <section class="pt-4 pt-md-9 pb-3 text-center">
     <!--/.bg-holder-->
-    <div class="container-fluid p-0">
+    <div class="container-fluid">
       <div class="row flex-center mx-auto showcase-banner">
         <div class="col px-sm-4">
-          <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4">Vendor <strong class="fw-bold">Dashboard</strong></h1>
-          <p class="lead text-300 opacity-75">Manage your stores and grow your business with our comprehensive vendor tools.</p>
+          <h1 class="text-white fs-3 fs-sm-4 fs-lg-5 fw-light mb-3">Vendor <strong class="fw-bold">Dashboard</strong></h1>
+          <p class="text-300 opacity-75" style="font-size: 1rem;">Manage your stores and grow your business with our comprehensive vendor tools.</p>
         </div>
       </div>
-      <div class="wave"><svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">
-          <path d="M1440,21.2101911 L1440,120 L0,120 L0,21.2101911 C120,35.0700637 240,42 360,42 C480,42 600,35.0700637 720,21.2101911 C808.32779,12.416393 874.573633,6.87702029 918.737528,4.59207306 C972.491685,1.8109458 1026.24584,0.420382166 1080,0.420382166 C1200,0.420382166 1320,7.35031847 1440,21.2101911 Z"></path>
-        </svg></div>
     </div><!-- end of .container-->
   </section><!-- <section> close ============================-->
   <!-- ============================================-->
 
   <!-- Filter Navigation -->
 
-  <div class="container container-wide-xl showcase-content">
+  <div class="container  container-wide-xl showcase-content">
     <div class="row justify-content-center align-items-center mx-auto mb-0" style="max-width: 52rem;">
       <div class="col px-sm-4 mt-6 mb-5 pt-2">
         <ul class="nav font-sans-serif justify-content-center px-1 showcase-nav" data-filter-nav>
@@ -50,11 +47,11 @@
   </div>
 
   <!-- Cards Grid -->
-  <div class="container container-wide-xl">
+  <div class="container container-wide-xl   ">
     <!-- Vendor Stores Section -->
     <div class="row g-4 mx-0" *ngIf="showVendorStores">
       <div class="col-12">
-        <h3 class="text-center mb-4">Your Stores</h3>
+
         <div class="row g-4" *ngIf="!isLoadingStores">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let store of vendorStores">
             <div class="card h-100 border-0 shadow-sm card-hover" (click)="navigateToStore(store.id)">
@@ -140,11 +137,11 @@
                     </button>
                     <a *ngIf="item.category === 'header'" [routerLink]="['/vendor/dashboard/preview']" [queryParams]="{ block: item.link.replace('blocks/', '') + '.html' }" class="btn btn-primary btn-sm rounded-pill">
                       <span class="fas fa-eye me-2"></span>
-                      View Component
+                      View Store
                     </a>
                     <a *ngIf="item.category !== 'header'" [routerLink]="['/' + item.link]" class="btn btn-primary btn-sm rounded-pill">
                       <span class="fas fa-eye me-2"></span>
-                      View Component
+                      View Store
                     </a>
                   </div>
                 </div>
@@ -162,14 +159,7 @@
     </div>
   </div>
 
-  <!-- Bottom Wave -->
-  <div class="position-relative">
-    <div class="wave z-index--1" style="top: -100%;">
-      <svg viewBox="0 0 1440 120" width="100%" height="100%" fill="black">
-        <path d="M1440,21.2101911 L1440,120 L0,120 L0,21.2101911 C120,35.0700637 240,42 360,42 C480,42 600,35.0700637 720,21.2101911 C808.32779,12.416393 874.573633,6.87702029 918.737528,4.59207306 C972.491685,1.8109458 1026.24584,0.420382166 1080,0.420382166 C1200,0.420382166 1320,7.35031847 1440,21.2101911 Z"></path>
-      </svg>
-    </div>
-  </div>
+ 
 </main><!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->

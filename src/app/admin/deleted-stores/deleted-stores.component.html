@@ -56,7 +56,6 @@
           <th>Category</th>
           <th>Status</th>
           <th>Deleted Date</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -65,10 +64,11 @@
           <td>
             <div class="d-flex align-items-center">
               <img *ngIf="store.logoURL" 
-                   [src]="store.logoURL" 
+                   [src]="getStoreImageUrl(store.logoURL)" 
                    alt="Store logo" 
                    class="rounded me-2" 
-                   style="width: 40px; height: 40px; object-fit: cover;">
+                   style="width: 40px; height: 40px; object-fit: cover;"
+                   (error)="onImgError($event)">
               <div>
                 <strong>{{ store.name }}</strong>
                 <br>
@@ -89,16 +89,6 @@
             <small class="text-muted">
               {{ store.createdAt | date:'shortDate' }}
             </small>
-          </td>
-          <td>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-primary btn-sm" title="View Details">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn btn-outline-success btn-sm" title="Restore">
-                <i class="bi bi-arrow-clockwise"></i>
-              </button>
-            </div>
           </td>
         </tr>
       </tbody>

@@ -2,7 +2,7 @@
   padding: 32px;
   background: #f5f7fa;
   min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Manrope", sans-serif;
 
   // Custom success toast styling
   ::ng-deep .success-toast {
@@ -692,4 +692,146 @@
 .add-product-form input,
 .add-category-form input {
   background: #fff !important;
+}
+
+// Modal Styles - Smaller Size
+::ng-deep .modal-dialog {
+  max-width: 450px !important;
+  margin: 1rem auto !important;
+  
+  &.modal-lg {
+    max-width: 500px !important;
+  }
+  
+  .modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px 10px 0 0;
+      padding: 1rem 1.25rem;
+      border-bottom: none;
+      
+      .modal-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        
+        mat-icon {
+          font-size: 1.1rem;
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+      
+      .btn-close {
+        color: white;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+      
+      .form-group {
+        margin-bottom: 1rem;
+        
+        label {
+          font-weight: 600;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+          display: block;
+          font-size: 0.9rem;
+        }
+        
+        .form-control {
+          border-radius: 6px;
+          border: 2px solid #e9ecef;
+          padding: 0.6rem 0.8rem;
+          font-size: 0.9rem;
+          transition: all 0.2s ease;
+          
+          &:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+          }
+          
+          &::placeholder {
+            color: #6c757d;
+            opacity: 0.7;
+          }
+        }
+        
+        .form-text {
+          font-size: 0.8rem;
+          color: #6c757d;
+          margin-top: 0.25rem;
+        }
+      }
+      
+      .input-group {
+        .input-group-text {
+          background: #f8f9fa;
+          border: 2px solid #e9ecef;
+          border-right: none;
+          color: #6c757d;
+          font-size: 0.8rem;
+        }
+        
+        .form-control {
+          border-left: none;
+          
+          &:focus {
+            border-left: none;
+          }
+        }
+      }
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e9ecef;
+      background: #f8f9fa;
+      border-radius: 0 0 10px 10px;
+      
+      .btn {
+        padding: 0.6rem 1.25rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        
+        &.btn-primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          }
+        }
+        
+        &.btn-secondary {
+          background: #6c757d;
+          border: none;
+          
+          &:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+  }
 }

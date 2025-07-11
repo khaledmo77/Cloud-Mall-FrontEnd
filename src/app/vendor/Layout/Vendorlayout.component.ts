@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { NgIf } from '@angular/common';
-import { footerComponent } from '../../shared/footer/footer.component';
 import { preloaderComponent } from '../../shared/preloader/preloader.component';
 import { navigationComponent } from '../../shared/navigation/navigation.component';
 
@@ -19,12 +18,10 @@ import { navigationComponent } from '../../shared/navigation/navigation.componen
     preloaderComponent,
     navigationComponent,
     MatToolbarModule,
-    footerComponent,
-    footerComponent,
     MatGridListModule,
     MatIconModule,
     MatListModule,
- 
+  
   ],
   templateUrl: './Vendorlayout.component.html',
   styleUrl: './Vendorlayout.component.scss',

@@ -1,4 +1,6 @@
 <main class="main" id="top">
+  <!-- Full Background Image -->
+  <div class="full-background-image"></div>
   <div class="navbar-overlay w-100 position-fixed top-0 start-0 px-4 py-1 d-flex align-items-center justify-content-between"
     [ngClass]="{ 'scrolled': isScrolled }">
     <h1 class="sitename text-white">QuickCrow</h1>
@@ -15,35 +17,31 @@
     <a class="cta-btn" href="" (click)="navigateVendorWithAuth('/vendor'); $event.preventDefault()">Get Started with free trial </a>
     <label for="nav-toggle" class="mobile-nav-toggle d-xl-none bi bi-list"></label>
   </div>
-  <section class="pt-7 pt-md-9 pb-0 text-center">
+  <section class="pb-0 text-center hero-section">
     <!-- Client Login Popup -->
     <app-ClientLogin
       *ngIf="showClientLogin"
       (switchToRegister)="openClientRegister()"
       (close)="closeClientLogin()">
     </app-ClientLogin>
-
     <!-- Client Register Popup -->
     <app-ClientRegister
       *ngIf="showClientRegister"
       (close)="closeClientRegister()"
       (switchToLogin)="openClientLogin()">
     </app-ClientRegister>
-
     <!-- Vendor Login Popup -->
     <app-VendorLogin
       *ngIf="showVendorLogin"
       (switchToRegister)="openVendorRegister()"
       (close)="closeVendorLogin()">
     </app-VendorLogin>
-
     <!-- Vendor Register Popup -->
     <app-VendorRegister
       *ngIf="showVendorRegister"
       (close)="closeVendorRegister()"
       (switchToLogin)="openVendorLogin()">
     </app-VendorRegister>
-
     <!-- Trial Info Modal -->
     <div *ngIf="showTrialInfo" class="trial-modal-overlay" (click)="closeTrialInfo()">
       <div class="trial-modal-card" (click)="$event.stopPropagation()">
@@ -81,26 +79,91 @@
         </div>
       </div>
     </div>
-
-    <div id="home"class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
-    <div class="container-fluid p-0">
-      <div class="row flex-center mx-auto showcase-banner">
+    <!-- Hero Content -->
+    <div class=" p-0 hero-content">
+      <div class="row flex-center mx-auto ">
         <div class="col px-sm-4">
-          <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4">Empower Your <strong class="fw-bold">Business</strong></h1>
-          <p class="lead text-300 opacity-75">“The future belongs to those who build it. Launch your store and lead the way.”</p>
-          <div class="mt-5">
+          <h1 class="text-white fs-4 fs-sm-5 fs-lg-7 fw-light mb-4 hero-title">Empower Your <strong class="fw-bold">Business</strong></h1>
+          <p class="lead text-300 opacity-75 hero-subtitle">“The future belongs to those who build it. Launch your store and lead the way.”</p>
+          <div class="hero-buttons">
             <button class="btn btn-primary btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateVendorWithAuth('/vendor')">Get Started</button>
             <button class="btn btn-outline-light btn-lg rounded-pill px-5 px-md-7 me-3" (click)="navigateWithAuth('/client/store-list')">Browse Stores</button>
-
           </div>
         </div>
+        
       </div>
-      <div class="wave">
-        <svg viewBox="0 0 1440 120" width="100%" height="100%" fill="#fff">
-          <path d="M1440,21.2101911 L1440,120 L0,120 L0,21.2101911 C120,35.0700637 240,42 360,42 C480,42 600,35.0700637 720,21.2101911 C808.32779,12.416393 874.573633,6.87702029 918.737528,4.59207306 C972.491685,1.8109458 1026.24584,0.420382166 1080,0.420382166 C1200,0.420382166 1320,7.35031847 1440,21.2101911 Z"></path>
-        </svg>
-      </div>
+  
     </div>
+    <section id="pricing" class="pricing section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Pricing</h2>
+        <p>Choose a plan that fits your business size and goals. Whether you're just starting or scaling up, we've got you covered.</p>
+      </div><!-- End Section Title -->
+    
+      <div class="container">
+        <div class="row gy-4">
+    
+          <!-- Free Plan -->
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="pricing-item">
+              <h3>Starter</h3>
+              <h4><sup>$</sup>0<span> / month</span></h4>
+              <ul>
+                <li>Create 1 online store</li>
+                <li>Up to 10 products</li>
+                <li>Basic order management</li>
+                <li class="na">Custom domain</li>
+                <li class="na">Advanced analytics</li>
+              </ul>
+              <div class="btn-wrap">
+                <a href="#" class="btn-buy" (click)="navigateVendorWithAuth('/vendor'); $event.preventDefault()">Get Started</a>
+                <button class="recommended-badge" (click)="openTrialInfo()"> Trial Info</button>
+              </div>
+            </div>
+          </div><!-- End Pricing Item -->
+    
+          <!-- Recommended Plan -->
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="pricing-item recommended">
+              <span class="recommended-badge">Recommended</span>
+              <h3>Business</h3>
+              <h4><sup>$</sup>50<span> / month</span></h4>
+              <ul>
+                <li>Up to 3 stores</li>
+                <li>Up to 100 products</li>
+                <li>Advanced order & inventory management</li>
+                <li>Custom domain</li>
+                <li class="na">Priority support</li>
+              </ul>
+              <div class="btn-wrap">
+                <a href="#" class="btn-buy disabled" tabindex="-1" aria-disabled="true">Coming soon</a>
+              </div>
+            </div>
+          </div><!-- End Pricing Item -->
+    
+          <!-- Developer Plan -->
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="pricing-item">
+              <h3>Enterprise</h3>
+              <h4><sup>$</sup>80<span> / month</span></h4>
+              <ul>
+                <li>Unlimited stores & products</li>
+                <li>Advanced analytics & reporting</li>
+                <li>Marketing & SEO tools</li>
+                <li>Custom domain & branding</li>
+                <li>Priority support</li>
+              </ul>
+              <div class="btn-wrap">
+                <a href="#" class="btn-buy disabled" tabindex="-1" aria-disabled="true">Coming soon</a>
+              </div>
+            </div>
+          </div><!-- End Pricing Item -->
+    
+        </div>
+      </div>
+    </section>
   </section>
 
   <!-- Additional sections that might have navigation -->
@@ -120,46 +183,7 @@
       </div>
     </div>
   </section> -->
-  <section id="about" class="about section">
-
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>About</h2>
-    <p>
-  Our multi-vendor platform empowers entrepreneurs and businesses to launch their own online stores with ease. Similar to Shopify, we provide a scalable, customizable e-commerce solution that supports sellers in showcasing their products, managing orders, and reaching customers across the globe — all in one seamless experience.
-</p>
-
-  </div><!-- End Section Title -->
-
-  <div class="container">
-
-    <div class="row gy-4">
-        <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
-      <p>
-    Our platform helps anyone create and manage an online store — no tech skills needed. We make it easy for vendors to sell, and for customers to shop.
-      </p>
-      <ul>
-        <li><i class="bi bi-check2-circle"></i> <span>Open your own store in minutes with easy setup tools.</span></li>
-        <li><i class="bi bi-check2-circle"></i> <span>Manage products, orders, and payments all in one place.</span></li>
-        <li><i class="bi bi-check2-circle"></i> <span>Reach more customers with built-in marketing tools.</span></li>
-     </ul>
-</div>
-
-
-    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-  <p>
-    Our platform connects vendors and customers in one powerful marketplace. Whether you're starting your first online store or managing multiple products, we make it easy to sell, grow, and succeed — all from one dashboard.
-  </p>
-  <a href="#" class="read-more">
-    <span>Read More</span><i class="bi bi-arrow-right"></i>
-  </a>
-</div>
-
-    </div>
-
-  </div>
-
-</section>
+ 
 <!--end section about-->
 
   <!--start service section-->
@@ -242,77 +266,48 @@
     </div>
     </div>
     </section>
+    <section id="about" class="about section">
 
-  <section id="pricing" class="pricing section light-background">
-
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Pricing</h2>
-    <p>Choose a plan that fits your business size and goals. Whether you're just starting or scaling up, we've got you covered.</p>
-  </div><!-- End Section Title -->
-
-  <div class="container">
-    <div class="row gy-4">
-
-      <!-- Free Plan -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-        <div class="pricing-item">
-          <h3>Starter</h3>
-          <h4><sup>$</sup>0<span> / month</span></h4>
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>About</h2>
+        <p>
+      Our multi-vendor platform empowers entrepreneurs and businesses to launch their own online stores with ease. Similar to Shopify, we provide a scalable, customizable e-commerce solution that supports sellers in showcasing their products, managing orders, and reaching customers across the globe — all in one seamless experience.
+    </p>
+    
+      </div><!-- End Section Title -->
+    
+      <div class="container">
+    
+        <div class="row gy-4">
+            <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
+          <p>
+        Our platform helps anyone create and manage an online store — no tech skills needed. We make it easy for vendors to sell, and for customers to shop.
+          </p>
           <ul>
-            <li>Create 1 online store</li>
-            <li>Up to 10 products</li>
-            <li>Basic order management</li>
-            <li class="na">Custom domain</li>
-            <li class="na">Advanced analytics</li>
-          </ul>
-          <div class="btn-wrap">
-            <a href="#" class="btn-buy" (click)="navigateVendorWithAuth('/vendor'); $event.preventDefault()">Get Started</a>
-            <button class="recommended-badge" (click)="openTrialInfo()"> Trial Info</button>
-          </div>
-        </div>
-      </div><!-- End Pricing Item -->
-
-      <!-- Recommended Plan -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="pricing-item recommended">
-          <span class="recommended-badge">Recommended</span>
-          <h3>Business</h3>
-          <h4><sup>$</sup>50<span> / month</span></h4>
-          <ul>
-            <li>Up to 3 stores</li>
-            <li>Up to 100 products</li>
-            <li>Advanced order & inventory management</li>
-            <li>Custom domain</li>
-            <li class="na">Priority support</li>
-          </ul>
-          <div class="btn-wrap">
-            <a href="#" class="btn-buy disabled" tabindex="-1" aria-disabled="true">Coming soon</a>
-          </div>
-        </div>
-      </div><!-- End Pricing Item -->
-
-      <!-- Developer Plan -->
-      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-        <div class="pricing-item">
-          <h3>Enterprise</h3>
-          <h4><sup>$</sup>80<span> / month</span></h4>
-          <ul>
-            <li>Unlimited stores & products</li>
-            <li>Advanced analytics & reporting</li>
-            <li>Marketing & SEO tools</li>
-            <li>Custom domain & branding</li>
-            <li>Priority support</li>
-          </ul>
-          <div class="btn-wrap">
-            <a href="#" class="btn-buy disabled" tabindex="-1" aria-disabled="true">Coming soon</a>
-          </div>
-        </div>
-      </div><!-- End Pricing Item -->
-
+            <li><i class="bi bi-check2-circle"></i> <span>Open your own store in minutes with easy setup tools.</span></li>
+            <li><i class="bi bi-check2-circle"></i> <span>Manage products, orders, and payments all in one place.</span></li>
+            <li><i class="bi bi-check2-circle"></i> <span>Reach more customers with built-in marketing tools.</span></li>
+         </ul>
     </div>
-  </div>
-</section>
+    
+    
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+      <p>
+        Our platform connects vendors and customers in one powerful marketplace. Whether you're starting your first online store or managing multiple products, we make it easy to sell, grow, and succeed — all from one dashboard.
+      </p>
+      <a href="#" class="read-more">
+        <span>Read More</span><i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+    
+        </div>
+    
+      </div>
+    
+    </section>
+
+
 
 <!--section Contact-->
 <section id="contact" class="contact section light-background">

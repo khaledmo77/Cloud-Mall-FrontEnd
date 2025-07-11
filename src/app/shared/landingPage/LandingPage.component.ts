@@ -141,7 +141,7 @@ showVendorRegister = false;
 
   closeTrialInfo() {
     this.showTrialInfo = false;
-  }
+}
 
 }
 

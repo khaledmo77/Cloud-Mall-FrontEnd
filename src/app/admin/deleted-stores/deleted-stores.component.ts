@@ -153,4 +153,14 @@ export class DeletedStoresComponent implements OnInit {
 
   // Make Math available in template
   Math = Math;
+
+  getStoreImageUrl(logoURL: string): string {
+    if (!logoURL) return 'assets/images/default-store.png';
+    if (logoURL.startsWith('http')) return logoURL;
+    return 'https://cloudmall.runasp.net' + logoURL;
+  }
+
+  onImgError(event: any) {
+    event.target.src = 'assets/images/default-store.png';
+  }
 } 

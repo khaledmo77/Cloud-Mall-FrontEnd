@@ -27,7 +27,7 @@ interface DashboardItem {
   styleUrl: './VendorDashboard.component.scss'
 })
 export class VendorDashboardComponent implements OnInit, AfterViewInit {
-  selectedFilter: string = '.header';
+  selectedFilter: string = '.your-stores';
   filteredItems: DashboardItem[] = [];
   storeCategories: StoreCategory[] = [];
   
@@ -278,8 +278,7 @@ export class VendorDashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Ensure main loader is hidden on component initialization
     this.forceHideLoader();
-    
-    this.filterItems('.header');
+    this.filterItems('.your-stores');
     this.loadStoreCategories();
     
     // Get vendor ID from localStorage (stored as 'userId' during login)

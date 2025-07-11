@@ -140,4 +140,14 @@ export class DisabledStoresComponent implements OnInit {
   }
 
   Math = Math;
+
+  getStoreImageUrl(logoURL: string): string {
+    if (!logoURL) return 'assets/images/default-store.png';
+    if (logoURL.startsWith('http')) return logoURL;
+    return 'https://cloudmall.runasp.net' + logoURL;
+  }
+
+  onImgError(event: any) {
+    event.target.src = 'assets/images/default-store.png';
+  }
 } 

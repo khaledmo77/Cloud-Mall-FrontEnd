@@ -242,6 +242,15 @@ html {
   color: #444;
   font-size: 16px;
 }
+#about p {
+  color: #444;
+  font-size: 16px;
+}
+#about .section-title p,
+#about p {
+  color: #fff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
 /* Style the icon like a right check mark */
 ::ng-deep .bi-check2-circle {
   color: #007bff;
@@ -272,7 +281,7 @@ html {
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   animation: modalSlideIn 0.3s ease-out;
 }
 
@@ -433,7 +442,7 @@ html {
 }
 .services .service-item {
   background-color: var(--surface-color);
-  box-shadow: 0px 5px 90px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 5px 90px 0px rgba(0, 0, 0, 0.5);
   padding: 60px 30px;
   transition: all ease-in-out 0.3s;
   border-radius: 18px;
@@ -517,18 +526,23 @@ html {
   position: absolute;
   left: 0;
   bottom: -12px;  /* Adjust distance from text */
-  width: 60%;
+  width: 100%;
   height: 3px;
   background-color: #007bff;
 }
 .pricing .pricing-item {
   background-color: var(--surface-color);
-  box-shadow: 0px 5px 90px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 5px 90px rgba(0, 0, 0, 0.5);
   padding: 40px 20px;
   text-align: center;
   border-radius: 8px;
   position: relative;
   overflow: hidden;
+}
+
+.pricing-item {
+  z-index: 3;
+  position: relative;
 }
 
 .pricing .pricing-item h3 {
@@ -823,6 +837,136 @@ text-decoration: none;
   .wave svg {
     height: 40px !important;
   }
+}
+
+.full-background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('/assets/img/header_showcase.jpg') center center/cover no-repeat;
+  pointer-events: none;
+}
+
+.hero-section,
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  min-height: 35vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.hero-title {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.25);
+}
+
+.hero-title strong {
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  color: #fff;
+  font-size: 1.25rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.18);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  .hero-content {
+    min-height: 15vh;
+  }
+}
+
+#about,
+#services,
+#pricing,
+#contact {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+#about h2, #about p, #about ul li,
+#services h2, #services p, #services ul li,
+#pricing h2, #pricing p, #pricing ul li,
+#contact h2, #contact p, #contact ul li {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.about h2,
+.section-title h2 {
+  font-size: 2.5rem;
+  font-weight: 800; 
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  letter-spacing: 0.5px;
+}
+
+.pricing-item h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  margin-bottom: 0.5rem;
+}
+
+.pricing-item h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  margin-bottom: 1rem;
+}
+
+.services .service-item h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  margin-bottom: 0.5rem;
+}
+
+.contact h2,
+.contact .info-item h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+  margin-bottom: 0.5rem;
+}
+
+.services .service-item {
+  z-index: 2;
+  position: relative;
+}
+
+.contact .info-item {
+  z-index: 2;
+  position: relative;
 }
 
 

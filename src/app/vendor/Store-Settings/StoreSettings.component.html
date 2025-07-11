@@ -1,447 +1,370 @@
-<div class="store-settings-container">
+<div class="container-fluid d-flex justify-content-center">
+  <div class="w-100" style="max-width: 1200px;">
   <!-- Component Loading State -->
-  <div *ngIf="componentLoading" class="component-loading-section">
-    <mat-card class="component-loading-card">
-      <mat-card-content>
-        <div class="component-loading-content">
-          <mat-spinner diameter="60"></mat-spinner>
-          <h3>Loading Store Settings...</h3>
-          <p>Please wait while we load your store data</p>
+    <div *ngIf="componentLoading" class="d-flex justify-content-center align-items-center min-vh-100">
+      <div class="card shadow-sm" style="max-width: 400px;">
+        <div class="card-body text-center p-4">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <h3 class="mb-2">Loading Store Settings...</h3>
+          <p class="text-muted mb-0">Please wait while we load your store data</p>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
   </div>
 
   <!-- Main Content (only show when not loading) -->
   <div *ngIf="!componentLoading">
     <!-- Header Section -->
-    <div class="header-section">
-      <div class="header-content">
-        <h1 class="page-title">
-          <mat-icon>store</mat-icon>
-          Store Settings & Dashboard
-        </h1>
-        <p class="page-subtitle">Manage your store, products, and orders from one central location</p>
-      </div>
-    </div>
+    
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-section">
-    <mat-card class="loading-card">
-      <mat-card-content>
-        <div class="loading-content">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading your stores...</p>
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center min-vh-50">
+      <div class="card shadow-sm" style="max-width: 300px;">
+        <div class="card-body text-center p-4">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mb-0">Loading your stores...</p>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
   </div>
 
   <!-- Error State -->
-  <div *ngIf="errorMessage" class="error-section">
-    <mat-card class="error-card">
-      <mat-card-content>
-        <div class="error-content">
-          <mat-icon color="warn">error</mat-icon>
-          <h3>Error Loading Stores</h3>
-          <p>{{ errorMessage }}</p>
-          <button mat-raised-button color="primary" (click)="retryLoadStores()">
-            <mat-icon>refresh</mat-icon>
+    <div *ngIf="errorMessage" class="row">
+      <div class="col-12">
+        <div class="card border-danger">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i>
+            <h3 class="mb-2">Error Loading Stores</h3>
+            <p class="text-muted mb-3">{{ errorMessage }}</p>
+            <button class="btn btn-primary" (click)="retryLoadStores()">
+              <i class="bi bi-arrow-clockwise me-2"></i>
             Retry
           </button>
+          </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
   </div>
 
   <!-- Store Selector (only show if multiple stores) -->
-  <div *ngIf="vendorStores.length > 1 && !isLoading && !errorMessage" class="store-selector-section">
-    <mat-card class="store-selector-card">
-      <mat-card-content>
-        <div class="store-selector-content">
-          <h3>Select Store to Manage</h3>
-          <div class="store-buttons">
+    <div *ngIf="vendorStores.length > 1 && !isLoading && !errorMessage" class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <h3 class="mb-3">Select Store to Manage</h3>
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
             <button 
               *ngFor="let store of vendorStores" 
-              mat-raised-button 
-              [color]="selectedStore?.id === store.id ? 'primary' : 'basic'"
-              (click)="selectStore(store)"
-              class="store-button">
-              <mat-icon>store</mat-icon>
+                class="btn"
+                [class]="selectedStore?.id === store.id ? 'btn-primary' : 'btn-outline-primary'"
+                (click)="selectStore(store)">
+                <i class="bi bi-shop me-2"></i>
               {{ store.name }}
             </button>
+            </div>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
   </div>
 
   <!-- Stats Cards (only show when store is selected) -->
-  <div *ngIf="selectedStore && !isLoading && !errorMessage" class="stats-grid">
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>inventory</mat-icon>
+    <div *ngIf="selectedStore && !isLoading && !errorMessage" class="row mb-4">
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-box-seam text-primary fs-1"></i>
           </div>
-          <div class="stat-details">
-            <h3>{{ storeStats.totalProducts }}</h3>
-            <p>Total Products</p>
+            <h3 class="mb-1">{{ storeStats.totalProducts }}</h3>
+            <p class="text-muted mb-0">Total Products</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
 
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>shopping_cart</mat-icon>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-cart text-success fs-1"></i>
           </div>
-          <div class="stat-details">
-            <h3>{{ storeStats.totalOrders }}</h3>
-            <p>Total Orders</p>
+            <h3 class="mb-1">{{ storeStats.totalOrders }}</h3>
+            <p class="text-muted mb-0">Total Orders</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
 
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>attach_money</mat-icon>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-currency-dollar text-warning fs-1"></i>
           </div>
-          <div class="stat-details">
-            <h3>${{ storeStats.totalRevenue.toLocaleString() }}</h3>
-            <p>Total Revenue</p>
+            <h3 class="mb-1">${{ storeStats.totalRevenue.toLocaleString() }}</h3>
+            <p class="text-muted mb-0">Total Revenue</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
 
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>pending</mat-icon>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+              <i class="bi bi-clock text-info fs-1"></i>
           </div>
-          <div class="stat-details">
-            <h3>{{ storeStats.pendingOrders }}</h3>
-            <p>Pending Orders</p>
+            <h3 class="mb-1">{{ storeStats.pendingOrders }}</h3>
+            <p class="text-muted mb-0">Pending Orders</p>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
   </div>
 
   <!-- Main Content Tabs (only show when store is selected) -->
-  <mat-card *ngIf="selectedStore && !isLoading && !errorMessage" class="main-content-card">
-    <mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="300ms">
+    <div *ngIf="selectedStore && !isLoading && !errorMessage" class="row">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body p-0">
+            <!-- Bootstrap Tabs -->
+            <ul class="nav nav-tabs" id="storeTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        [class.active]="selectedTab === 0"
+                        (click)="selectedTab = 0"
+                        type="button" 
+                        role="tab">
+                  Dashboard
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        [class.active]="selectedTab === 1"
+                        (click)="selectedTab = 1"
+                        type="button" 
+                        role="tab">
+                  Store Settings
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content p-4" id="storeTabsContent">
       
       <!-- Dashboard Tab -->
-      <mat-tab label="Dashboard">
-        <div class="tab-content">
-          <div class="dashboard-grid">
+              <div class="tab-pane fade" 
+                   [class.show]="selectedTab === 0" 
+                   [class.active]="selectedTab === 0" 
+                   role="tabpanel">
+                <div class="row">
             
             <!-- Recent Orders -->
-            <mat-card class="dashboard-card">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>receipt</mat-icon>
-                  Recent Orders
-                </mat-card-title>
-                <mat-card-subtitle>Latest customer orders</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content style="max-height: 400px; overflow-y: auto;">
-                <mat-list>
-                  <mat-list-item *ngFor="let order of recentOrders" class="order-item" (click)="openOrderDetails(order)" style="cursor:pointer;">
-                    <div class="order-info">
-                      <div class="order-header">
-                        <span class="order-id">{{ order.storeName }}</span>
-                        <span class="badge ms-2" [ngClass]="getOrderStatusBadgeClass(order.status)">{{ order.status }}</span>
+                  <div class="col-lg-8 mb-4">
+                    <div class="card shadow-sm h-100">
+                      <div class="card-header bg-transparent">
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-receipt me-2 text-primary"></i>
+                          <h5 class="mb-0">Recent Orders</h5>
+                        </div>
+                        <small class="text-muted">Latest customer orders</small>
                       </div>
-                      <div class="order-details d-flex align-items-center">
-                        <span class="customer-name me-3">{{ order.clientName }}</span>
-                        <span class="order-amount">${{ order.subTotal }}</span>
-                      </div>
-                      <div class="order-date">{{ order.orderDate }}</div>
-                    </div>
-                  </mat-list-item>
-                </mat-list>
-              </mat-card-content>
-            </mat-card>
-
-            <!-- Low Stock Alert -->
-            <mat-card class="dashboard-card">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>warning</mat-icon>
-                  Low Stock Alert
-                </mat-card-title>
-                <mat-card-subtitle>Products running low on inventory</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <mat-list>
-                  <mat-list-item *ngFor="let product of lowStockProducts" class="stock-item">
-                    <div class="stock-info">
-                      <div class="product-name">{{ product.name }}</div>
-                      <div class="stock-details">
-                        <span class="stock-count">Stock: {{ product.stock }}</span>
-                        <mat-chip [color]="getStockColor(product.stock, product.threshold)" selected>
-                          {{ getStockStatus(product.stock, product.threshold) }}
-                        </mat-chip>
+                      <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                        <div class="list-group list-group-flush">
+                          <div *ngFor="let order of recentOrders" 
+                               class="list-group-item list-group-item-action" 
+                               (click)="openOrderDetails(order)" 
+                               style="cursor: pointer;">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                              <h6 class="mb-1">{{ order.storeName }}</h6>
+                              <span class="badge" [ngClass]="getOrderStatusBadgeClass(order.status)">
+                                {{ order.status }}
+                              </span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <span class="text-muted">{{ order.clientName }}</span>
+                              <span class="fw-bold">${{ order.subTotal }}</span>
+                            </div>
+                            <small class="text-muted">{{ order.orderDate }}</small>
                       </div>
                     </div>
-                  </mat-list-item>
-                </mat-list>
-                <div class="view-all">
-                  <button mat-button color="primary">
-                    Manage Inventory
-                    <mat-icon>arrow_forward</mat-icon>
-                  </button>
+                      </div>
+                    </div>
                 </div>
-              </mat-card-content>
-            </mat-card>
 
             <!-- Quick Actions -->
-            <mat-card class="dashboard-card">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>flash_on</mat-icon>
-                  Quick Actions
-                </mat-card-title>
-                <mat-card-subtitle>Common tasks and shortcuts</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div *ngIf="!showAddProductModal && !showAddCategoryModal" class="quick-actions">
-                  <button mat-raised-button 
-                          [color]="hasCategories() ? 'primary' : 'warn'" 
-                          class="action-btn" 
+                  <div class="col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                      <div class="card-header bg-transparent">
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-lightning me-2 text-warning"></i>
+                          <h5 class="mb-0">Quick Actions</h5>
+                        </div>
+                        <small class="text-muted">Common tasks and shortcuts</small>
+                      </div>
+                      <div class="card-body">
+                        <div *ngIf="!showAddProductModal && !showAddCategoryModal" class="d-grid gap-2">
+                          <button class="btn" 
+                                  [class]="hasCategories() ? 'btn-primary' : 'btn-warning'" 
                           (click)="toggleAddProductModal()"
                           [disabled]="!hasCategories() || categoriesLoading">
-                    <mat-icon>{{ hasCategories() ? 'add' : (categoriesLoading ? 'hourglass_empty' : 'warning') }}</mat-icon>
+                            <i class="bi me-2" [class]="hasCategories() ? 'bi-plus-circle' : (categoriesLoading ? 'bi-hourglass-split' : 'bi-exclamation-triangle')"></i>
                     {{ hasCategories() ? 'Add Product' : (categoriesLoading ? 'Loading Categories...' : 'Add Categories First') }}
                   </button>
-                  <button mat-raised-button color="accent" class="action-btn" (click)="toggleAddCategoryModal()">
-                    <mat-icon>category</mat-icon>
+                          <button class="btn btn-success" (click)="toggleAddCategoryModal()">
+                            <i class="bi bi-tags me-2"></i>
                     Add Category
                   </button>
-                  <button mat-raised-button color="warn" class="action-btn">
-                    <mat-icon>inventory</mat-icon>
+                          <button class="btn btn-warning">
+                            <i class="bi bi-box-seam me-2"></i>
                     Manage Stock
                   </button>
-                  <button mat-raised-button class="action-btn">
-                    <mat-icon>analytics</mat-icon>
+                          <button class="btn btn-info">
+                            <i class="bi bi-graph-up me-2"></i>
                     View Reports
                   </button>
                 </div>
 
-                <!-- Add Product Form (inline) -->
-                <form *ngIf="showAddProductModal" (ngSubmit)="submitAddProduct()" #addProductForm="ngForm" class="add-product-form">
-                  <h5>Add Product</h5>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Name</mat-label><input matInput [(ngModel)]="addProductData.name" name="name" required /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><input matInput [(ngModel)]="addProductData.description" name="description" required /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Brand</mat-label><input matInput [(ngModel)]="addProductData.brand" name="brand" /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>SKU</mat-label><input matInput [(ngModel)]="addProductData.sku" name="sku" /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Price</mat-label><input matInput type="number" [(ngModel)]="addProductData.price" name="price" required /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Discount</mat-label><input matInput type="number" [(ngModel)]="addProductData.discount" name="discount" /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Stock</mat-label><input matInput type="number" [(ngModel)]="addProductData.stock" name="stock" /></mat-form-field>
-                  <div class="full-width" style="margin-bottom: 20px;">
-                    <label style="display:block; color:#2c3e50; margin-bottom: 6px;">Image</label>
-                    <input type="file" (change)="onProductImageChange($event)" />
-                  </div>
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Product Category</mat-label>
-                    <mat-select [(ngModel)]="addProductData.selectedCategoryId" name="selectedCategoryId" required>
-                      <mat-option *ngFor="let category of productCategories" [value]="category.id">
-                        {{ category.name }}
-                      </mat-option>
-                      <mat-option *ngIf="productCategories.length === 0" disabled>
-                        No categories available. Please add categories first.
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <div class="form-actions">
-                    <button mat-button type="button" (click)="closeAddProductModal()">Cancel</button>
-                    <button mat-raised-button color="primary" type="submit">Add Product</button>
-                  </div>
-                </form>
 
-                <!-- Add Product Category Form (inline) -->
-                <form *ngIf="showAddCategoryModal" (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm" class="add-category-form">
-                  <h5>Add Product Category</h5>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Name</mat-label><input matInput [(ngModel)]="addCategoryData.name" name="categoryName" required /></mat-form-field>
-                  <mat-form-field appearance="outline" class="full-width"><mat-label>Description</mat-label><input matInput [(ngModel)]="addCategoryData.description" name="categoryDescription" required /></mat-form-field>
-                  <div class="form-actions">
-                    <button mat-button type="button" (click)="closeAddCategoryModal()">Cancel</button>
-                    <button mat-raised-button color="accent" type="submit">Add Category</button>
-                  </div>
-                </form>
 
-              </mat-card-content>
-            </mat-card>
+              </div>
+                  </div>
+                  </div>
+
+                <!-- Store Settings Tab -->
+      <div class="tab-pane fade" 
+           [class.show]="selectedTab === 1" 
+           [class.active]="selectedTab === 1" 
+           role="tabpanel">
+        <div class="row">
+          
+    
+
+          <!-- Notifications -->
+        
+                  </div>
+
+        <!-- Save Button -->
 
           </div>
         </div>
-      </mat-tab>
-
-      <!-- Store Settings Tab -->
-      <mat-tab label="Store Settings">
-        <div class="tab-content">
-          <div class="settings-grid">
-            
-            <!-- Basic Information -->
-            <mat-card class="settings-card">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>store</mat-icon>
-                  Basic Information
-                </mat-card-title>
-                <mat-card-subtitle>Store details and contact information</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <form class="settings-form">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Store Name</mat-label>
-                    <input matInput [(ngModel)]="storeSettings.storeName" name="storeName">
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Description</mat-label>
-                    <textarea matInput [(ngModel)]="storeSettings.description" name="description" rows="3"></textarea>
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Email</mat-label>
-                    <input matInput type="email" [(ngModel)]="storeSettings.email" name="email">
-                    <mat-icon matSuffix>email</mat-icon>
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Phone</mat-label>
-                    <input matInput [(ngModel)]="storeSettings.phone" name="phone">
-                    <mat-icon matSuffix>phone</mat-icon>
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Address</mat-label>
-                    <textarea matInput [(ngModel)]="storeSettings.address" name="address" rows="2"></textarea>
-                    <mat-icon matSuffix>location_on</mat-icon>
-                  </mat-form-field>
-
-                  <div class="form-row">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Currency</mat-label>
-                      <mat-select [(ngModel)]="storeSettings.currency" name="currency">
-                        <mat-option value="USD">USD ($)</mat-option>
-                        <mat-option value="EUR">EUR (€)</mat-option>
-                        <mat-option value="GBP">GBP (£)</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                      <mat-label>Timezone</mat-label>
-                      <mat-select [(ngModel)]="storeSettings.timezone" name="timezone">
-                        <mat-option value="EST">Eastern Time (EST)</mat-option>
-                        <mat-option value="PST">Pacific Time (PST)</mat-option>
-                        <mat-option value="CST">Central Time (CST)</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+      </div>
+    </div>
                   </div>
-                </form>
-              </mat-card-content>
-            </mat-card>
-
-            <!-- Notifications -->
-            <mat-card class="settings-card">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>notifications</mat-icon>
-                  Notifications
-                </mat-card-title>
-                <mat-card-subtitle>Configure notification preferences</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="notification-settings">
-                  <div class="setting-item">
-                    <div class="setting-info">
-                      <h4>Auto Accept Orders</h4>
-                      <p>Automatically accept new orders without manual approval</p>
                     </div>
-                    <mat-slide-toggle [(ngModel)]="storeSettings.autoAcceptOrders"></mat-slide-toggle>
                   </div>
 
-                  <mat-divider></mat-divider>
-
-                  <div class="setting-item">
-                    <div class="setting-info">
-                      <h4>Email Notifications</h4>
-                      <p>Receive order notifications via email</p>
+<!-- Add Product Modal -->
+<div *ngIf="showAddProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered modal-lg" style="z-index: 1060;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-plus-circle me-2"></i>
+          Add New Product
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeAddProductModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="productName" class="form-label">Product Name *</label>
+              <input type="text" class="form-control" id="productName" [(ngModel)]="addProductData.name" name="name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="productBrand" class="form-label">Brand</label>
+              <input type="text" class="form-control" id="productBrand" [(ngModel)]="addProductData.brand" name="brand">
                     </div>
-                    <mat-slide-toggle [(ngModel)]="storeSettings.emailNotifications"></mat-slide-toggle>
                   </div>
 
-                  <mat-divider></mat-divider>
+          <div class="mb-3">
+            <label for="productDescription" class="form-label">Description *</label>
+            <textarea class="form-control" id="productDescription" rows="3" [(ngModel)]="addProductData.description" name="description" required></textarea>
+          </div>
 
-                  <div class="setting-item">
-                    <div class="setting-info">
-                      <h4>SMS Notifications</h4>
-                      <p>Receive order notifications via SMS</p>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="productPrice" class="form-label">Price *</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" class="form-control" id="productPrice" [(ngModel)]="addProductData.price" name="price" required step="0.01">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="productDiscount" class="form-label">Discount</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="productDiscount" [(ngModel)]="addProductData.discount" name="discount" step="0.01">
+                <span class="input-group-text">%</span>
+              </div>
                     </div>
-                    <mat-slide-toggle [(ngModel)]="storeSettings.smsNotifications"></mat-slide-toggle>
+            <div class="col-md-4 mb-3">
+              <label for="productStock" class="form-label">Stock</label>
+              <input type="number" class="form-control" id="productStock" [(ngModel)]="addProductData.stock" name="stock" min="0">
                   </div>
                 </div>
-              </mat-card-content>
-            </mat-card>
 
+          <div class="mb-3">
+            <label for="productImage" class="form-label">Product Image</label>
+            <input type="file" class="form-control" id="productImage" (change)="onProductImageChange($event)" accept="image/*">
           </div>
 
-          <!-- Save Button -->
-          <div class="save-section">
-            <button mat-raised-button color="primary" class="save-btn">
-              <mat-icon>save</mat-icon>
-              Save Changes
-            </button>
+          <div class="mb-3">
+            <label for="productCategory" class="form-label">Product Category *</label>
+            <select class="form-select" id="productCategory" [(ngModel)]="addProductData.selectedCategoryId" name="selectedCategoryId" required>
+              <option value="">Select a category</option>
+              <option *ngFor="let category of productCategories" [value]="category.id">
+                {{ category.name }}
+              </option>
+              <option *ngIf="productCategories.length === 0" disabled>
+                No categories available. Please add categories first.
+              </option>
+            </select>
           </div>
+        </form>
         </div>
-      </mat-tab>
-
-      <!-- Products Tab -->
-      <mat-tab label="Products">
-        <div class="tab-content">
-          <div class="products-header">
-            <h2>Product Management</h2>
-            <button mat-raised-button color="primary" (click)="toggleAddProductModal()">
-              <mat-icon>add</mat-icon>
-              Add New Product
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAddProductModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" form="addProductForm">
+          <i class="bi bi-plus-circle me-2"></i>
+          Add Product
             </button>
-            <button mat-raised-button color="accent" (click)="toggleAddCategoryModal()">
-              <mat-icon>category</mat-icon>
-              Add Product Category
-            </button>
-          </div>
-          <p>Product management interface will be implemented here.</p>
-        </div>
-      </mat-tab>
-
-      <!-- Orders Tab -->
-      <mat-tab label="Orders">
-        <div class="tab-content">
-          <div class="orders-header">
-            <h2>Order Management</h2>
-            <button mat-raised-button color="accent">
-              <mat-icon>refresh</mat-icon>
-              Refresh Orders
-            </button>
-          </div>
-          <p>Order management interface will be implemented here.</p>
-        </div>
-      </mat-tab>
-
-    </mat-tab-group>
-  </mat-card>
+      </div>
+    </div>
   </div>
+  <div class="modal-backdrop fade show" (click)="closeAddProductModal()" style="z-index: 1050;"></div>
+</div>
+
+<!-- Add Category Modal -->
+<div *ngIf="showAddCategoryModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered" style="z-index: 1060;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-tags me-2"></i>
+          Add New Category
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeAddCategoryModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm">
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Category Name *</label>
+            <input type="text" class="form-control" id="categoryName" [(ngModel)]="addCategoryData.name" name="categoryName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="categoryDescription" class="form-label">Description *</label>
+            <textarea class="form-control" id="categoryDescription" rows="3" [(ngModel)]="addCategoryData.description" name="categoryDescription" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAddCategoryModal()">Cancel</button>
+        <button type="submit" class="btn btn-success" form="addCategoryForm">
+          <i class="bi bi-tags me-2"></i>
+          Add Category
+        </button>
+      </div>
+        </div>
+  </div>
+  <div class="modal-backdrop fade show" (click)="closeAddCategoryModal()" style="z-index: 1050;"></div>
 </div>
 
 <!-- Order Details Modal (moved to root for full-page overlay) -->

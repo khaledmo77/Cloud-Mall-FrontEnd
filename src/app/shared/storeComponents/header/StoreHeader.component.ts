@@ -200,6 +200,22 @@ export class StoreHeader implements OnInit, OnDestroy {
     return url;
   }
 
+  getLogoUrl(): string {
+    if (!this.logoUrl) return '';
+    if (this.logoUrl.startsWith('http')) return this.logoUrl;
+    if (this.logoUrl.startsWith('/')) return environment.imageBaseUrl + this.logoUrl;
+    return environment.imageBaseUrl + '/' + this.logoUrl;
+  }
+
+  onLogoError(event: any): void {
+    // Hide the image and show the fallback text logo
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.style.display = 'none';
+    // The fallback div will show automatically due to *ngIf="!logoUrl"
+    this.logoUrl = null;
+    this.cdr.detectChanges();
+  }
+
   onImgError(event: any) {
     event.target.src = 'assets/images/default.jpg';
   }

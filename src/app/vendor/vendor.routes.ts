@@ -18,7 +18,7 @@ export const VENDOR_ROUTES: Routes = [
     canActivate: [roleGuard(['Vendor'])],
     component: VendorLayoutComponent,
     children: [
-      { path: '', component: VendorHomeComponent },
+      { path: '', component: VendorDashboardComponent },
       { path: 'dashboard', component: VendorDashboardComponent },
       { path: 'dashboard/preview', component: PreviewBlockComponent },
       { path: 'create-store', component: CreateStoreComponent },

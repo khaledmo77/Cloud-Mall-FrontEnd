@@ -55,7 +55,7 @@ export class Storehome {
     successMessage: string | null = null;
     selectedProduct: any = null;
     showProductModal = false;
-    
+
     // Category filtering
     selectedCategoryId: number | null = null;
     filteredProducts: any[] = [];
