@@ -3,8 +3,10 @@
     <div class="col-12 col-md-6 mx-auto">
       <div class="card text-center shadow">
         <div class="card-body">
-          <h4 class="card-title"><i class="bi bi-graph-up me-2"></i>Total Revenue</h4>
-          <p class="display-5 fw-bold text-success">$12,345</p>
+          <h4 class="card-title">
+            <i class="bi bi-graph-up me-2"></i>Total Revenue
+          </h4>
+          <p class="display-5 fw-bold text-success">EGP 12,345</p>
         </div>
       </div>
     </div>
@@ -25,7 +27,7 @@
           <td>{{ i + 1 }}</td>
           <td>{{ tx.date }}</td>
           <td>{{ tx.orderId }}</td>
-          <td>${{ tx.amount }}</td>
+          <td>EGP{{ tx.amount }}</td>
           <td><span class="badge bg-success">Paid</span></td>
         </tr>
       </tbody>
