@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { GetProductsApiService } from '../../../core/storeCore/Get-Products-api.service';
 import { AuthService } from '../../../core/auth.service';
 import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
+import { ClientStoreCategoriesApiService } from '../../../core/ClientCore/client-store-categories-api.service';
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../core/ClientCore/client-cart-api.service';
@@ -66,6 +67,7 @@ export class Storehome {
      private clientProductService: ClientProductApiService,
      private auth: AuthService,
      private storeProductCategoryService: StoreProductCategoryApiService,
+    private clientCategoryService: ClientStoreCategoriesApiService,
      private cdr: ChangeDetectorRef,
      private cartService : CartService,
      private snackBar: MatSnackBar
@@ -179,7 +181,42 @@ export class Storehome {
   }
 
   submitAddProduct() {
-    if (!this.storeId) return;
+    console.log('submitAddProduct method called!');
+    console.log('Form data:', this.addProductData);
+    console.log('Store ID:', this.storeId);
+    console.log('Is vendor:', this.isVendor);
+    
+    // Check if form is valid
+    const form = document.querySelector('#addProductForm') as HTMLFormElement;
+    if (form) {
+      console.log('Form validity:', form.checkValidity());
+      console.log('Form elements:', form.elements);
+    }
+    
+    if (!this.storeId) {
+      this.showErrorToast('Store ID not available. Please wait for store information to load.');
+      return;
+    }
+    
+    // Only vendors can add products
+    if (!this.isVendor) {
+      this.showErrorToast('Only store owners can add products.');
+      return;
+    }
+    
+    // Validate required fields
+    console.log('Validating form data...');
+    console.log('Name:', this.addProductData.name);
+    console.log('Description:', this.addProductData.description);
+    console.log('Price:', this.addProductData.price);
+    
+    if (!this.addProductData.name || !this.addProductData.description || !this.addProductData.price) {
+      console.log('Validation failed - missing required fields');
+      this.showErrorToast('Please fill in all required fields (Name, Description, Price).');
+      return;
+    }
+    
+    console.log('Validation passed - proceeding with API call');
     
     this.isAddingProduct = true; // Show add product loader
     
@@ -200,15 +237,33 @@ export class Storehome {
     }
     
     console.log('Adding product for store:', this.storeId);
+    console.log('Is vendor:', this.isVendor);
+    console.log('User role:', this.auth.getUserRole());
+    console.log('Token exists:', !!this.auth.getToken());
     console.log('FormData entries:');
     for (let [key, value] of formData.entries()) {
       console.log(key + ':', value);
     }
     
     this.productService.addProduct(formData, this.storeId).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Product added successfully:', response);
         this.isAddingProduct = false; // Hide add product loader
         this.showSuccessToast('Product added successfully!');
+        
+        // Reset form data
+        this.addProductData = {
+          name: '',
+          description: '',
+          brand: '',
+          sku: '',
+          price: null,
+          discount: null,
+          stock: null,
+          image: null,
+          productCategoryId: null
+        };
+        
         setTimeout(() => {
           this.showAddProductModal = false;
         }, 2000);
@@ -217,6 +272,10 @@ export class Storehome {
       error: (err) => {
         this.isAddingProduct = false; // Hide add product loader
         console.error('Error adding product:', err);
+        console.error('Error status:', err.status);
+        console.error('Error message:', err.message);
+        console.error('Error body:', err.error);
+        
         let errorMessage = 'Failed to add product';
         
         if (err.status === 400) {
@@ -237,24 +296,77 @@ export class Storehome {
   }
 
   submitAddCategory() {
-    if (!this.storeId) return;
+    console.log('submitAddCategory method called!');
+    console.log('Category form data:', this.addCategoryData);
+    console.log('Store ID:', this.storeId);
+    console.log('Is vendor:', this.isVendor);
     
+    // Check if form is valid
+    const form = document.querySelector('#addCategoryForm') as HTMLFormElement;
+    if (form) {
+      console.log('Category form validity:', form.checkValidity());
+      console.log('Category form elements:', form.elements);
+    }
+    
+    if (!this.storeId) {
+      this.showErrorToast('Store ID not available. Please wait for store information to load.');
+      console.warn('No storeId, aborting');
+      return;
+    }
+    // Only vendors can add categories
+    if (!this.isVendor) {
+      this.showErrorToast('Only store owners can add categories.');
+      console.warn('Not a vendor, aborting');
+      return;
+    }
+    // Validate required fields
+    console.log('Validating category form data...');
+    console.log('Category Name:', this.addCategoryData.name);
+    console.log('Category Description:', this.addCategoryData.description);
+    
+    if (!this.addCategoryData.name || !this.addCategoryData.description) {
+      console.log('Category validation failed - missing required fields');
+      this.showErrorToast('Please fill in all required fields (Name, Description).');
+      console.warn('Missing required fields', this.addCategoryData);
+      return;
+    }
+    
+    console.log('Category validation passed - proceeding with API call');
     this.isAddingCategory = true; // Show add category loader
-    
+    console.log('Calling addProductCategory API', this.storeId, this.addCategoryData);
     this.storeProductCategoryService.addProductCategory(this.storeId, {
       name: this.addCategoryData.name,
       description: this.addCategoryData.description
     }).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('API success:', response);
         this.isAddingCategory = false; // Hide add category loader
         this.showSuccessToast('Category added successfully!');
+        // Reset form data
+        this.addCategoryData = {
+          name: '',
+          description: ''
+        };
         setTimeout(() => {
           this.showAddCategoryModal = false;
         }, 2000);
       },
       error: (err) => {
         this.isAddingCategory = false; // Hide add category loader
-        this.showErrorToast('Failed to add category: ' + err.message);
+        console.error('API error:', err);
+        let errorMessage = 'Failed to add category';
+        if (err.status === 400) {
+          errorMessage = 'Invalid category data. Please check all required fields.';
+        } else if (err.status === 401) {
+          errorMessage = 'Unauthorized. Please log in again.';
+        } else if (err.status === 403) {
+          errorMessage = 'Access denied. You may not have permission to add categories to this store.';
+        } else if (err.status === 0) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        }
+        this.showErrorToast(errorMessage);
       }
     });
   }
@@ -413,5 +525,14 @@ export class Storehome {
   // Get products for display (either filtered or all)
   getDisplayProducts(): any[] {
     return this.selectedCategoryId !== null ? this.filteredProducts : this.products;
+  }
+
+  testButtonClick() {
+    console.log('Button clicked!');
+    console.log('Current form data:', this.addProductData);
+    console.log('Current category data:', this.addCategoryData);
+    console.log('Store ID:', this.storeId);
+    console.log('Is vendor:', this.isVendor);
+    alert('Button clicked!');
   }
 }

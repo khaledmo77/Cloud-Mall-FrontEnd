@@ -402,6 +402,10 @@ export class StoreSettingsComponent implements OnInit {
   }
 
   submitAddProduct() {
+    console.log('StoreSettings: submitAddProduct method called!');
+    console.log('Store ID:', this.storeId);
+    console.log('Product data:', this.addProductData);
+    
     if (!this.storeId) {
       this.showErrorToast('Store ID not available. Please wait for store information to load.');
       return;
@@ -465,6 +469,10 @@ export class StoreSettingsComponent implements OnInit {
   }
 
   submitAddCategory() {
+    console.log('StoreSettings: submitAddCategory method called!');
+    console.log('Store ID:', this.storeId);
+    console.log('Category data:', this.addCategoryData);
+    
     if (!this.storeId) {
       this.showErrorToast('Store ID not available. Please wait for store information to load.');
       return;

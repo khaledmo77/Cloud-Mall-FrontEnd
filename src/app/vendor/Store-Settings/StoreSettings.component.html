@@ -262,7 +262,7 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeAddProductModal()"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm">
+        <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm" id="addProductForm">
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="productName" class="form-label">Product Name *</label>
@@ -271,8 +271,18 @@
             <div class="col-md-6 mb-3">
               <label for="productBrand" class="form-label">Brand</label>
               <input type="text" class="form-control" id="productBrand" [(ngModel)]="addProductData.brand" name="brand">
-                    </div>
-                  </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="productSku" class="form-label">SKU</label>
+              <input type="text" class="form-control" id="productSku" [(ngModel)]="addProductData.sku" name="sku">
+            </div>
+            <div class="col-md-6 mb-3">
+              <!-- Empty column for spacing -->
+            </div>
+          </div>
 
           <div class="mb-3">
             <label for="productDescription" class="form-label">Description *</label>
@@ -343,7 +353,7 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeAddCategoryModal()"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm">
+        <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm" id="addCategoryForm">
           <div class="mb-3">
             <label for="categoryName" class="form-label">Category Name *</label>
             <input type="text" class="form-control" id="categoryName" [(ngModel)]="addCategoryData.name" name="categoryName" required>

@@ -14,7 +14,7 @@ import { navigationComponent } from '../../shared/navigation/navigation.componen
 
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-client-layout',
   imports: [
     RouterOutlet,
     navigationComponent,

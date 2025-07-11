@@ -11,7 +11,20 @@ export class StoreProductCategoryApiService {
   constructor(private http: HttpClient) {}
 
   addProductCategory(storeId: number, data: { name: string; description: string }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${storeId}`, data);
+    const token = localStorage.getItem('token');
+    const headers: any = {
+      'Content-Type': 'application/json'
+    };
+    
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    console.log('Adding category for store:', storeId);
+    console.log('Category data:', data);
+    console.log('Token exists:', !!token);
+    
+    return this.http.post(`${this.baseUrl}/${storeId}`, data, { headers });
   }
 
   getProductCategories(storeId: number): Observable<any> {

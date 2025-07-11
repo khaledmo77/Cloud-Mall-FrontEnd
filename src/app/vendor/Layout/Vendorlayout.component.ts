@@ -12,7 +12,7 @@ import { preloaderComponent } from '../../shared/preloader/preloader.component';
 import { navigationComponent } from '../../shared/navigation/navigation.component';
 
 @Component({
-  selector: 'app-layout',
+  selector: 'app-vendor-layout',
   imports: [
     RouterOutlet,
     preloaderComponent,

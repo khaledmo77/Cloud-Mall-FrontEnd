@@ -17,7 +17,21 @@ export class ProductApiService {
   ) {}
 
   addProduct(formData: FormData, storeId: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${storeId}`, formData);
+    const token = this.authService.getToken();
+    const headers: any = {};
+    
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    console.log('Adding product for store:', storeId);
+    console.log('Token exists:', !!token);
+    console.log('FormData entries:');
+    for (let [key, value] of formData.entries()) {
+      console.log(key + ':', value);
+    }
+    
+    return this.http.post(`${this.baseUrl}/${storeId}`, formData, { headers });
   }
 
   getProductsByStore(storeId: number): Observable<any[]> {
