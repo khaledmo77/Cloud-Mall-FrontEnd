@@ -63,7 +63,8 @@ export class DisabledStoresComponent implements OnInit {
     this.storesApi.getAllStores(1, loadPageSize, this.selectedCategory || undefined)
       .subscribe({
         next: (response: StoresResponse) => {
-          this.stores = response.allStores.filter(store => !store.isActive && !store.isDeleted);
+          // Show all stores (both active and inactive) that are not deleted
+          this.stores = response.allStores.filter(store => !store.isDeleted);
           this.filteredStores = [...this.stores];
           this.totalCount = this.stores.length;
           this.totalPages = Math.ceil(this.totalCount / this.pageSize);
@@ -118,7 +119,7 @@ export class DisabledStoresComponent implements OnInit {
   }
 
   getStatusText(store: Store): string {
-    return 'Disabled';
+    return 'Inactive';
   }
 
   toggleCategoryFilter() {

@@ -1,7 +1,7 @@
 <div class="container py-4">
   <!-- Header with search and filters -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-slash-circle me-2"></i>Disabled Stores</h2>
+    <h2><i class="bi bi-slash-circle me-2"></i>Inactive Stores</h2>
     <div class="d-flex gap-3">
       <!-- Category Filter -->
       <div class="dropdown">
@@ -24,7 +24,7 @@
       <!-- Search -->
       <input type="text" 
              class="form-control" 
-             placeholder="Search disabled stores..." 
+             placeholder="Search inactive stores..." 
              [(ngModel)]="searchTerm"
              (ngModelChange)="onSearchChange()"
              style="width: 250px;">
@@ -41,7 +41,7 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <p class="mt-2 text-muted">Loading disabled stores...</p>
+    <p class="mt-2 text-muted">Loading inactive stores...</p>
   </div>
 
   <!-- Stores Table -->
@@ -96,18 +96,18 @@
     <!-- No Results Message -->
     <div *ngIf="filteredStores.length === 0 && !loading" class="text-center py-5">
       <i class="bi bi-slash-circle display-1 text-muted"></i>
-      <h4 class="mt-3 text-muted">No disabled stores found</h4>
-      <p class="text-muted">There are no disabled stores matching your criteria.</p>
+      <h4 class="mt-3 text-muted">No inactive stores found</h4>
+      <p class="text-muted">There are no inactive stores matching your criteria.</p>
     </div>
   </div>
 
   <!-- Pagination -->
   <div *ngIf="totalPages > 1 && !loading" class="d-flex justify-content-between align-items-center mt-4">
     <div class="text-muted">
-      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} disabled stores
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} inactive stores
     </div>
     
-    <nav aria-label="Disabled stores pagination">
+    <nav aria-label="Inactive stores pagination">
       <ul class="pagination pagination-sm mb-0">
         <!-- Previous Page -->
         <li class="page-item" [class.disabled]="currentPage === 1">
