@@ -13,6 +13,7 @@ import { environment } from '../../../../environments/environment';
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { StoreProductSearchApiService, Product } from '../../../core/storeCore/store-product-search-api.service';
 import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
+import { ClientStoreCategoriesApiService } from '../../../core/ClientCore/client-store-categories-api.service';
 
 @Component({
   selector: 'app-StoreHeader',
@@ -76,7 +77,8 @@ export class StoreHeader implements OnInit, OnDestroy {
     private orderEventsService: OrderEventsService,
     private storeInfoService: StoreInfoService,
     private searchService: StoreProductSearchApiService,
-    private categoryService: StoreProductCategoryApiService
+    private categoryService: StoreProductCategoryApiService,
+    private clientCategoryService: ClientStoreCategoriesApiService
   ) {}
 
   ngOnInit(): void {
@@ -596,7 +598,13 @@ export class StoreHeader implements OnInit, OnDestroy {
   // Category methods
   loadStoreCategories(storeId: number) {
     this.isLoadingCategories = true;
-    this.categoryService.getProductCategories(storeId).subscribe({
+    
+    // Use different service based on user role
+    const categoryObservable = this.isVendor 
+      ? this.categoryService.getProductCategories(storeId)
+      : this.clientCategoryService.getStoreProductCategories(storeId);
+    
+    categoryObservable.subscribe({
       next: (categories: any) => {
         // Handle different response formats
         if (Array.isArray(categories)) {
