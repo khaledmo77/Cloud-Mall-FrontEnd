@@ -392,10 +392,10 @@
 </div>
 
 <!-- Action buttons for vendor role only -->
-<div *ngIf="isVendor" class="mb-4 d-flex gap-2">
+<!-- <div *ngIf="isVendor" class="mb-4 d-flex gap-2">
   <button class="btn btn-success" (click)="showAddProductModal = true">Add Product</button>
   <button class="btn btn-primary" (click)="showAddCategoryModal = true">Add Product Category</button>
-</div>
+</div> -->
 
 <!-- Add Product Modal -->
 <div
@@ -414,7 +414,11 @@
           (click)="showAddProductModal = false"
         ></button>
       </div>
-      <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm" id="addProductForm">
+      <form
+        (ngSubmit)="submitAddProduct()"
+        #addProductForm="ngForm"
+        id="addProductForm"
+      >
         <div class="modal-body">
           <!-- Add Product Loader -->
           <div *ngIf="isAddingProduct" class="text-center py-3">
@@ -428,13 +432,37 @@
           <div *ngIf="!isAddingProduct">
             <div class="mb-3">
               <label>Name</label>
-              <input type="text" class="form-control" [(ngModel)]="addProductData.name" name="name" required #nameField="ngModel" />
-              <div *ngIf="nameField.invalid && nameField.touched" class="text-danger">Name is required</div>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addProductData.name"
+                name="name"
+                required
+                #nameField="ngModel"
+              />
+              <div
+                *ngIf="nameField.invalid && nameField.touched"
+                class="text-danger"
+              >
+                Name is required
+              </div>
             </div>
             <div class="mb-3">
               <label>Description</label>
-              <input type="text" class="form-control" [(ngModel)]="addProductData.description" name="description" required #descField="ngModel" />
-              <div *ngIf="descField.invalid && descField.touched" class="text-danger">Description is required</div>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addProductData.description"
+                name="description"
+                required
+                #descField="ngModel"
+              />
+              <div
+                *ngIf="descField.invalid && descField.touched"
+                class="text-danger"
+              >
+                Description is required
+              </div>
             </div>
             <div class="mb-3">
               <label>Brand</label>
@@ -456,8 +484,20 @@
             </div>
             <div class="mb-3">
               <label>Price</label>
-              <input type="number" class="form-control" [(ngModel)]="addProductData.price" name="price" required #priceField="ngModel" />
-              <div *ngIf="priceField.invalid && priceField.touched" class="text-danger">Price is required</div>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="addProductData.price"
+                name="price"
+                required
+                #priceField="ngModel"
+              />
+              <div
+                *ngIf="priceField.invalid && priceField.touched"
+                class="text-danger"
+              >
+                Price is required
+              </div>
             </div>
             <div class="mb-3">
               <label>Discount</label>
@@ -497,8 +537,20 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="showAddProductModal = false" [disabled]="isAddingProduct">Cancel</button>
-          <button type="submit" class="btn btn-success" [disabled]="isAddingProduct" (click)="testButtonClick()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="showAddProductModal = false"
+            [disabled]="isAddingProduct"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="isAddingProduct"
+            (click)="testButtonClick()"
+          >
             <span *ngIf="!isAddingProduct">Add Product</span>
             <span *ngIf="isAddingProduct">Adding...</span>
           </button>
@@ -525,7 +577,11 @@
           (click)="showAddCategoryModal = false"
         ></button>
       </div>
-      <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm" id="addCategoryForm">
+      <form
+        (ngSubmit)="submitAddCategory()"
+        #addCategoryForm="ngForm"
+        id="addCategoryForm"
+      >
         <div class="modal-body">
           <!-- Add Category Loader -->
           <div *ngIf="isAddingCategory" class="text-center py-3">
@@ -539,19 +595,55 @@
           <div *ngIf="!isAddingCategory">
             <div class="mb-3">
               <label>Name</label>
-              <input type="text" class="form-control" [(ngModel)]="addCategoryData.name" name="categoryName" required #catNameField="ngModel" />
-              <div *ngIf="catNameField.invalid && catNameField.touched" class="text-danger">Category name is required</div>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addCategoryData.name"
+                name="categoryName"
+                required
+                #catNameField="ngModel"
+              />
+              <div
+                *ngIf="catNameField.invalid && catNameField.touched"
+                class="text-danger"
+              >
+                Category name is required
+              </div>
             </div>
             <div class="mb-3">
               <label>Description</label>
-              <input type="text" class="form-control" [(ngModel)]="addCategoryData.description" name="categoryDescription" required #catDescField="ngModel" />
-              <div *ngIf="catDescField.invalid && catDescField.touched" class="text-danger">Category description is required</div>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addCategoryData.description"
+                name="categoryDescription"
+                required
+                #catDescField="ngModel"
+              />
+              <div
+                *ngIf="catDescField.invalid && catDescField.touched"
+                class="text-danger"
+              >
+                Category description is required
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="showAddCategoryModal = false" [disabled]="isAddingCategory">Cancel</button>
-          <button type="submit" class="btn btn-primary" [disabled]="isAddingCategory" (click)="testButtonClick()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="showAddCategoryModal = false"
+            [disabled]="isAddingCategory"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isAddingCategory"
+            (click)="testButtonClick()"
+          >
             <span *ngIf="!isAddingCategory">Add Category</span>
             <span *ngIf="isAddingCategory">Adding...</span>
           </button>

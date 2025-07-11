@@ -144,36 +144,25 @@
             <span class="badge bg-info">{{ store.categoryName }}</span>
           </td>
           <td>
-<<<<<<< HEAD
-            <span [class]="getStatusBadgeClass(store)">
-              {{ getStatusText(store) }}
-            </span>
-            <button
-              class="btn d-flex btn-sm ms-2"
-              [ngClass]="
-                store.isActive ? 'btn-outline-danger' : 'btn-outline-success'
-              "
-              (click)="toggleStoreStatus(store)"
-              [disabled]="statusLoadingId === store.id"
-            >
-              <i
-                class="bi"
-                [ngClass]="store.isActive ? 'bi-toggle-off' : 'bi-toggle-on'"
-              ></i>
-              {{ store.isActive ? "Disable" : "Enable" }}
-            </button>
-=======
             <div class="status-column">
               <span [class]="getStatusBadgeClass(store)">
                 {{ getStatusText(store) }}
               </span>
-              <button class="btn btn-sm" [ngClass]="store.isActive ? 'btn-outline-danger' : 'btn-outline-success'"
-                      (click)="toggleStoreStatus(store)" [disabled]="statusLoadingId === store.id">
-                <i class="bi" [ngClass]="store.isActive ? 'bi-toggle-off' : 'bi-toggle-on'"></i>
-                {{ store.isActive ? 'Disable' : 'Enable' }}
+              <button
+                class="btn btn-sm"
+                [ngClass]="
+                  store.isActive ? 'btn-outline-danger' : 'btn-outline-success'
+                "
+                (click)="toggleStoreStatus(store)"
+                [disabled]="statusLoadingId === store.id"
+              >
+                <i
+                  class="bi"
+                  [ngClass]="store.isActive ? 'bi-toggle-off' : 'bi-toggle-on'"
+                ></i>
+                {{ store.isActive ? "Disable" : "Enable" }}
               </button>
             </div>
->>>>>>> 5c089ec005b53de59322475bd521d5eda28dcebc
           </td>
           <td>
             <small class="text-muted">
