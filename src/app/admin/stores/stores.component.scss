@@ -176,6 +176,100 @@ h2 {
   }
 }
 
+// Table responsive fixes
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 8px;
+  
+  .table {
+    min-width: 900px; // Ensure minimum width to prevent column stacking
+    margin-bottom: 0;
+    
+    th, td {
+      white-space: nowrap; // Prevent text wrapping
+      min-width: 120px; // Minimum column width
+      vertical-align: middle;
+    }
+    
+    // Specific column widths
+    th:nth-child(1), td:nth-child(1) { // #
+      width: 50px;
+      min-width: 50px;
+      text-align: center;
+    }
+    
+    th:nth-child(2), td:nth-child(2) { // Store
+      width: 250px;
+      min-width: 250px;
+    }
+    
+    th:nth-child(3), td:nth-child(3) { // Owner
+      width: 150px;
+      min-width: 150px;
+    }
+    
+    th:nth-child(4), td:nth-child(4) { // Category
+      width: 120px;
+      min-width: 120px;
+    }
+    
+    th:nth-child(5), td:nth-child(5) { // Status
+      width: 200px;
+      min-width: 200px;
+      
+      .badge {
+        display: inline-block;
+        margin-right: 8px;
+      }
+      
+      .btn {
+        display: inline-block;
+        white-space: nowrap;
+      }
+    }
+    
+    th:nth-child(6), td:nth-child(6) { // Created
+      width: 120px;
+      min-width: 120px;
+    }
+    
+    th:nth-child(7), td:nth-child(7) { // Actions
+      width: 150px;
+      min-width: 150px;
+    }
+  }
+}
+
+// Additional responsive improvements
+@media (max-width: 1200px) {
+  .table-responsive .table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 992px) {
+  .table-responsive .table {
+    min-width: 700px;
+  }
+}
+
+// Status column specific styles
+.status-column {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  
+  .badge {
+    flex-shrink: 0;
+  }
+  
+  .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
 // Error and loading states
 .alert {
   border-radius: 8px;
