@@ -1,7 +1,26 @@
 <!-- Main Page Loader - Shows when first accessing the store -->
-<div *ngIf="isPageLoading" class="page-loader-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+<div
+  *ngIf="isPageLoading"
+  class="page-loader-overlay"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  "
+>
   <div class="page-loader-content text-center">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <div
+      class="spinner-border text-primary"
+      role="status"
+      style="width: 3rem; height: 3rem"
+    >
       <span class="visually-hidden">Loading...</span>
     </div>
     <h4 class="mt-3 text-primary">Loading Store...</h4>
@@ -10,31 +29,57 @@
 </div>
 
 <!-- Success Alert -->
-<div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 2000; min-width: 300px; max-width: 90vw;">
+<div
+  *ngIf="successMessage"
+  class="alert alert-success alert-dismissible fade show"
+  role="alert"
+  style="
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    min-width: 300px;
+    max-width: 90vw;
+  "
+>
   {{ successMessage }}
-  <button type="button" class="btn-close" aria-label="Close" (click)="successMessage = null"></button>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="successMessage = null"
+  ></button>
 </div>
 
 <!-- Empty Store Message for Vendors -->
-<div *ngIf="isVendor && !isPageLoading && !isLoading && products.length === 0" class="empty-store-message">
+<div
+  *ngIf="isVendor && !isPageLoading && !isLoading && products.length === 0"
+  class="empty-store-message"
+>
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-10 col-12 text-center">
         <div class="empty-store-content">
           <div class="empty-store-icon">
-            <i class="lni lni-package" style="font-size: 4rem; color: #f7941d;"></i>
+            <i
+              class="lni lni-package"
+              style="font-size: 4rem; color: #f7941d"
+            ></i>
           </div>
           <h2 class="empty-store-title">Welcome to Your Store!</h2>
           <p class="empty-store-description">
-            Your store is ready, but it looks a bit empty. Start by adding your first product to showcase your amazing items to customers.
+            Your store is ready, but it looks a bit empty. Start by adding your
+            first product to showcase your amazing items to customers.
           </p>
           <div class="empty-store-actions">
             <a routerLink="./storesettings" class="btn btn-primary btn-lg">
               <i class="lni lni-cog"></i> Go to Store Settings
             </a>
             <p class="mt-3 text-muted">
-              <i class="lni lni-information"></i> 
-              In Store Settings, you can add products, manage categories, and customize your store.
+              <i class="lni lni-information"></i>
+              In Store Settings, you can add products, manage categories, and
+              customize your store.
             </p>
           </div>
         </div>
@@ -45,197 +90,305 @@
 
 <!-- Store Content - Only show when there are products or user is not vendor -->
 <div *ngIf="!isVendor || products.length > 0">
-<!-- Start Hero Area -->
-  <section class="hero-area" *ngIf="products && products.length > 0 && !isLoading">
+  <!-- Start Hero Area -->
+  <section
+    class="hero-area"
+    *ngIf="products && products.length > 0 && !isLoading"
+  >
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-12 custom-padding-right">
-                <div class="slider-head">
-                      <app-hero-slider
-                        [products]="products"
-                        [isVendor]="isVendor"
-                        [getProductImageUrl]="getProductImageUrl.bind(this)"
-                        [openProductModal]="openProductModal.bind(this)">
-                      </app-hero-slider>
-                </div>
-            </div>
-            <div class="col-lg-4 col-12">
-                <div class="row">
-                      <div class="col-lg-12 col-md-6 col-12 md-custom-padding" *ngIf="products && products.length > 0">
-                        <!-- Start Small Banner -->
-                        <div class="hero-small-banner"
-                              [style.background-image]="'url(' + getProductImageUrl(products[0].imagesURL) + ')'">
-                              <div class="content" style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
-                                  <h2 style="font-size: 2.2rem; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.4);">
-                                      <span style="display: block; font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 0.25rem;">{{ products[0].brand || products[0].categoryName }}</span>
-                                      {{ products[0].name }}
-                                </h2>
-                                  <h3 style="font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 1rem;">${{ products[0].price }}</h3>
-                            </div>
-                        </div>
-                        <!-- End Small Banner -->
-                    </div>
-                      <div class="col-lg-12 col-md-6 col-12" *ngIf="products && products.length > 1">
-                        <!-- Start Small Banner -->
-                          <div class="hero-small-banner style2"
-                              [style.background-image]="'url(' + getProductImageUrl(products[1].imagesURL) + ')'">
-                            <div class="content">
-                                  <h2>{{ products[1].name }}</h2>
-                                  <p>{{ products[1].description }}</p>
-                                  <div class="button" *ngIf="!isVendor">
-                                      <a class="btn" (click)="openProductModal(products[1].id)">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                          <!-- End Small Banner -->
-                    </div>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-lg-8 col-12 custom-padding-right">
+          <div class="slider-head">
+            <app-hero-slider
+              [products]="products"
+              [isVendor]="isVendor"
+              [getProductImageUrl]="getProductImageUrl.bind(this)"
+              [openProductModal]="openProductModal.bind(this)"
+            >
+            </app-hero-slider>
+          </div>
         </div>
+        <div class="col-lg-4 col-12">
+          <div class="row">
+            <div
+              class="col-lg-12 col-md-6 col-12 md-custom-padding"
+              *ngIf="products && products.length > 0"
+            >
+              <!-- Start Small Banner -->
+              <div
+                class="hero-small-banner"
+                [style.background-image]="
+                  'url(' + getProductImageUrl(products[0].imagesURL) + ')'
+                "
+              >
+                <div
+                  class="content"
+                  style="color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4)"
+                >
+                  <h2
+                    style="
+                      font-size: 2.2rem;
+                      font-weight: 700;
+                      color: #fff;
+                      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+                    "
+                  >
+                    <span
+                      style="
+                        display: block;
+                        font-size: 1.1rem;
+                        font-weight: 400;
+                        color: #fff;
+                        margin-bottom: 0.25rem;
+                      "
+                      >{{ products[0].brand || products[0].categoryName }}</span
+                    >
+                    {{ products[0].name }}
+                  </h2>
+                  <h3
+                    style="
+                      font-size: 1.5rem;
+                      font-weight: 600;
+                      color: #fff;
+                      margin-bottom: 1rem;
+                    "
+                  >
+                    ${{ products[0].price }}
+                  </h3>
+                </div>
+              </div>
+              <!-- End Small Banner -->
+            </div>
+            <div
+              class="col-lg-12 col-md-6 col-12"
+              *ngIf="products && products.length > 1"
+            >
+              <!-- Start Small Banner -->
+              <div
+                class="hero-small-banner style2"
+                [style.background-image]="
+                  'url(' + getProductImageUrl(products[1].imagesURL) + ')'
+                "
+              >
+                <div class="content">
+                  <h2>{{ products[1].name }}</h2>
+                  <p>{{ products[1].description }}</p>
+                  <div class="button" *ngIf="!isVendor">
+                    <a class="btn" (click)="openProductModal(products[1].id)"
+                      >View Details</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <!-- End Small Banner -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
-<!-- End Hero Area -->
+  </section>
+  <!-- End Hero Area -->
 
-<!-- Start Trending Product Area -->
-<section class="trending-product section" style="margin-top: 12px;">
+  <!-- Start Trending Product Area -->
+  <section class="trending-product section" style="margin-top: 12px">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-title">
-                    <h2>Trending Product</h2>
-                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                        suffered alteration in some form.</p>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="section-title">
+            <h2>Trending Product</h2>
+            <p>
+              There are many variations of passages of Lorem Ipsum available,
+              but the majority have suffered alteration in some form.
+            </p>
+          </div>
         </div>
-        <div class="row">
-            <!-- Loading State -->
-            <div *ngIf="isLoading" class="col-12 text-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-2">Loading products...</p>
-            </div>
-
-            <!-- Error State -->
-            <div *ngIf="!isLoading && errorMessage" class="col-12">
-                <div class="alert alert-warning" role="alert">
-                    <h4 class="alert-heading">Unable to load products</h4>
-                    <p>{{ errorMessage }}</p>
-                    <hr>
-                    <button class="btn btn-primary" (click)="loadProducts()">Try Again</button>
-                </div>
-            </div>
-
-            <!-- Products and Empty State -->
-            <ng-container *ngIf="!isLoading && !errorMessage">
-                <div *ngFor="let product of getDisplayProducts()" class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Product -->
-                    <div class="single-product">
-                        <div class="product-image" (click)="openProductModal(product.id)" style="cursor:pointer;">
-                            <img [src]="getProductImageUrl(product.imagesURL)" alt="Product image" 
-                                 (load)="onImageLoad(product.imagesURL)" 
-                                 (error)="onImageError(product.imagesURL)" />
-                            <div class="button" *ngIf="!isVendor">
-                                <button (click)="addToCart(product); $event.stopPropagation();" class="btn">
-                                    <i class="lni lni-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <span class="category">{{ product.categoryName }}</span>
-                            <h4 class="title">
-                                <a (click)="openProductModal(product.id)" style="cursor:pointer;">{{ product.name }}</a>
-                            </h4>
-                            <ul class="review">
-                                <li *ngFor="let star of [1,2,3,4,5]; let i = index">
-                                    <i class="lni" [ngClass]="{
-                                        'lni-star-filled': i < product.averageRate,
-                                        'lni-star': i >= product.averageRate
-                                    }"></i>
-                                </li>
-                                <li><span>{{ product.averageRate }} Review(s)</span></li>
-                            </ul>
-                            <div class="price">
-                                <span>${{ product.price }}</span>
-                                <span *ngIf="product.discount" class="discount-price">${{ product.discount }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Single Product -->
-                </div>
-                <!-- No Products Found -->
-                <div *ngIf="getDisplayProducts().length === 0 && products.length > 0" class="col-12 text-center">
-                    <div class="alert alert-info" role="alert">
-                        <h4 class="alert-heading">No products in this category</h4>
-                        <p>No products found for the selected category. Try selecting a different category or view all products.</p>
-                    </div>
-                </div>
-                <div *ngIf="products.length === 0" class="col-12 text-center">
-                    <div class="alert alert-info" role="alert">
-                        <h4 class="alert-heading">No products found</h4>
-                        <p>This store doesn't have any products available at the moment.</p>
-                    </div>
-                </div>
-            </ng-container>
+      </div>
+      <div class="row">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="col-12 text-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading products...</p>
         </div>
+
+        <!-- Error State -->
+        <div *ngIf="!isLoading && errorMessage" class="col-12">
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Unable to load products</h4>
+            <p>{{ errorMessage }}</p>
+            <hr />
+            <button class="btn btn-primary" (click)="loadProducts()">
+              Try Again
+            </button>
+          </div>
+        </div>
+
+        <!-- Products and Empty State -->
+        <ng-container *ngIf="!isLoading && !errorMessage">
+          <div
+            *ngFor="let product of getDisplayProducts()"
+            class="col-lg-3 col-md-6 col-12"
+          >
+            <!-- Start Single Product -->
+            <div class="single-product">
+              <div
+                class="product-image"
+                (click)="openProductModal(product.id)"
+                style="cursor: pointer"
+              >
+                <img
+                  [src]="getProductImageUrl(product.imagesURL)"
+                  alt="Product image"
+                  (load)="onImageLoad(product.imagesURL)"
+                  (error)="onImageError(product.imagesURL)"
+                />
+                <div class="button" *ngIf="!isVendor">
+                  <button
+                    (click)="addToCart(product); $event.stopPropagation()"
+                    class="btn"
+                  >
+                    <i class="lni lni-cart"></i> Add to Cart
+                  </button>
+                </div>
+              </div>
+              <div class="product-info">
+                <span class="category">{{ product.categoryName }}</span>
+                <h4 class="title">
+                  <a
+                    (click)="openProductModal(product.id)"
+                    style="cursor: pointer"
+                    >{{ product.name }}</a
+                  >
+                </h4>
+                <ul class="review">
+                  <li *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                    <i
+                      class="lni"
+                      [ngClass]="{
+                        'lni-star-filled': i < product.averageRate,
+                        'lni-star': i >= product.averageRate
+                      }"
+                    ></i>
+                  </li>
+                  <li>
+                    <span>{{ product.averageRate }} Review(s)</span>
+                  </li>
+                </ul>
+                <div class="price">
+                  <span>EGP{{ product.price }}</span>
+                  <span *ngIf="product.discount" class="discount-price"
+                    >EGP{{ product.discount }}</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- End Single Product -->
+          </div>
+          <!-- No Products Found -->
+          <div
+            *ngIf="getDisplayProducts().length === 0 && products.length > 0"
+            class="col-12 text-center"
+          >
+            <div class="alert alert-info" role="alert">
+              <h4 class="alert-heading">No products in this category</h4>
+              <p>
+                No products found for the selected category. Try selecting a
+                different category or view all products.
+              </p>
+            </div>
+          </div>
+          <div *ngIf="products.length === 0" class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+              <h4 class="alert-heading">No products found</h4>
+              <p>
+                This store doesn't have any products available at the moment.
+              </p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
     </div>
-</section> 
-<!-- End Trending Product Area -->
+  </section>
+  <!-- End Trending Product Area -->
 
-<!-- Start Call Action Area -->
+  <!-- Start Call Action Area -->
   <section class="call-action section" *ngIf="isVendor">
     <div class="container">
-        <div class="row ">
-            <div class="col-lg-8 offset-lg-2 col-12">
-                <div class="inner">
-                    <div class="content">
-                        <h2 class="wow fadeInUp" data-wow-delay=".4s">Currently You are using free<br>
-                              Lite version of QuickCrow</h2>
-                          <p class="wow fadeInUp" data-wow-delay=".6s">Please, purchase full version of the store
-                              to get all features,<br> features and commercial license.</p>
-                        <div class="button wow fadeInUp" data-wow-delay=".8s">
-                            <a href="javascript:void(0)" class="btn">Purchase Now</a>
-                        </div>
-                    </div>
-                </div>
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2 col-12">
+          <div class="inner">
+            <div class="content">
+              <h2 class="wow fadeInUp" data-wow-delay=".4s">
+                Currently You are using free<br />
+                Lite version of QuickCrow
+              </h2>
+              <p class="wow fadeInUp" data-wow-delay=".6s">
+                Please, purchase full version of the store to get all
+                features,<br />
+                features and commercial license.
+              </p>
+              <div class="button wow fadeInUp" data-wow-delay=".8s">
+                <a href="javascript:void(0)" class="btn">Purchase Now</a>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</section>
-<!-- End Call Action Area -->
+  </section>
+  <!-- End Call Action Area -->
 
-<!-- Start Banner Area -->
+  <!-- Start Banner Area -->
   <section class="banner section" *ngIf="products && products.length >= 2">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-12">
-                  <div class="single-banner" [style.background-image]="'url(' + getProductImageUrl(products[0].imagesURL) + ')'">
-                    <div class="content">
-                          <h2>{{ products[0].name }}</h2>
-                          <p>{{ products[0].description }}</p>
-                        <div class="button">
-                              <a (click)="openProductModal(products[0].id)" class="btn" style="cursor: pointer;">View Details</a>
-                        </div>
-                    </div>
-                </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-12">
+          <div
+            class="single-banner"
+            [style.background-image]="
+              'url(' + getProductImageUrl(products[0].imagesURL) + ')'
+            "
+          >
+            <div class="content">
+              <h2>{{ products[0].name }}</h2>
+              <p>{{ products[0].description }}</p>
+              <div class="button">
+                <a
+                  (click)="openProductModal(products[0].id)"
+                  class="btn"
+                  style="cursor: pointer"
+                  >View Details</a
+                >
+              </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-12">
-                <div class="single-banner custom-responsive-margin"
-                      [style.background-image]="'url(' + getProductImageUrl(products[1].imagesURL) + ')'">
-                    <div class="content">
-                          <h2>{{ products[1].name }}</h2>
-                          <p>{{ products[1].description }}</p>
-                        <div class="button">
-                              <a (click)="openProductModal(products[1].id)" class="btn" style="cursor: pointer;">View Details</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <div
+            class="single-banner custom-responsive-margin"
+            [style.background-image]="
+              'url(' + getProductImageUrl(products[1].imagesURL) + ')'
+            "
+          >
+            <div class="content">
+              <h2>{{ products[1].name }}</h2>
+              <p>{{ products[1].description }}</p>
+              <div class="button">
+                <a
+                  (click)="openProductModal(products[1].id)"
+                  class="btn"
+                  style="cursor: pointer"
+                  >View Details</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
-<!-- End Banner Area -->
+  </section>
+  <!-- End Banner Area -->
 </div>
 
 <!-- Action buttons for vendor role only -->
@@ -245,12 +398,21 @@
 </div>
 
 <!-- Add Product Modal -->
-<div *ngIf="showAddProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
-  <div class="modal-dialog" style="z-index: 1060;">
+<div
+  *ngIf="showAddProductModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.5); z-index: 1050"
+>
+  <div class="modal-dialog" style="z-index: 1060">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Add Product</h5>
-        <button type="button" class="btn-close" (click)="showAddProductModal = false"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showAddProductModal = false"
+        ></button>
       </div>
       <form (ngSubmit)="submitAddProduct()" #addProductForm="ngForm" id="addProductForm">
         <div class="modal-body">
@@ -261,7 +423,7 @@
             </div>
             <p class="mt-2 text-muted">Adding product to store...</p>
           </div>
-          
+
           <!-- Add Product Form -->
           <div *ngIf="!isAddingProduct">
             <div class="mb-3">
@@ -276,11 +438,21 @@
             </div>
             <div class="mb-3">
               <label>Brand</label>
-              <input type="text" class="form-control" [(ngModel)]="addProductData.brand" name="brand" />
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addProductData.brand"
+                name="brand"
+              />
             </div>
             <div class="mb-3">
               <label>SKU</label>
-              <input type="text" class="form-control" [(ngModel)]="addProductData.sku" name="sku" />
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="addProductData.sku"
+                name="sku"
+              />
             </div>
             <div class="mb-3">
               <label>Price</label>
@@ -289,19 +461,38 @@
             </div>
             <div class="mb-3">
               <label>Discount</label>
-              <input type="number" class="form-control" [(ngModel)]="addProductData.discount" name="discount" />
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="addProductData.discount"
+                name="discount"
+              />
             </div>
             <div class="mb-3">
               <label>Stock</label>
-              <input type="number" class="form-control" [(ngModel)]="addProductData.stock" name="stock" />
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="addProductData.stock"
+                name="stock"
+              />
             </div>
             <div class="mb-3">
               <label>Image</label>
-              <input type="file" class="form-control" (change)="onProductImageChange($event)" />
+              <input
+                type="file"
+                class="form-control"
+                (change)="onProductImageChange($event)"
+              />
             </div>
             <div class="mb-3">
               <label>Product Category ID</label>
-              <input type="number" class="form-control" [(ngModel)]="addProductData.productCategoryId" name="productCategoryId" />
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="addProductData.productCategoryId"
+                name="productCategoryId"
+              />
             </div>
           </div>
         </div>
@@ -318,12 +509,21 @@
 </div>
 
 <!-- Add Product Category Modal -->
-<div *ngIf="showAddCategoryModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
-  <div class="modal-dialog" style="z-index: 1060;">
+<div
+  *ngIf="showAddCategoryModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.5); z-index: 1050"
+>
+  <div class="modal-dialog" style="z-index: 1060">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Add Product Category</h5>
-        <button type="button" class="btn-close" (click)="showAddCategoryModal = false"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showAddCategoryModal = false"
+        ></button>
       </div>
       <form (ngSubmit)="submitAddCategory()" #addCategoryForm="ngForm" id="addCategoryForm">
         <div class="modal-body">
@@ -334,7 +534,7 @@
             </div>
             <p class="mt-2 text-muted">Adding category to store...</p>
           </div>
-          
+
           <!-- Add Category Form -->
           <div *ngIf="!isAddingCategory">
             <div class="mb-3">
@@ -363,64 +563,110 @@
 
 <!-- Start Shipping Info -->
 <section class="shipping-info">
-    <div class="container">
-        <ul>
-            <!-- Free Shipping -->
-            <li>
-                <div class="media-icon">
-                    <i class="lni lni-delivery"></i>
-                </div>
-                <div class="media-body">
-                    <h5>Free Shipping</h5>
-                    <span>On order over $99</span>
-                </div>
-            </li>
-            <!-- Money Return -->
-            <li>
-                <div class="media-icon">
-                    <i class="lni lni-support"></i>
-                </div>
-                <div class="media-body">
-                    <h5>24/7 Support.</h5>
-                    <span>Live Chat Or Call.</span>
-                </div>
-            </li>
-            <!-- Support 24/7 -->
-            <li>
-                <div class="media-icon">
-                    <i class="lni lni-credit-cards"></i>
-                </div>
-                <div class="media-body">
-                    <h5>Online Payment.</h5>
-                    <span>Secure Payment Services.</span>
-                </div>
-            </li>
-            <!-- Safe Payment -->
-            <li>
-                <div class="media-icon">
-                    <i class="lni lni-reload"></i>
-                </div>
-                <div class="media-body">
-                    <h5>Easy Return.</h5>
-                    <span>Hassle Free Shopping.</span>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="container">
+    <ul>
+      <!-- Free Shipping -->
+      <li>
+        <div class="media-icon">
+          <i class="lni lni-delivery"></i>
+        </div>
+        <div class="media-body">
+          <h5>Free Shipping</h5>
+          <span>On order over $99</span>
+        </div>
+      </li>
+      <!-- Money Return -->
+      <li>
+        <div class="media-icon">
+          <i class="lni lni-support"></i>
+        </div>
+        <div class="media-body">
+          <h5>24/7 Support.</h5>
+          <span>Live Chat Or Call.</span>
+        </div>
+      </li>
+      <!-- Support 24/7 -->
+      <li>
+        <div class="media-icon">
+          <i class="lni lni-credit-cards"></i>
+        </div>
+        <div class="media-body">
+          <h5>Online Payment.</h5>
+          <span>Secure Payment Services.</span>
+        </div>
+      </li>
+      <!-- Safe Payment -->
+      <li>
+        <div class="media-icon">
+          <i class="lni lni-reload"></i>
+        </div>
+        <div class="media-body">
+          <h5>Easy Return.</h5>
+          <span>Hassle Free Shopping.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
 </section>
 <!-- End Shipping Info -->
 
 <!-- Product Details Modal -->
-<div *ngIf="showProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 2000;" (click)="closeProductModal()">
-  <div class="modal-dialog modal-dialog-centered" style="z-index: 2010; max-width: 900px;">
+<div
+  *ngIf="showProductModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.5); z-index: 2000"
+  (click)="closeProductModal()"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    style="z-index: 2010; max-width: 900px"
+  >
     <div class="card product-popup-card" (click)="$event.stopPropagation()">
       <nav>
-        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" fill="none" stroke-width="24"/></svg>
-        <span style="cursor:pointer" (click)="closeProductModal()">Back to all Products</span>
-        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" fill="none" stroke-width="16"/></svg>
+        <svg
+          class="arrow"
+          version="1.1"
+          viewBox="0 0 512 512"
+          width="24"
+          xml:space="preserve"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <polygon
+            points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 "
+            stroke="#727272"
+            fill="none"
+            stroke-width="24"
+          />
+        </svg>
+        <span style="cursor: pointer" (click)="closeProductModal()"
+          >Back to all Products</span
+        >
+        <svg
+          class="heart"
+          version="1.1"
+          viewBox="0 0 512 512"
+          width="24"
+          xml:space="preserve"
+          stroke="#727272"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <path
+            d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z"
+            stroke="#727272"
+            fill="none"
+            stroke-width="16"
+          />
+        </svg>
       </nav>
       <div class="photo">
-        <img *ngIf="selectedProduct" [src]="getProductImageUrl(selectedProduct.imagesURL)" alt="Product image">
+        <img
+          *ngIf="selectedProduct"
+          [src]="getProductImageUrl(selectedProduct.imagesURL)"
+          alt="Product image"
+        />
       </div>
       <div class="description">
         <!-- Product Details Loader -->
@@ -432,42 +678,126 @@
             <p class="mt-2 text-muted">Loading product details...</p>
           </div>
         </ng-container>
-        
+
         <ng-container *ngIf="!isProductLoading && !selectedProduct">
-          <div class="text-center py-5 text-danger">Failed to load product details.</div>
+          <div class="text-center py-5 text-danger">
+            Failed to load product details.
+          </div>
         </ng-container>
-        
+
         <ng-container *ngIf="!isProductLoading && selectedProduct">
           <h2>{{ selectedProduct.name }}</h2>
-          <h4>{{ selectedProduct.categoryName || selectedProduct.productCategoryName }}</h4>
+          <h4>
+            {{
+              selectedProduct.categoryName ||
+                selectedProduct.productCategoryName
+            }}
+          </h4>
           <h1>${{ selectedProduct.price }}</h1>
           <p>{{ selectedProduct.description }}</p>
-          <button *ngIf="!isVendor" (click)="addToCartFromModal(selectedProduct); $event.stopPropagation()" style="position: relative; z-index: 10; cursor: pointer;">Add to Cart</button>
+          <button
+            *ngIf="!isVendor"
+            (click)="
+              addToCartFromModal(selectedProduct); $event.stopPropagation()
+            "
+            style="position: relative; z-index: 10; cursor: pointer"
+          >
+            Add to Cart
+          </button>
           <button *ngIf="!isVendor">Wishlist</button>
           <div>
             <!-- Vendor: show all fields with fallback; Client: only show if value exists -->
             <ng-container *ngIf="isVendor; else clientFields">
-              <div><strong>Brand:</strong> {{ selectedProduct.brand || 'N/A' }}</div>
-              <div><strong>SKU:</strong> {{ selectedProduct.sku || 'N/A' }}</div>
-              <div><strong>Stock:</strong> {{ selectedProduct.stock !== undefined && selectedProduct.stock !== null ? selectedProduct.stock : 'N/A' }}</div>
-              <div><strong>Discount:</strong> 
-                {{ selectedProduct.discount !== null && selectedProduct.discount !== undefined ? (selectedProduct.discount + '%') : 'No discount' }}
+              <div>
+                <strong>Brand:</strong> {{ selectedProduct.brand || "N/A" }}
               </div>
-              <div><strong>Average Rating:</strong> {{ selectedProduct.averageRate || selectedProduct.averageRating || 'N/A' }}</div>
-              <div><strong>Reviews:</strong> {{ selectedProduct.reviewCount || selectedProduct.reviews || 'N/A' }}</div>
-              <div><strong>Store:</strong> {{ selectedProduct.storeName || 'N/A' }}</div>
-              <div><strong>Product ID:</strong> {{ selectedProduct.id || 'N/A' }}</div>
+              <div>
+                <strong>SKU:</strong> {{ selectedProduct.sku || "N/A" }}
+              </div>
+              <div>
+                <strong>Stock:</strong>
+                {{
+                  selectedProduct.stock !== undefined &&
+                  selectedProduct.stock !== null
+                    ? selectedProduct.stock
+                    : "N/A"
+                }}
+              </div>
+              <div>
+                <strong>Discount:</strong>
+                {{
+                  selectedProduct.discount !== null &&
+                  selectedProduct.discount !== undefined
+                    ? selectedProduct.discount + "%"
+                    : "No discount"
+                }}
+              </div>
+              <div>
+                <strong>Average Rating:</strong>
+                {{
+                  selectedProduct.averageRate ||
+                    selectedProduct.averageRating ||
+                    "N/A"
+                }}
+              </div>
+              <div>
+                <strong>Reviews:</strong>
+                {{
+                  selectedProduct.reviewCount ||
+                    selectedProduct.reviews ||
+                    "N/A"
+                }}
+              </div>
+              <div>
+                <strong>Store:</strong> {{ selectedProduct.storeName || "N/A" }}
+              </div>
+              <div>
+                <strong>Product ID:</strong> {{ selectedProduct.id || "N/A" }}
+              </div>
             </ng-container>
             <ng-template #clientFields>
-              <div *ngIf="selectedProduct.brand"><strong>Brand:</strong> {{ selectedProduct.brand }}</div>
-              <div *ngIf="selectedProduct.sku"><strong>SKU:</strong> {{ selectedProduct.sku }}</div>
-              <div *ngIf="selectedProduct.stock !== undefined && selectedProduct.stock !== null"><strong>Stock:</strong> {{ selectedProduct.stock }}</div>
-              <div><strong>Discount:</strong> 
-                {{ selectedProduct.discount !== null && selectedProduct.discount !== undefined ? (selectedProduct.discount + '%') : 'No discount' }}
+              <div *ngIf="selectedProduct.brand">
+                <strong>Brand:</strong> {{ selectedProduct.brand }}
               </div>
-              <div *ngIf="selectedProduct.averageRate || selectedProduct.averageRating"><strong>Average Rating:</strong> {{ selectedProduct.averageRate || selectedProduct.averageRating }}</div>
-              <div *ngIf="selectedProduct.reviewCount || selectedProduct.reviews"><strong>Reviews:</strong> {{ selectedProduct.reviewCount || selectedProduct.reviews }}</div>
-              <div *ngIf="selectedProduct.storeName"><strong>Store:</strong> {{ selectedProduct.storeName }}</div>
+              <div *ngIf="selectedProduct.sku">
+                <strong>SKU:</strong> {{ selectedProduct.sku }}
+              </div>
+              <div
+                *ngIf="
+                  selectedProduct.stock !== undefined &&
+                  selectedProduct.stock !== null
+                "
+              >
+                <strong>Stock:</strong> {{ selectedProduct.stock }}
+              </div>
+              <div>
+                <strong>Discount:</strong>
+                {{
+                  selectedProduct.discount !== null &&
+                  selectedProduct.discount !== undefined
+                    ? selectedProduct.discount + "%"
+                    : "No discount"
+                }}
+              </div>
+              <div
+                *ngIf="
+                  selectedProduct.averageRate || selectedProduct.averageRating
+                "
+              >
+                <strong>Average Rating:</strong>
+                {{
+                  selectedProduct.averageRate || selectedProduct.averageRating
+                }}
+              </div>
+              <div
+                *ngIf="selectedProduct.reviewCount || selectedProduct.reviews"
+              >
+                <strong>Reviews:</strong>
+                {{ selectedProduct.reviewCount || selectedProduct.reviews }}
+              </div>
+              <div *ngIf="selectedProduct.storeName">
+                <strong>Store:</strong> {{ selectedProduct.storeName }}
+              </div>
               <div><strong>Product ID:</strong> {{ selectedProduct.id }}</div>
             </ng-template>
           </div>
