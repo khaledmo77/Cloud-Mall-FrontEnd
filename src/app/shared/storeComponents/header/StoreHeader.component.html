@@ -1,7 +1,7 @@
 <!-- Start Header Area -->
 <header class="header navbar-area">
-    <!-- Start Topbar -->
-    <!-- <div class="topbar">
+  <!-- Start Topbar -->
+  <!-- <div class="topbar">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 col-md-4 col-12">
@@ -60,382 +60,717 @@
             </div>
         </div>
     </div> -->
-    <!-- End Topbar -->
-    <!-- Start Header Middle -->
-    <div class="header-middle">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center" style="width: 100%; gap: 100px;">
-                        <!-- Logo and Store Name - Left -->
-                        <div class="header-left">
-                            <a class="navbar-brand" (click)="navigateToStoreHome()" style="cursor: pointer;">
-                                <div class="store-logo d-flex align-items-center">
-                                    <div class="logo-container me-2">
-                                        <img *ngIf="logoUrl" [src]="getLogoUrl()" [alt]="storeName" class="logo-img" (error)="onLogoError($event)">
-                                        <div *ngIf="!logoUrl" class="logo-icon">{{ generateStoreLogo() }}</div>
-                                    </div>
-                                    <div class="logo-text fw-bold">{{ storeName || 'STORE' }}</div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <!-- Search Bar - Center -->
-                        <div class="header-center" style="flex: 1;">
-                            <div class="main-menu-search" style="max-width: 500px; margin: 0 auto;">
-                                <div class="navbar-search search-style-5">
-                                    
-                                    <div class="search-input">
-                                        <input 
-                                            type="text" 
-                                            placeholder="Search products..." 
-                                            [(ngModel)]="searchQuery"
-                                            (input)="onSearchInput($event)"
-                                            (focus)="onSearchFocus()"
-                                            (blur)="onSearchBlur()"
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="search-btn">
-                                        <button type="button"><i class="lni lni-search-alt"></i></button>
-                                    </div>
-                                    
-                                    <!-- Search Results Dropdown -->
-                                    <div class="search-results-dropdown" *ngIf="showSearchResults && (searchResults.length > 0 || isSearching)">
-                                        <div class="search-results-header">
-                                            <span>Search Results</span>
-                                            <button type="button" class="close-btn" (click)="clearSearch()">
-                                                <i class="lni lni-close"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- Loading State -->
-                                        <div *ngIf="isSearching" class="search-loading">
-                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                                <span class="visually-hidden">Searching...</span>
-                                            </div>
-                                            <span class="ms-2">Searching...</span>
-                                        </div>
-                                        
-                                        <!-- Search Results -->
-                                        <div *ngIf="!isSearching && searchResults.length > 0" class="search-results-list">
-                                            <div 
-                                                *ngFor="let product of searchResults" 
-                                                class="search-result-item"
-                                                (click)="onSearchResultClick(product); $event.stopPropagation()">
-                                                <div class="product-image">
-                                                    <img [src]="getProductImageUrl(product)" [alt]="product.name" (error)="onImgError($event)">
-                                                </div>
-                                                <div class="product-info">
-                                                    <h6 class="product-name">{{ product.name }}</h6>
-                                                    <p class="product-brand">{{ product.brand }}</p>
-                                                    <p class="product-price">${{ product.price.toFixed(2) }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- No Results -->
-                                        <div *ngIf="!isSearching && searchResults.length === 0 && searchQuery.trim()" class="no-results">
-                                            <p>No products found for "{{ searchQuery }}"</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User Actions - Right -->
-                        <div class="header-right d-flex align-items-center" style="gap: 15px;">
-                            <!-- Cart and Wishlist -->
-                            <div class="navbar-cart d-flex align-items-center" *ngIf="!isVendor" style="gap: 15px;">
-                                
-                                <div class="cart-items">
-                                    <a href="javascript:void(0)" class="main-btn position-relative">
-                                        <i class="lni lni-cart"></i>
-                                        <span class="total-items badge bg-primary position-absolute top-0 start-100 translate-middle">{{totalCount}}</span>
-                                    </a>
-                                    <!-- Shopping Item -->
-                                    <div class="shopping-item">
-                                        <div class="dropdown-cart-header">
-                                            <span>{{totalCount}} items</span>
-                                            <a routerLink="/cart">View Cart</a>
-                                        </div>
-                                        <ul class="shopping-list">
-                                            <li *ngFor="let item of cartItems">
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item" (click)="removeItem(item.productId)"><i
-                                                        class="lni lni-close"></i></a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" [routerLink]="['/product-details', item.productId]">
-                                                        <img [src]="getProductImageUrl(item)" [alt]="item.productName" (error)="onImgError($event)">
-                                                    </a>
-                                                </div>
-
-                                                <div class="content">
-                                                    <h4><a href="javascript:void(0)" (click)="openProductModal(item.productId)">
-                                                            {{ item.productName }}</a></h4>
-                                                    <p class="quantity">  {{ item.quantity }}x - 
-                                                        <span class="amount">${{ item.price.toFixed(2) }}</span></p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="bottom">
-                                            <div class="total">
-                                                <span>Total</span>
-                                                <span class="total-amount">${{ total$ | async | number: '1.2-2' }}</span>
-                                            </div>
-                                            <div class="button">
-                                                <a (click)="navigateToCheckout()" class="btn animate" style="cursor: pointer;">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ End Shopping Item -->
-                                </div>
-                            </div>
-
-                            <!-- Orders History Section -->
-                            <div class="navbar-orders" *ngIf="!isVendor && isLoggedIn" (click)="$event.stopPropagation()">
-                                <div class="orders-items">
-                                    <a href="javascript:void(0)" class="main-btn position-relative" (click)="toggleOrdersHistory()">
-                                        <i class="lni lni-package"></i>
-                                        <span class="total-items badge bg-info position-absolute top-0 start-100 translate-middle">{{orders.length}}</span>
-                                    </a>
-                                    <!-- Orders History Dropdown -->
-                                    <div class="orders-item" *ngIf="showOrdersHistory">
-                                        <div class="dropdown-orders-header">
-                                            <span>Order History</span>
-                                            <a href="javascript:void(0)" (click)="toggleOrdersHistory()">Close</a>
-                                        </div>
-                                        
-                                        <!-- Loading State -->
-                                        <div *ngIf="isLoadingOrders" class="text-center py-3">
-                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                            <p class="mt-2 small text-muted">Loading orders...</p>
-                                        </div>
-
-                                        <!-- Refresh After Order State -->
-                                        <div *ngIf="isRefreshingAfterOrder" class="text-center py-3">
-                                            <div class="spinner-border spinner-border-sm text-success" role="status">
-                                                <span class="visually-hidden">Refreshing...</span>
-                                            </div>
-                                            <p class="mt-2 small text-success">Updating with your new order...</p>
-                                        </div>
-
-                                        <!-- Error State -->
-                                        <div *ngIf="ordersError" class="alert alert-danger m-2" role="alert">
-                                            <small>{{ ordersError }}</small>
-                                            <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadOrders()">Retry</button>
-                                        </div>
-
-                                        <!-- Orders List -->
-                                        <ul class="orders-list" *ngIf="!isLoadingOrders && !ordersError && !isRefreshingAfterOrder">
-                                            <li *ngFor="let order of orders" class="order-item" (click)="showOrderDetailsModal(order)">
-                                                <div class="order-header">
-                                                    <h6 class="order-id">Order #{{ order.id }}</h6>
-                                                    <span class="order-date">{{ formatDate(order.orderDate) }}</span>
-                                                </div>
-                                                <div class="order-summary">
-                                                    <span class="order-total">${{ order.grandTotal.toFixed(2) }}</span>
-                                                    <span class="order-status" [ngClass]="'badge bg-' + getStatusColor(order.overallStatus)">
-                                                        {{ order.overallStatus }}
-                                                    </span>
-                                                </div>
-                                                <div class="order-stores">
-                                                    <small class="text-muted">{{ order.vendorOrders.length }} store(s)</small>
-                                                </div>
-                                            </li>
-                                            
-                                            <!-- Empty State -->
-                                            <li *ngIf="orders.length === 0" class="text-center py-3">
-                                                <p class="text-muted mb-0">No orders found</p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!--/ End Orders History Dropdown -->
-                                </div>
-                            </div>
-
-                            <!-- User Info - Rightmost -->
-                            <div class="user-section d-flex align-items-center" style="gap: 15px;">
-                                <div class="user d-flex align-items-center" *ngIf="isLoggedIn">
-                                    <i class="lni lni-user me-2"></i>
-                                    <span class="fw-medium">Hello {{ userName || 'User' }}</span>
-                                </div>
-                                <div class="logout-link" *ngIf="isLoggedIn">
-                                    <a href="javascript:void(0)" (click)="logout()" class="text-decoration-none text-muted">
-                                        Sign Out
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Details Modal -->
-    <div *ngIf="showProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 2000;" (click)="closeProductModal()">
-      <div class="modal-dialog modal-dialog-centered" style="z-index: 2010; max-width: 900px;">
-        <div class="card product-popup-card" (click)="$event.stopPropagation()">
-          <nav>
-            <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" fill="none" stroke-width="24"/></svg>
-            <span style="cursor:pointer" (click)="closeProductModal()">Back to all Products</span>
-            <svg class="heart" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" fill="none" stroke-width="16"/></svg>
-          </nav>
-          <div class="photo">
-            <img *ngIf="selectedProduct" [src]="getProductImageUrl(selectedProduct)" alt="Product image">
-          </div>
-          <div class="description">
-            <!-- Product Details Loader -->
-            <ng-container *ngIf="isProductLoading">
-              <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading product details...</span>
-                </div>
-                <p class="mt-2 text-muted">Loading product details...</p>
-              </div>
-            </ng-container>
-            
-            <ng-container *ngIf="!isProductLoading && !selectedProduct">
-              <div class="text-center py-5 text-danger">Failed to load product details.</div>
-            </ng-container>
-            
-            <ng-container *ngIf="!isProductLoading && selectedProduct">
-              <h2>{{ selectedProduct.name }}</h2>
-              <h4>{{ selectedProduct.categoryName || selectedProduct.productCategoryName }}</h4>
-              <h1>${{ selectedProduct.price }}</h1>
-              <p>{{ selectedProduct.description }}</p>
-              <button *ngIf="!isVendor" (click)="addToCartFromModal(selectedProduct); $event.stopPropagation()" style="position: relative; z-index: 10; cursor: pointer;">Add to Cart</button>
-              <button *ngIf="!isVendor">Wishlist</button>
-              <div>
-                <!-- Vendor: show all fields with fallback; Client: only show if value exists -->
-                <ng-container *ngIf="isVendor; else clientFields">
-                  <div><strong>Brand:</strong> {{ selectedProduct.brand || 'N/A' }}</div>
-                  <div><strong>SKU:</strong> {{ selectedProduct.sku || 'N/A' }}</div>
-                  <div><strong>Stock:</strong> {{ selectedProduct.stock !== undefined && selectedProduct.stock !== null ? selectedProduct.stock : 'N/A' }}</div>
-                  <div><strong>Discount:</strong> 
-                    {{ selectedProduct.discount !== null && selectedProduct.discount !== undefined ? (selectedProduct.discount + '%') : 'No discount' }}
-                  </div>
-                  <div><strong>Average Rating:</strong> {{ selectedProduct.averageRate || selectedProduct.averageRating || 'N/A' }}</div>
-                  <div><strong>Reviews:</strong> {{ selectedProduct.reviewCount || selectedProduct.reviews || 'N/A' }}</div>
-                  <div><strong>Store:</strong> {{ selectedProduct.storeName || 'N/A' }}</div>
-                  <div><strong>Product ID:</strong> {{ selectedProduct.id || 'N/A' }}</div>
-                </ng-container>
-                <ng-template #clientFields>
-                  <div *ngIf="selectedProduct.brand"><strong>Brand:</strong> {{ selectedProduct.brand }}</div>
-                  <div *ngIf="selectedProduct.sku"><strong>SKU:</strong> {{ selectedProduct.sku }}</div>
-                  <div *ngIf="selectedProduct.stock !== undefined && selectedProduct.stock !== null"><strong>Stock:</strong> {{ selectedProduct.stock }}</div>
-                  <div><strong>Discount:</strong> 
-                    {{ selectedProduct.discount !== null && selectedProduct.discount !== undefined ? (selectedProduct.discount + '%') : 'No discount' }}
-                  </div>
-                  <div *ngIf="selectedProduct.averageRate || selectedProduct.averageRating"><strong>Average Rating:</strong> {{ selectedProduct.averageRate || selectedProduct.averageRating }}</div>
-                  <div *ngIf="selectedProduct.reviewCount || selectedProduct.reviews"><strong>Reviews:</strong> {{ selectedProduct.reviewCount || selectedProduct.reviews }}</div>
-                  <div *ngIf="selectedProduct.storeName"><strong>Store:</strong> {{ selectedProduct.storeName }}</div>
-                  <div><strong>Product ID:</strong> {{ selectedProduct.id }}</div>
-                </ng-template>
-              </div>
-            </ng-container>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Header Middle -->
-    <!-- Start Header Bottom -->
+  <!-- End Topbar -->
+  <!-- Start Header Middle -->
+  <div class="header-middle">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8 col-md-6 col-12">
-                <div class="nav-inner">
-                    <!-- Start Mega Category Menu -->
-                    <div class="mega-category-menu">
-                        <span class="cat-button" (click)="onCategorySelect(null)">
-                            <i class="lni lni-menu"></i>
-                            {{ selectedCategoryId ? 'Filtered' : 'All Categories' }}
-                        </span>
-                        <ul class="sub-category">
-                            <li *ngIf="isLoadingCategories">
-                                <a href="#" class="loading-categories">
-                                    <i class="lni lni-spinner-arrow"></i> Loading categories...
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" (click)="onCategorySelect(null); $event.preventDefault()" 
-                                   [class.active]="selectedCategoryId === null">
-                                    <i class="lni lni-grid"></i> All Products
-                                </a>
-                            </li>
-                            <li *ngFor="let category of storeCategories">
-                                <a href="#" (click)="onCategorySelect(category.id); $event.preventDefault()"
-                                   [class.active]="selectedCategoryId === category.id">
-                                    {{ category.name }}
-                                    <i class="lni lni-chevron-right"></i>
-                                </a>
-                            </li>
-                            <li *ngIf="!isLoadingCategories && storeCategories.length === 0">
-                                <a href="#" class="no-categories">No categories available</a>
-                            </li>
-                        </ul>
+      <div class="row align-items-center">
+        <div class="col-12">
+          <div
+            class="d-flex justify-content-between align-items-center"
+            style="width: 100%; gap: 100px"
+          >
+            <!-- Logo and Store Name - Left -->
+            <div class="header-left">
+              <a
+                class="navbar-brand"
+                (click)="navigateToStoreHome()"
+                style="cursor: pointer"
+              >
+                <div class="store-logo d-flex align-items-center">
+                  <div class="logo-container me-2">
+                    <img
+                      *ngIf="logoUrl"
+                      [src]="getLogoUrl()"
+                      [alt]="storeName"
+                      class="logo-img"
+                      (error)="onLogoError($event)"
+                    />
+                    <div *ngIf="!logoUrl" class="logo-icon">
+                      {{ generateStoreLogo() }}
                     </div>
-                    <!-- End Mega Category Menu -->
-                    <!-- Start Navbar -->
-                    <nav class="navbar navbar-expand-lg">
-                        <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="toggler-icon"></span>
-                            <span class="toggler-icon"></span>
-                            <span class="toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                            <ul id="nav" class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a (click)="navigateToStoreHome()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" style="cursor: pointer;">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a routerLink="/contact" routerLinkActive="active">Contact Us</a>
-                                </li>
-                                <li class="nav-item" *ngIf="isVendor">
-                                    <a routerLink="./storesettings" routerLinkActive="active">Store Settings</a>
-                                </li>
-                            </ul>
-                        </div> <!-- navbar collapse -->
-                    </nav>
-                    <!-- End Navbar -->
+                  </div>
+                  <div class="logo-text fw-bold">
+                    {{ storeName || "STORE" }}
+                  </div>
                 </div>
+              </a>
             </div>
-            <div class="col-lg-4 col-md-6 col-12">
-                <!-- Start Nav Social -->
-                <div class="nav-social">
-                    <h5 class="title">Follow Us:</h5>
-                    <ul>
-                        <li>
-                            <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="lni lni-instagram"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
-                        </li>
+
+            <!-- Search Bar - Center -->
+            <div class="header-center" style="flex: 1">
+              <div
+                class="main-menu-search"
+                style="max-width: 500px; margin: 0 auto"
+              >
+                <div class="navbar-search search-style-5">
+                  <div class="search-input">
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      [(ngModel)]="searchQuery"
+                      (input)="onSearchInput($event)"
+                      (focus)="onSearchFocus()"
+                      (blur)="onSearchBlur()"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="search-btn">
+                    <button type="button">
+                      <i class="lni lni-search-alt"></i>
+                    </button>
+                  </div>
+
+                  <!-- Search Results Dropdown -->
+                  <div
+                    class="search-results-dropdown"
+                    *ngIf="
+                      showSearchResults &&
+                      (searchResults.length > 0 || isSearching)
+                    "
+                  >
+                    <div class="search-results-header">
+                      <span>Search Results</span>
+                      <button
+                        type="button"
+                        class="close-btn"
+                        (click)="clearSearch()"
+                      >
+                        <i class="lni lni-close"></i>
+                      </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div *ngIf="isSearching" class="search-loading">
+                      <div
+                        class="spinner-border spinner-border-sm text-primary"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Searching...</span>
+                      </div>
+                      <span class="ms-2">Searching...</span>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div
+                      *ngIf="!isSearching && searchResults.length > 0"
+                      class="search-results-list"
+                    >
+                      <div
+                        *ngFor="let product of searchResults"
+                        class="search-result-item"
+                        (click)="
+                          onSearchResultClick(product); $event.stopPropagation()
+                        "
+                      >
+                        <div class="product-image">
+                          <img
+                            [src]="getProductImageUrl(product)"
+                            [alt]="product.name"
+                            (error)="onImgError($event)"
+                          />
+                        </div>
+                        <div class="product-info">
+                          <h6 class="product-name">{{ product.name }}</h6>
+                          <p class="product-brand">{{ product.brand }}</p>
+                          <p class="product-price">
+                            ${{ product.price.toFixed(2) }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- No Results -->
+                    <div
+                      *ngIf="
+                        !isSearching &&
+                        searchResults.length === 0 &&
+                        searchQuery.trim()
+                      "
+                      class="no-results"
+                    >
+                      <p>No products found for "{{ searchQuery }}"</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Actions - Right -->
+            <div
+              class="header-right d-flex align-items-center"
+              style="gap: 15px"
+            >
+              <!-- Cart and Wishlist -->
+              <div
+                class="navbar-cart d-flex align-items-center"
+                *ngIf="!isVendor"
+                style="gap: 15px"
+              >
+                <div class="cart-items">
+                  <a
+                    href="javascript:void(0)"
+                    class="main-btn position-relative"
+                  >
+                    <i class="lni lni-cart"></i>
+                    <span
+                      class="total-items badge bg-primary position-absolute top-0 start-100 translate-middle"
+                      >{{ totalCount }}</span
+                    >
+                  </a>
+                  <!-- Shopping Item -->
+                  <div class="shopping-item">
+                    <div class="dropdown-cart-header">
+                      <span>{{ totalCount }} items</span>
+                      <a routerLink="/cart">View Cart</a>
+                    </div>
+                    <ul class="shopping-list">
+                      <li *ngFor="let item of cartItems">
+                        <a
+                          href="javascript:void(0)"
+                          class="remove"
+                          title="Remove this item"
+                          (click)="removeItem(item.productId)"
+                          ><i class="lni lni-close"></i
+                        ></a>
+                        <div class="cart-img-head">
+                          <a
+                            class="cart-img"
+                            [routerLink]="['/product-details', item.productId]"
+                          >
+                            <img
+                              [src]="getProductImageUrl(item)"
+                              [alt]="item.productName"
+                              (error)="onImgError($event)"
+                            />
+                          </a>
+                        </div>
+
+                        <div class="content">
+                          <h4>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="openProductModal(item.productId)"
+                            >
+                              {{ item.productName }}</a
+                            >
+                          </h4>
+                          <p class="quantity">
+                            {{ item.quantity }}x -
+                            <span class="amount"
+                              >${{ item.price.toFixed(2) }}</span
+                            >
+                          </p>
+                        </div>
+                      </li>
                     </ul>
+                    <div class="bottom">
+                      <div class="total">
+                        <span>Total</span>
+                        <span class="total-amount"
+                          >${{ total$ | async | number : "1.2-2" }}</span
+                        >
+                      </div>
+                      <div class="button">
+                        <a
+                          (click)="navigateToCheckout()"
+                          class="btn animate"
+                          style="cursor: pointer"
+                          >Checkout</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <!--/ End Shopping Item -->
                 </div>
-                <!-- End Nav Social -->
+              </div>
+
+              <!-- Orders History Section -->
+              <div
+                class="navbar-orders"
+                *ngIf="!isVendor && isLoggedIn"
+                (click)="$event.stopPropagation()"
+              >
+                <div class="orders-items">
+                  <a
+                    href="javascript:void(0)"
+                    class="main-btn position-relative"
+                    (click)="toggleOrdersHistory()"
+                  >
+                    <i class="lni lni-package"></i>
+                    <span
+                      class="total-items badge bg-info position-absolute top-0 start-100 translate-middle"
+                      >{{ orders.length }}</span
+                    >
+                  </a>
+                  <!-- Orders History Dropdown -->
+                  <div class="orders-item" *ngIf="showOrdersHistory">
+                    <div class="dropdown-orders-header">
+                      <span>Order History</span>
+                      <a
+                        href="javascript:void(0)"
+                        (click)="toggleOrdersHistory()"
+                        >Close</a
+                      >
+                    </div>
+
+                    <!-- Loading State -->
+                    <div *ngIf="isLoadingOrders" class="text-center py-3">
+                      <div
+                        class="spinner-border spinner-border-sm text-primary"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <p class="mt-2 small text-muted">Loading orders...</p>
+                    </div>
+
+                    <!-- Refresh After Order State -->
+                    <div
+                      *ngIf="isRefreshingAfterOrder"
+                      class="text-center py-3"
+                    >
+                      <div
+                        class="spinner-border spinner-border-sm text-success"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Refreshing...</span>
+                      </div>
+                      <p class="mt-2 small text-success">
+                        Updating with your new order...
+                      </p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div
+                      *ngIf="ordersError"
+                      class="alert alert-danger m-2"
+                      role="alert"
+                    >
+                      <small>{{ ordersError }}</small>
+                      <button
+                        class="btn btn-sm btn-outline-danger ms-2"
+                        (click)="loadOrders()"
+                      >
+                        Retry
+                      </button>
+                    </div>
+
+                    <!-- Orders List -->
+                    <ul
+                      class="orders-list"
+                      *ngIf="
+                        !isLoadingOrders &&
+                        !ordersError &&
+                        !isRefreshingAfterOrder
+                      "
+                    >
+                      <li
+                        *ngFor="let order of orders"
+                        class="order-item"
+                        (click)="showOrderDetailsModal(order)"
+                      >
+                        <div class="order-header">
+                          <h6 class="order-id">Order #{{ order.id }}</h6>
+                          <span class="order-date">{{
+                            formatDate(order.orderDate)
+                          }}</span>
+                        </div>
+                        <div class="order-summary">
+                          <span class="order-total"
+                            >${{ order.grandTotal.toFixed(2) }}</span
+                          >
+                          <span
+                            class="order-status"
+                            [ngClass]="
+                              'badge bg-' + getStatusColor(order.overallStatus)
+                            "
+                          >
+                            {{ order.overallStatus }}
+                          </span>
+                        </div>
+                        <div class="order-stores">
+                          <small class="text-muted"
+                            >{{ order.vendorOrders.length }} store(s)</small
+                          >
+                        </div>
+                      </li>
+
+                      <!-- Empty State -->
+                      <li *ngIf="orders.length === 0" class="text-center py-3">
+                        <p class="text-muted mb-0">No orders found</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <!--/ End Orders History Dropdown -->
+                </div>
+              </div>
+
+              <!-- User Info - Rightmost -->
+              <div
+                class="user-section d-flex align-items-center"
+                style="gap: 15px"
+              >
+                <div class="user d-flex align-items-center" *ngIf="isLoggedIn">
+                  <i class="lni lni-user me-2"></i>
+                  <span class="fw-medium">Hello {{ userName || "User" }}</span>
+                </div>
+                <div class="logout-link" *ngIf="isLoggedIn">
+                  <a
+                    href="javascript:void(0)"
+                    (click)="logout()"
+                    class="text-decoration-none text-muted"
+                  >
+                    Sign Out
+                  </a>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- End Header Bottom -->
+  </div>
+
+  <!-- Product Details Modal -->
+  <div
+    *ngIf="showProductModal"
+    class="modal fade show d-block"
+    tabindex="-1"
+    style="background: rgba(0, 0, 0, 0.5); z-index: 2000"
+    (click)="closeProductModal()"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered"
+      style="z-index: 2010; max-width: 900px"
+    >
+      <div class="card product-popup-card" (click)="$event.stopPropagation()">
+        <nav>
+          <svg
+            class="arrow"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="24"
+            xml:space="preserve"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <polygon
+              points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 "
+              stroke="#727272"
+              fill="none"
+              stroke-width="24"
+            />
+          </svg>
+          <span style="cursor: pointer" (click)="closeProductModal()"
+            >Back to all Products</span
+          >
+          <svg
+            class="heart"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="24"
+            xml:space="preserve"
+            stroke="#727272"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <path
+              d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z"
+              stroke="#727272"
+              fill="none"
+              stroke-width="16"
+            />
+          </svg>
+        </nav>
+        <div class="photo">
+          <img
+            *ngIf="selectedProduct"
+            [src]="getProductImageUrl(selectedProduct)"
+            alt="Product image"
+          />
+        </div>
+        <div class="description">
+          <!-- Product Details Loader -->
+          <ng-container *ngIf="isProductLoading">
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading product details...</span>
+              </div>
+              <p class="mt-2 text-muted">Loading product details...</p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!isProductLoading && !selectedProduct">
+            <div class="text-center py-5 text-danger">
+              Failed to load product details.
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!isProductLoading && selectedProduct">
+            <h2>{{ selectedProduct.name }}</h2>
+            <h4>
+              {{
+                selectedProduct.categoryName ||
+                  selectedProduct.productCategoryName
+              }}
+            </h4>
+            <h1>${{ selectedProduct.price }}</h1>
+            <p>{{ selectedProduct.description }}</p>
+            <button
+              *ngIf="!isVendor"
+              (click)="
+                addToCartFromModal(selectedProduct); $event.stopPropagation()
+              "
+              style="position: relative; z-index: 10; cursor: pointer"
+            >
+              Add to Cart
+            </button>
+            <button *ngIf="!isVendor">Wishlist</button>
+            <div>
+              <!-- Vendor: show all fields with fallback; Client: only show if value exists -->
+              <ng-container *ngIf="isVendor; else clientFields">
+                <div>
+                  <strong>Brand:</strong> {{ selectedProduct.brand || "N/A" }}
+                </div>
+                <div>
+                  <strong>SKU:</strong> {{ selectedProduct.sku || "N/A" }}
+                </div>
+                <div>
+                  <strong>Stock:</strong>
+                  {{
+                    selectedProduct.stock !== undefined &&
+                    selectedProduct.stock !== null
+                      ? selectedProduct.stock
+                      : "N/A"
+                  }}
+                </div>
+                <div>
+                  <strong>Discount:</strong>
+                  {{
+                    selectedProduct.discount !== null &&
+                    selectedProduct.discount !== undefined
+                      ? selectedProduct.discount + "%"
+                      : "No discount"
+                  }}
+                </div>
+                <div>
+                  <strong>Average Rating:</strong>
+                  {{
+                    selectedProduct.averageRate ||
+                      selectedProduct.averageRating ||
+                      "N/A"
+                  }}
+                </div>
+                <div>
+                  <strong>Reviews:</strong>
+                  {{
+                    selectedProduct.reviewCount ||
+                      selectedProduct.reviews ||
+                      "N/A"
+                  }}
+                </div>
+                <div>
+                  <strong>Store:</strong>
+                  {{ selectedProduct.storeName || "N/A" }}
+                </div>
+                <div>
+                  <strong>Product ID:</strong> {{ selectedProduct.id || "N/A" }}
+                </div>
+              </ng-container>
+              <ng-template #clientFields>
+                <div *ngIf="selectedProduct.brand">
+                  <strong>Brand:</strong> {{ selectedProduct.brand }}
+                </div>
+                <div *ngIf="selectedProduct.sku">
+                  <strong>SKU:</strong> {{ selectedProduct.sku }}
+                </div>
+                <div
+                  *ngIf="
+                    selectedProduct.stock !== undefined &&
+                    selectedProduct.stock !== null
+                  "
+                >
+                  <strong>Stock:</strong> {{ selectedProduct.stock }}
+                </div>
+                <div>
+                  <strong>Discount:</strong>
+                  {{
+                    selectedProduct.discount !== null &&
+                    selectedProduct.discount !== undefined
+                      ? selectedProduct.discount + "%"
+                      : "No discount"
+                  }}
+                </div>
+                <div
+                  *ngIf="
+                    selectedProduct.averageRate || selectedProduct.averageRating
+                  "
+                >
+                  <strong>Average Rating:</strong>
+                  {{
+                    selectedProduct.averageRate || selectedProduct.averageRating
+                  }}
+                </div>
+                <div
+                  *ngIf="selectedProduct.reviewCount || selectedProduct.reviews"
+                >
+                  <strong>Reviews:</strong>
+                  {{ selectedProduct.reviewCount || selectedProduct.reviews }}
+                </div>
+                <div *ngIf="selectedProduct.storeName">
+                  <strong>Store:</strong> {{ selectedProduct.storeName }}
+                </div>
+                <div><strong>Product ID:</strong> {{ selectedProduct.id }}</div>
+              </ng-template>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Header Middle -->
+  <!-- Start Header Bottom -->
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8 col-md-6 col-12">
+        <div class="nav-inner">
+          <!-- Start Mega Category Menu -->
+          <div class="mega-category-menu">
+            <span class="cat-button" (click)="onCategorySelect(null)">
+              <i class="lni lni-menu"></i>
+              {{ selectedCategoryId ? "Filtered" : "All Categories" }}
+            </span>
+            <ul class="sub-category">
+              <li *ngIf="isLoadingCategories">
+                <a href="#" class="loading-categories">
+                  <i class="lni lni-spinner-arrow"></i> Loading categories...
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  (click)="onCategorySelect(null); $event.preventDefault()"
+                  [class.active]="selectedCategoryId === null"
+                >
+                  <i class="lni lni-grid"></i> All Products
+                </a>
+              </li>
+              <li *ngFor="let category of storeCategories">
+                <a
+                  href="#"
+                  (click)="
+                    onCategorySelect(category.id); $event.preventDefault()
+                  "
+                  [class.active]="selectedCategoryId === category.id"
+                >
+                  {{ category.name }}
+                  <i class="lni lni-chevron-right"></i>
+                </a>
+              </li>
+              <li *ngIf="!isLoadingCategories && storeCategories.length === 0">
+                <a href="#" class="no-categories">No categories available</a>
+              </li>
+            </ul>
+          </div>
+          <!-- End Mega Category Menu -->
+          <!-- Start Navbar -->
+          <nav class="navbar navbar-expand-lg">
+            <button
+              class="navbar-toggler mobile-menu-btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+            </button>
+            <div
+              class="collapse navbar-collapse sub-menu-bar"
+              id="navbarSupportedContent"
+            >
+              <ul id="nav" class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  <a
+                    (click)="navigateToStoreHome()"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    style="cursor: pointer"
+                    >Home</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a routerLink="/contact" routerLinkActive="active"
+                    >Contact Us</a
+                  >
+                </li>
+                <li class="nav-item" *ngIf="isVendor">
+                  <a routerLink="./storesettings" routerLinkActive="active"
+                    >Store Settings</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- navbar collapse -->
+          </nav>
+          <!-- End Navbar -->
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12">
+        <!-- Start Nav Social -->
+        <div class="nav-social">
+          <h5 class="title">Follow Us:</h5>
+          <ul>
+            <li>
+              <a href="javascript:void(0)"
+                ><i class="lni lni-facebook-filled"></i
+              ></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"
+                ><i class="lni lni-twitter-original"></i
+              ></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-instagram"></i></a>
+            </li>
+            <li>
+              <a href="javascript:void(0)"><i class="lni lni-skype"></i></a>
+            </li>
+          </ul>
+        </div>
+        <!-- End Nav Social -->
+      </div>
+    </div>
+  </div>
+  <!-- End Header Bottom -->
 </header>
 <!-- End Header Area -->
 
 <!-- Order Details Modal -->
-<div *ngIf="showOrderDetails && selectedOrder" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 2000;" (click)="closeOrderDetailsModal()">
-  <div class="modal-dialog modal-dialog-centered modal-lg" style="z-index: 2010;">
+<div
+  *ngIf="showOrderDetails && selectedOrder"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.5); z-index: 2000"
+  (click)="closeOrderDetailsModal()"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-lg"
+    style="z-index: 2010"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h5 class="modal-title">Order Details - #{{ selectedOrder.id }}</h5>
-        <button type="button" class="btn-close" (click)="closeOrderDetailsModal()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeOrderDetailsModal()"
+        ></button>
       </div>
       <div class="modal-body">
         <!-- Order Summary -->
@@ -443,18 +778,36 @@
           <div class="row">
             <div class="col-md-6">
               <h6>Order Information</h6>
-              <p><strong>Order Date:</strong> {{ formatDate(selectedOrder.orderDate) }}</p>
-              <p><strong>Total Amount:</strong> ${{ selectedOrder.grandTotal.toFixed(2) }}</p>
-              <p><strong>Overall Status:</strong> 
-                <span class="badge" [ngClass]="'bg-' + getStatusColor(selectedOrder.overallStatus)">
+              <p>
+                <strong>Order Date:</strong>
+                {{ formatDate(selectedOrder.orderDate) }}
+              </p>
+              <p>
+                <strong>Total Amount:</strong> ${{
+                  selectedOrder.grandTotal.toFixed(2)
+                }}
+              </p>
+              <p>
+                <strong>Overall Status:</strong>
+                <span
+                  class="badge"
+                  [ngClass]="
+                    'bg-' + getStatusColor(selectedOrder.overallStatus)
+                  "
+                >
                   {{ selectedOrder.overallStatus }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <h6>Order Summary</h6>
-              <p><strong>Total Orders:</strong> {{ selectedOrder.vendorOrders.length }}</p>
-              <p><strong>Total Items:</strong> {{ getTotalItems(selectedOrder) }}</p>
+              <p>
+                <strong>Total Orders:</strong>
+                {{ selectedOrder.vendorOrders.length }}
+              </p>
+              <p>
+                <strong>Total Items:</strong> {{ getTotalItems(selectedOrder) }}
+              </p>
             </div>
           </div>
         </div>
@@ -462,46 +815,73 @@
         <!-- Vendor Orders -->
         <div class="vendor-orders-section">
           <h6>Store Orders</h6>
-          <div class="vendor-order-item mb-3" *ngFor="let vendorOrder of selectedOrder.vendorOrders">
+          <div
+            class="vendor-order-item mb-3"
+            *ngFor="let vendorOrder of selectedOrder.vendorOrders"
+          >
             <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
                 <h6 class="mb-0">{{ vendorOrder.storeName }}</h6>
-                <span class="badge" [ngClass]="'bg-' + getStatusColor(vendorOrder.status)">
+                <span
+                  class="badge"
+                  [ngClass]="'bg-' + getStatusColor(vendorOrder.status)"
+                >
                   {{ vendorOrder.status }}
                 </span>
               </div>
               <div class="card-body">
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <small class="text-muted">Order Date: {{ vendorOrder.orderDate }}</small>
+                    <small class="text-muted"
+                      >Order Date: {{ vendorOrder.orderDate }}</small
+                    >
                   </div>
                   <div class="col-md-6">
-                    <small class="text-muted">Subtotal: ${{ vendorOrder.subTotal.toFixed(2) }}</small>
+                    <small class="text-muted"
+                      >Subtotal: ${{ vendorOrder.subTotal.toFixed(2) }}</small
+                    >
                   </div>
                 </div>
-                
+
                 <div class="shipping-address mb-3">
-                  <small class="text-muted"><strong>Shipping Address:</strong></small>
+                  <small class="text-muted"
+                    ><strong>Shipping Address:</strong></small
+                  >
                   <p class="mb-0 small">{{ vendorOrder.shippingAddress }}</p>
                 </div>
 
                 <!-- Order Items -->
                 <div class="order-items">
-                  <h6 class="mb-2">Items ({{ vendorOrder.orderItems.length }})</h6>
-                  <div class="order-item-row mb-2" *ngFor="let item of vendorOrder.orderItems">
+                  <h6 class="mb-2">
+                    Items ({{ vendorOrder.orderItems.length }})
+                  </h6>
+                  <div
+                    class="order-item-row mb-2"
+                    *ngFor="let item of vendorOrder.orderItems"
+                  >
                     <div class="row align-items-center">
                       <div class="col-md-2">
-                        <img [src]="item.productImageUrl" [alt]="item.productName" 
-                             class="img-fluid rounded" style="max-height: 50px; object-fit: cover;">
+                        <img
+                          [src]="getProductImageUrl(item)"
+                          [alt]="item.productName"
+                          class="img-fluid rounded"
+                          style="max-height: 50px; object-fit: cover"
+                        />
                       </div>
                       <div class="col-md-6">
                         <h6 class="mb-0 small">{{ item.productName }}</h6>
                       </div>
                       <div class="col-md-2 text-center">
-                        <span class="badge bg-secondary">{{ item.quantity }}x</span>
+                        <span class="badge bg-secondary"
+                          >{{ item.quantity }}x</span
+                        >
                       </div>
                       <div class="col-md-2 text-end">
-                        <span class="fw-bold">${{ item.priceAtTimeOfPurchase.toFixed(2) }}</span>
+                        <span class="fw-bold"
+                          >${{ item.priceAtTimeOfPurchase.toFixed(2) }}</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -512,23 +892,75 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeOrderDetailsModal()">Close</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeOrderDetailsModal()"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Product Details Modal -->
-<div *ngIf="showProductModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 2000;" (click)="closeProductModal()">
-  <div class="modal-dialog modal-dialog-centered" style="z-index: 2010; max-width: 900px;">
+<div
+  *ngIf="showProductModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.5); z-index: 2000"
+  (click)="closeProductModal()"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    style="z-index: 2010; max-width: 900px"
+  >
     <div class="card product-popup-card" (click)="$event.stopPropagation()">
       <nav>
-        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" fill="none" stroke-width="24"/></svg>
-        <span style="cursor:pointer" (click)="closeProductModal()">Back to all Products</span>
-        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="24" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" fill="none" stroke-width="16"/></svg>
+        <svg
+          class="arrow"
+          version="1.1"
+          viewBox="0 0 512 512"
+          width="24"
+          xml:space="preserve"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <polygon
+            points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 "
+            stroke="#727272"
+            fill="none"
+            stroke-width="24"
+          />
+        </svg>
+        <span style="cursor: pointer" (click)="closeProductModal()"
+          >Back to all Products</span
+        >
+        <svg
+          class="heart"
+          version="1.1"
+          viewBox="0 0 512 512"
+          width="24"
+          xml:space="preserve"
+          stroke="#727272"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <path
+            d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z"
+            stroke="#727272"
+            fill="none"
+            stroke-width="16"
+          />
+        </svg>
       </nav>
       <div class="photo">
-        <img *ngIf="selectedProduct" [src]="getProductImageUrl(selectedProduct.imagesURL)" alt="Product image">
+        <img
+          *ngIf="selectedProduct"
+          [src]="getProductImageUrl(selectedProduct.imagesURL)"
+          alt="Product image"
+        />
       </div>
       <div class="description">
         <!-- Product Details Loader -->
@@ -540,28 +972,73 @@
             <p class="mt-2 text-muted">Loading product details...</p>
           </div>
         </ng-container>
-        
+
         <ng-container *ngIf="!isProductLoading && !selectedProduct">
-          <div class="text-center py-5 text-danger">Failed to load product details.</div>
+          <div class="text-center py-5 text-danger">
+            Failed to load product details.
+          </div>
         </ng-container>
-        
+
         <ng-container *ngIf="!isProductLoading && selectedProduct">
           <h2>{{ selectedProduct.name }}</h2>
-          <h4>{{ selectedProduct.categoryName || selectedProduct.productCategoryName }}</h4>
+          <h4>
+            {{
+              selectedProduct.categoryName ||
+                selectedProduct.productCategoryName
+            }}
+          </h4>
           <h1>${{ selectedProduct.price }}</h1>
           <p>{{ selectedProduct.description }}</p>
-          <button *ngIf="!isVendor" (click)="addToCart(selectedProduct); $event.stopPropagation()" style="position: relative; z-index: 10; cursor: pointer;" class="btn btn-success mb-2"><i class="lni lni-cart"></i> Add to Cart</button>
-          <button *ngIf="!isVendor" class="btn btn-outline-secondary mb-2">Wishlist</button>
+          <button
+            *ngIf="!isVendor"
+            (click)="addToCart(selectedProduct); $event.stopPropagation()"
+            style="position: relative; z-index: 10; cursor: pointer"
+            class="btn btn-success mb-2"
+          >
+            <i class="lni lni-cart"></i> Add to Cart
+          </button>
+          <button *ngIf="!isVendor" class="btn btn-outline-secondary mb-2">
+            Wishlist
+          </button>
           <div>
-            <div *ngIf="selectedProduct.brand"><strong>Brand:</strong> {{ selectedProduct.brand }}</div>
-            <div *ngIf="selectedProduct.sku"><strong>SKU:</strong> {{ selectedProduct.sku }}</div>
-            <div *ngIf="selectedProduct.stock !== undefined && selectedProduct.stock !== null"><strong>Stock:</strong> {{ selectedProduct.stock }}</div>
-            <div><strong>Discount:</strong> 
-              {{ selectedProduct.discount !== null && selectedProduct.discount !== undefined ? (selectedProduct.discount + '%') : 'No discount' }}
+            <div *ngIf="selectedProduct.brand">
+              <strong>Brand:</strong> {{ selectedProduct.brand }}
             </div>
-            <div *ngIf="selectedProduct.averageRate || selectedProduct.averageRating"><strong>Average Rating:</strong> {{ selectedProduct.averageRate || selectedProduct.averageRating }}</div>
-            <div *ngIf="selectedProduct.reviewCount || selectedProduct.reviews"><strong>Reviews:</strong> {{ selectedProduct.reviewCount || selectedProduct.reviews }}</div>
-            <div *ngIf="selectedProduct.storeName"><strong>Store:</strong> {{ selectedProduct.storeName }}</div>
+            <div *ngIf="selectedProduct.sku">
+              <strong>SKU:</strong> {{ selectedProduct.sku }}
+            </div>
+            <div
+              *ngIf="
+                selectedProduct.stock !== undefined &&
+                selectedProduct.stock !== null
+              "
+            >
+              <strong>Stock:</strong> {{ selectedProduct.stock }}
+            </div>
+            <div>
+              <strong>Discount:</strong>
+              {{
+                selectedProduct.discount !== null &&
+                selectedProduct.discount !== undefined
+                  ? selectedProduct.discount + "%"
+                  : "No discount"
+              }}
+            </div>
+            <div
+              *ngIf="
+                selectedProduct.averageRate || selectedProduct.averageRating
+              "
+            >
+              <strong>Average Rating:</strong>
+              {{ selectedProduct.averageRate || selectedProduct.averageRating }}
+            </div>
+            <div *ngIf="selectedProduct.reviewCount || selectedProduct.reviews">
+              <strong>Reviews:</strong>
+              {{ selectedProduct.reviewCount || selectedProduct.reviews }}
+            </div>
+            <div *ngIf="selectedProduct.storeName">
+              <strong>Store:</strong> {{ selectedProduct.storeName }}
+            </div>
             <div><strong>Product ID:</strong> {{ selectedProduct.id }}</div>
           </div>
         </ng-container>
