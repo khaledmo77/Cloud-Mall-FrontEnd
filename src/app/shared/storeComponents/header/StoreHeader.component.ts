@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { StoreInfoService } from '../../../core/storeCore/store-info.service';
 import { environment } from '../../../../environments/environment';
 import { ClientProductApiService } from '../../../core/ClientCore/client-product-api.service';
 import { StoreProductSearchApiService, Product } from '../../../core/storeCore/store-product-search-api.service';
+import { StoreProductCategoryApiService } from '../../../core/storeCore/store-product-category-api.service';
 
 @Component({
   selector: 'app-StoreHeader',
@@ -57,6 +58,12 @@ export class StoreHeader implements OnInit, OnDestroy {
   private searchSubject = new Subject<string>();
   private searchSubscription?: Subscription;
 
+  // Category functionality
+  storeCategories: any[] = [];
+  selectedCategoryId: number | null = null;
+  isLoadingCategories = false;
+  @Output() categorySelected = new EventEmitter<number | null>();
+
   constructor(
     private cartService: CartService,
     private authService: AuthService,
@@ -68,7 +75,8 @@ export class StoreHeader implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private orderEventsService: OrderEventsService,
     private storeInfoService: StoreInfoService,
-    private searchService: StoreProductSearchApiService
+    private searchService: StoreProductSearchApiService,
+    private categoryService: StoreProductCategoryApiService
   ) {}
 
   ngOnInit(): void {
@@ -121,6 +129,8 @@ export class StoreHeader implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       const storeId = params['storeId'];
       if (storeId) {
+        // Load store categories
+        this.loadStoreCategories(+storeId);
         if (this.isVendor) {
           this.productService.getStoreDetails(storeId).subscribe({
             next: (res: any) => {
@@ -565,5 +575,39 @@ export class StoreHeader implements OnInit, OnDestroy {
     });
     // Optionally, show a toast or alert here if you want
     // Example: this.showSuccessToast(`${product.name} added to cart!`);
+  }
+
+  // Category methods
+  loadStoreCategories(storeId: number) {
+    this.isLoadingCategories = true;
+    this.categoryService.getProductCategories(storeId).subscribe({
+      next: (categories: any) => {
+        // Handle different response formats
+        if (Array.isArray(categories)) {
+          this.storeCategories = categories;
+        } else if (categories && typeof categories === 'object' && 'data' in categories && Array.isArray(categories.data)) {
+          this.storeCategories = categories.data;
+        } else if (categories && typeof categories === 'object' && 'success' in categories && 'data' in categories && Array.isArray(categories.data)) {
+          this.storeCategories = categories.data;
+        } else {
+          this.storeCategories = [];
+        }
+        this.isLoadingCategories = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Error loading store categories:', err);
+        this.storeCategories = [];
+        this.isLoadingCategories = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  onCategorySelect(categoryId: number | null) {
+    this.selectedCategoryId = categoryId;
+    // Emit event to parent component to filter trending products
+    this.categorySelected.emit(categoryId);
+    console.log('Category selected:', categoryId);
   }
 }

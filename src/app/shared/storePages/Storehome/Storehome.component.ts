@@ -55,6 +55,10 @@ export class Storehome {
     successMessage: string | null = null;
     selectedProduct: any = null;
     showProductModal = false;
+    
+    // Category filtering
+    selectedCategoryId: number | null = null;
+    filteredProducts: any[] = [];
 
      constructor( 
      private route: ActivatedRoute, 
@@ -95,6 +99,12 @@ export class Storehome {
         this.errorMessage = 'Store ID not found.';
         this.cdr.detectChanges();
       }
+    });
+
+    // Listen for category selection events from the header
+    window.addEventListener('categorySelected', (event: any) => {
+      const categoryId = event.detail.categoryId;
+      this.onCategorySelected(categoryId);
     });
   }
   
@@ -137,6 +147,8 @@ export class Storehome {
         }
         
         console.log('Final processed products:', this.products);
+        // Initialize filtered products with all products
+        this.filteredProducts = [...this.products];
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -378,4 +390,28 @@ export class Storehome {
     });
   }
 
+  // Category filtering methods
+  onCategorySelected(categoryId: number | null) {
+    this.selectedCategoryId = categoryId;
+    this.filterProductsByCategory();
+  }
+
+  private filterProductsByCategory() {
+    if (this.selectedCategoryId === null) {
+      // Show all products
+      this.filteredProducts = [...this.products];
+    } else {
+      // Filter products by category
+      this.filteredProducts = this.products.filter(product => 
+        product.productCategoryId === this.selectedCategoryId
+      );
+    }
+    console.log('Filtered products:', this.filteredProducts);
+    this.cdr.detectChanges();
+  }
+
+  // Get products for display (either filtered or all)
+  getDisplayProducts(): any[] {
+    return this.selectedCategoryId !== null ? this.filteredProducts : this.products;
+  }
 }

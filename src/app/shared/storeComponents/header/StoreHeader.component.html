@@ -360,33 +360,32 @@
                 <div class="nav-inner">
                     <!-- Start Mega Category Menu -->
                     <div class="mega-category-menu">
-                        <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
+                        <span class="cat-button" (click)="onCategorySelect(null)">
+                            <i class="lni lni-menu"></i>
+                            {{ selectedCategoryId ? 'Filtered' : 'All Categories' }}
+                        </span>
                         <ul class="sub-category">
-                            <li><a routerLink="/product-grids">Electronics <i class="lni lni-chevron-right"></i></a>
-                                <ul class="inner-sub-category">
-                                    <li><a routerLink="/product-grids">Digital Cameras</a></li>
-                                    <li><a routerLink="/product-grids">Camcorders</a></li>
-                                    <li><a routerLink="/product-grids">Camera Drones</a></li>
-                                    <li><a routerLink="/product-grids">Smart Watches</a></li>
-                                    <li><a routerLink="/product-grids">Headphones</a></li>
-                                    <li><a routerLink="/product-grids">MP3 Players</a></li>
-                                    <li><a routerLink="/product-grids">Microphones</a></li>
-                                    <li><a routerLink="/product-grids">Chargers</a></li>
-                                    <li><a routerLink="/product-grids">Batteries</a></li>
-                                    <li><a routerLink="/product-grids">Cables & Adapters</a></li>
-                                </ul>
+                            <li *ngIf="isLoadingCategories">
+                                <a href="#" class="loading-categories">
+                                    <i class="lni lni-spinner-arrow"></i> Loading categories...
+                                </a>
                             </li>
-                            <li><a routerLink="/product-grids">accessories</a></li>
-                            <li><a routerLink="/product-grids">Televisions</a></li>
-                            <li><a routerLink="/product-grids">best selling</a></li>
-                            <li><a routerLink="/product-grids">top 100 offer</a></li>
-                            <li><a routerLink="/product-grids">sunglass</a></li>
-                            <li><a routerLink="/product-grids">watch</a></li>
-                            <li><a routerLink="/product-grids">man's product</a></li>
-                            <li><a routerLink="/product-grids">Home Audio & Theater</a></li>
-                            <li><a routerLink="/product-grids">Computers & Tablets </a></li>
-                            <li><a routerLink="/product-grids">Video Games </a></li>
-                            <li><a routerLink="/product-grids">Home Appliances </a></li>
+                            <li>
+                                <a href="#" (click)="onCategorySelect(null); $event.preventDefault()" 
+                                   [class.active]="selectedCategoryId === null">
+                                    <i class="lni lni-grid"></i> All Products
+                                </a>
+                            </li>
+                            <li *ngFor="let category of storeCategories">
+                                <a href="#" (click)="onCategorySelect(category.id); $event.preventDefault()"
+                                   [class.active]="selectedCategoryId === category.id">
+                                    {{ category.name }}
+                                    <i class="lni lni-chevron-right"></i>
+                                </a>
+                            </li>
+                            <li *ngIf="!isLoadingCategories && storeCategories.length === 0">
+                                <a href="#" class="no-categories">No categories available</a>
+                            </li>
                         </ul>
                     </div>
                     <!-- End Mega Category Menu -->

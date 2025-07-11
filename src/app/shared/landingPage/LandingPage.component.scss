@@ -249,6 +249,159 @@ html {
   margin-right: 8px;
   vertical-align: middle;
 }
+
+/* Trial Modal Styles */
+.trial-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.trial-modal-card {
+  background: white;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.trial-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+}
+
+.trial-modal-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.trial-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.trial-close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.trial-modal-body {
+  padding: 25px;
+}
+
+.trial-info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #007bff;
+}
+
+.trial-icon {
+  font-size: 1.5rem;
+  margin-right: 15px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.trial-info-item h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.trial-info-item p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.trial-modal-cta {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  margin-top: 20px;
+}
+
+.trial-modal-cta .btn {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.trial-modal-cta .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .trial-modal-card {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .trial-modal-header {
+    padding: 15px 20px;
+  }
+  
+  .trial-modal-body {
+    padding: 20px;
+  }
+  
+  .trial-info-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .trial-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
 #about ul {
   list-style: none;     /* Removes default bullet */
   padding-left: 0;      /* Optional: align nicely with icon */

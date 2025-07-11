@@ -6,7 +6,7 @@
     right: 0;
     bottom: 0;
     background-color: #000;
-    color: #0f0;
+    color: rgb(195, 0, 255);
     font-family: 'Source Code Pro', monospace;
     display: flex;
     justify-content: center;
@@ -28,7 +28,7 @@
 #loader-text {
     font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
     font-weight: bold;
-    border-right: 0.15em solid #0f0; /* The blinking cursor */
+    border-right: 0.15em solid  rgb(195, 0, 255); /* The blinking cursor */
     white-space: nowrap; 
     overflow: hidden;
     display: inline-block;
@@ -42,7 +42,7 @@
 #sub-text {
     margin-top: 1.5rem;
     font-size: clamp(1rem, 2.5vw, 1.5rem);
-    color: #0c0; /* Slightly darker green */
+    color:  rgb(195, 0, 255); /* Slightly darker green */
     opacity: 0; /* Initially hidden */
     animation: fadeIn 1s ease-in 2s forwards; /* Fade in after typing animation */
 }
@@ -52,7 +52,7 @@
     width: 80%;
     max-width: 400px;
     height: 10px;
-    border: 1px solid #0f0;
+    border: 1px solid  rgb(195, 0, 255);
     border-radius: 5px;
     margin-top: 1.5rem;
     overflow: hidden; /* Ensures the inner bar stays within the container's rounded corners */
@@ -64,7 +64,7 @@
 .progress-bar {
     width: 0%;
     height: 100%;
-    background-color: #0f0;
+    background-color:  rgb(195, 0, 255);
     border-radius: 5px;
     animation: fill-progress 3s ease-in-out 1s forwards; /* Start filling after a delay */
 }
@@ -78,7 +78,7 @@
 /* The typewriter cursor effect */
 @keyframes blink-caret {
     from, to { border-color: transparent }
-    50% { border-color: #0f0; }
+    50% { border-color:  rgb(195, 0, 255); }
 }
 
 /* Fade in animation for sub-text and progress bar */

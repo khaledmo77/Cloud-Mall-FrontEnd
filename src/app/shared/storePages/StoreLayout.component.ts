@@ -10,7 +10,7 @@ import { StoreFooterComponent } from '../storeComponents/footer/Storefooter.comp
   imports: [RouterOutlet, StoreHeader, StoreFooterComponent],
   template: `
     <div class="store-app">
-      <app-StoreHeader></app-StoreHeader>
+      <app-StoreHeader (categorySelected)="onCategorySelected($event)"></app-StoreHeader>
       <router-outlet></router-outlet>
       <app-StoreFooter></app-StoreFooter>
     </div>
@@ -61,5 +61,15 @@ export class StoreLayoutComponent implements OnInit, OnDestroy {
         document.body.appendChild(script);
       }
     }
+  }
+
+  onCategorySelected(categoryId: number | null) {
+    // This method will be called when a category is selected in the header
+    // We need to communicate this to the child components
+    console.log('Category selected in layout:', categoryId);
+    // For now, we'll use a custom event to communicate with child components
+    window.dispatchEvent(new CustomEvent('categorySelected', { 
+      detail: { categoryId: categoryId } 
+    }));
   }
 } 

@@ -24,6 +24,7 @@ showVendorRegister = false;
   showClientRegister = false;
   showVendorLogin = false;
   showClientLogin = false;
+  showTrialInfo = false;
   isLoggedIn = false;
   name: string | null = null;
   isBrowser: boolean;
@@ -133,6 +134,14 @@ showVendorRegister = false;
     el.scrollIntoView({ behavior: 'smooth' });
   }
 }
+
+  openTrialInfo() {
+    this.showTrialInfo = true;
+  }
+
+  closeTrialInfo() {
+    this.showTrialInfo = false;
+  }
 
 }
 

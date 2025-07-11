@@ -12,7 +12,7 @@
         <li><a (click)="scrollToSection('contact')" style="cursor: pointer; ">Contact</a></li>
       </ul>
     </nav>
-    <a class="cta-btn" href="">Get Started</a>
+    <a class="cta-btn" href="" (click)="navigateVendorWithAuth('/vendor'); $event.preventDefault()">Get Started with free trial </a>
     <label for="nav-toggle" class="mobile-nav-toggle d-xl-none bi bi-list"></label>
   </div>
   <section class="pt-7 pt-md-9 pb-0 text-center">
@@ -43,6 +43,44 @@
       (close)="closeVendorRegister()"
       (switchToLogin)="openVendorLogin()">
     </app-VendorRegister>
+
+    <!-- Trial Info Modal -->
+    <div *ngIf="showTrialInfo" class="trial-modal-overlay" (click)="closeTrialInfo()">
+      <div class="trial-modal-card" (click)="$event.stopPropagation()">
+        <div class="trial-modal-header">
+          <h3>🎉 Free Trial Information</h3>
+          <button class="trial-close-btn" (click)="closeTrialInfo()">&times;</button>
+        </div>
+        <div class="trial-modal-body">
+          <div class="trial-info-item">
+            <span class="trial-icon">📅</span>
+            <div>
+              <h4>30-Day Free Trial</h4>
+              <p>Create and showcase your store completely free for 30 days. No setup fees, no hidden costs.</p>
+            </div>
+          </div>
+          <div class="trial-info-item">
+            <span class="trial-icon">💰</span>
+            <div>
+              <h4>5% Commission on Sales</h4>
+              <p>After your trial period, we only charge 5% of your sales. Keep 95% of your earnings!</p>
+            </div>
+          </div>
+          <div class="trial-info-item">
+            <span class="trial-icon">✅</span>
+            <div>
+              <h4>No Risk, All Reward</h4>
+              <p>Start selling immediately with our full platform features. Cancel anytime during the trial.</p>
+            </div>
+          </div>
+          <div class="trial-modal-cta">
+            <button class="btn btn-primary" (click)="navigateVendorWithAuth('/vendor'); closeTrialInfo()">
+              Start Free Trial Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="home"class="bg-holder overlay" style="background-image:url(assets/img/header_showcase.jpg);background-position: top;"></div>
     <div class="container-fluid p-0">
@@ -229,7 +267,8 @@
             <li class="na">Advanced analytics</li>
           </ul>
           <div class="btn-wrap">
-            <a href="#" class="btn-buy">Get Started</a>
+            <a href="#" class="btn-buy" (click)="navigateVendorWithAuth('/vendor'); $event.preventDefault()">Get Started</a>
+            <button class="recommended-badge" (click)="openTrialInfo()"> Trial Info</button>
           </div>
         </div>
       </div><!-- End Pricing Item -->
@@ -239,7 +278,7 @@
         <div class="pricing-item recommended">
           <span class="recommended-badge">Recommended</span>
           <h3>Business</h3>
-          <h4><sup>$</sup>19<span> / month</span></h4>
+          <h4><sup>$</sup>50<span> / month</span></h4>
           <ul>
             <li>Up to 3 stores</li>
             <li>Up to 100 products</li>
@@ -257,7 +296,7 @@
       <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
         <div class="pricing-item">
           <h3>Enterprise</h3>
-          <h4><sup>$</sup>49<span> / month</span></h4>
+          <h4><sup>$</sup>80<span> / month</span></h4>
           <ul>
             <li>Unlimited stores & products</li>
             <li>Advanced analytics & reporting</li>
