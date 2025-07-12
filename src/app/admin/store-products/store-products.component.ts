@@ -96,6 +96,40 @@ export class StoreProductsComponent implements OnInit {
     }, 10000);
   }
 
+  getProductImageUrl(item: any): string {
+    // Handle different possible image URL properties
+    const url = item.imagesURL || item.imageUrl || item.imageURL || item.productImageUrl;
+    
+    console.log('getProductImageUrl - item:', item);
+    console.log('getProductImageUrl - raw URL:', url);
+    
+    if (!url) {
+      console.log('No image URL found for item:', item);
+      return 'assets/images/products/product-1.jpg';
+    }
+    
+    if (url.startsWith('http')) {
+      console.log('getProductImageUrl - absolute URL:', url);
+      return url;
+    }
+    
+    // If it starts with '/', append to base URL
+    if (url.startsWith('/')) {
+      const fullUrl = environment.imageBaseUrl + url;
+      console.log('getProductImageUrl - constructed URL:', fullUrl);
+      return fullUrl;
+    }
+    
+    // If it's a relative path without '/', append to base URL with '/'
+    const fullUrl = environment.imageBaseUrl + '/' + url;
+    console.log('getProductImageUrl - constructed URL (without slash):', fullUrl);
+    return fullUrl;
+  }
+
+  onImgError(event: any): void {
+    console.log('Image failed to load:', event.target.src);
+    event.target.src = 'assets/images/products/product-1.jpg';
+  }
   goBack(): void {
     this.router.navigate(['/admin/vendors']);
   }

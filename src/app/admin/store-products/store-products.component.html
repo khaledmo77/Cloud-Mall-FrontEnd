@@ -29,7 +29,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let product of products">
-          <td><img [src]="product.imagesURL" alt="{{product.name}}" style="width: 60px; height: 60px; object-fit: cover;"></td>
+          <td><img [src]="getProductImageUrl(product)" alt="{{product.name}}" style="width: 60px; height: 60px; object-fit: cover;" (error)="onImgError($event)"></td>
           <td>{{ product.name }}</td>
           <td>{{ product.brand }}</td>
           <td>{{ product.productCategoryName }}</td>
